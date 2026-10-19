@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>C48 Football Manager Online v0.6.3</title>
+<style>
+:root{--bg:#09120e;--panel:#12231a;--line:#294d38;--lime:#baff67;--muted:#a9c4b0;--white:#f4fff6}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--white);font-family:system-ui,Segoe UI,Arial}button,input,select{font:inherit}button{cursor:pointer;background:#1b3825;border:1px solid #3e6848;color:var(--white);border-radius:10px;padding:10px 13px;font-weight:750}button.primary{background:var(--lime);color:#12200e;border-color:var(--lime)}button:disabled{opacity:.4;cursor:not-allowed}header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:#0e1d14;border-bottom:1px solid var(--line);gap:12px;flex-wrap:wrap}.logo{font-weight:950;font-size:20px;letter-spacing:.5px}.logo span{color:var(--lime)}.stats{display:flex;gap:8px;flex-wrap:wrap}.chip{border:1px solid var(--line);background:#13271a;padding:7px 10px;border-radius:99px;font-size:13px}.layout{max-width:1300px;margin:auto;padding:16px;display:grid;grid-template-columns:230px 1fr;gap:15px}.sidebar,.panel{background:var(--panel);border:1px solid var(--line);border-radius:15px}.sidebar{padding:12px;height:max-content;position:sticky;top:12px}.nav{display:flex;flex-direction:column;gap:7px}.nav button{text-align:left;background:transparent;border-color:transparent}.nav button.active{background:#25432d;border-color:#47734e;color:var(--lime)}.main{min-width:0}.hero{padding:20px;border-radius:15px;background:linear-gradient(115deg,#214b2c,#10251a 70%);border:1px solid #3c6c47;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap}.hero h1{margin:4px 0 8px;font-size:clamp(23px,4vw,36px)}.muted{color:var(--muted);font-size:13px}.panel{padding:16px;margin-bottom:14px}.panel h2{font-size:18px;margin:0 0 13px}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.metric{padding:13px;border-radius:12px;background:#0d1c13;border:1px solid #294833}.metric .big{font-size:24px;font-weight:900}.metric small{display:block;color:var(--muted);margin-top:3px}.pitch{display:grid;grid-template-columns:1fr 1fr;gap:8px}.player{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px;background:#0d1b12;border:1px solid #2b4b35;border-radius:10px;font-size:13px}.rating{font-weight:900;color:var(--lime)}.roster-card{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;background:#10261a;border:2px solid #6e9676;border-radius:10px;padding:8px 4px;cursor:pointer;color:#fff;min-width:0}.roster-card.selected{border-color:var(--lime);box-shadow:0 0 0 2px #baff6755}.roster-card .name{font-size:11px;font-weight:800;overflow-wrap:anywhere}.roster-card .pos{font-size:10px;color:#c5e8ce}.roster-card .rating{font-size:17px}.bench-card{cursor:pointer;padding:9px;background:#0d1b12;border:2px solid #294b35;border-radius:9px;font-size:12px}.bench-card.selected{border-color:var(--lime)}.tablewrap{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:13px;min-width:560px}th,td{text-align:left;padding:10px;border-bottom:1px solid #294333}th{color:var(--muted);font-weight:650}input,select{background:#0b1910;color:var(--white);border:1px solid #365740;border-radius:8px;padding:9px;max-width:100%}.formrow{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.formrow input{flex:1;min-width:120px}.notice{background:#172f20;border:1px solid #3a6744;padding:10px 12px;border-radius:10px;font-size:13px;margin-bottom:12px}.bar{height:8px;background:#274432;border-radius:99px;overflow:hidden;margin-top:7px}.bar span{display:block;height:100%;background:var(--lime)}.hidden{display:none!important}.badge{font-size:11px;border-radius:99px;padding:4px 7px;background:#28462f;color:#d8ffd8}.footer{padding:8px 2px;color:var(--muted);font-size:12px}@media(max-width:800px){#squadLayout{grid-template-columns:minmax(0,1fr)!important}#formationPitch{min-height:340px!important}#benchList{grid-template-columns:repeat(2,minmax(0,1fr))!important}.layout{grid-template-columns:1fr;padding:10px}.sidebar{position:static;padding:8px}.nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}.nav button{text-align:center;padding:9px 5px;font-size:12px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{padding:15px}.pitch{grid-template-columns:1fr}header{padding:12px}.panel{padding:12px}}@media(max-width:400px){.grid{grid-template-columns:1fr}.nav{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* v0.4 visual polish */
+:root{--accent:#baff67;--bg:#08130e;--panel:#102019;--line:#2b5038}
+body{background:radial-gradient(ellipse at top,#13281b 0%,var(--bg) 55%);transition:background .25s,color .25s}
+header,.sidebar,.panel{box-shadow:0 12px 30px #0002}
+.hero{box-shadow:inset 0 1px #ffffff12,0 12px 30px #0002}
+#liveMatch{padding:14px!important;border-color:#3a6d48!important;background:linear-gradient(145deg,#10271a,#07110b)!important}
+#broadcastStadium{min-height:370px!important;background:linear-gradient(#091a13 0 15%,#1b3827 15% 28%,#176638 28% 100%)!important;box-shadow:inset 0 0 0 1px #ffffff22,0 12px 24px #0004}
+#crowd{height:28%!important;background:repeating-linear-gradient(90deg,#263a30 0 5px,#617667 5px 8px,#15281e 8px 13px)!important}
+#broadcastPlayers{font-size:0!important;display:block}.dot-player{position:absolute;width:16px;height:16px;border-radius:50%;border:2px solid #f4fff6;box-shadow:0 2px 4px #0008;transform:translate(-50%,-50%)}.dot-player.home{background:#baff67}.dot-player.away{background:#e34b4b}
+#ballAnimation{filter:drop-shadow(0 3px 3px #0008);font-size:28px!important}
+#liveStatus{background:#bd2929;color:#fff;border-color:#ff7777}
+#liveMinute{font-variant-numeric:tabular-nums}
+#page-club .panel{background:linear-gradient(135deg,#13281b,#0b1710)}
+#page-club input,#page-club select{min-height:38px}
+#themeChoices button{min-height:64px;font-size:16px}
+@media(max-width:650px){#broadcastStadium{min-height:300px!important}#page-club .panel>div{grid-template-columns:1fr!important}}
+
+.metric{transition:transform .15s,border-color .15s}.metric:hover{transform:translateY(-2px);border-color:var(--accent)}#page-tactics .panel{background:linear-gradient(145deg,#13281b,#0b1710)}#page-tactics label{display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted)}#page-tactics select{min-width:145px}
+</style></head><body>
+<header><div class="logo">C48 <span>FOOTBALL MANAGER</span></div><div class="stats"><div class="chip">💰 <b id="money">25.000</b> C48</div><div class="chip">🏟️ Seviye <b id="stadiumLevel">1</b></div><div class="chip">⭐ Güç <b id="teamPower">62</b></div></div></header>
+<div class="layout"><aside class="sidebar"><div class="muted" style="padding:6px 9px 12px">KULÜP MERKEZİ</div><div class="nav" id="nav">
+<button class="active" data-page="home">🏠 Genel Bakış</button><button data-page="squad">👥 Kadro</button><button data-page="market">🔄 Transfer Marketi</button><button data-page="tactics">🧠 Taktikler</button><button data-page="matches">⚽ Maçlar</button><button data-page="versus">⚔️ 1v1 Oda</button><button data-page="friends">🤝 Arkadaşlar</button><button data-page="stadium">🏟️ Stadyum</button><button data-page="club">🎨 Kulüp</button><button data-page="settings">⚙️ Ayarlar</button></div><div class="footer">C48 Studios · Manager Prototype 0.6.3</div></aside>
+<main class="main">
+<section id="page-home">
+<div class="hero"><div><div class="badge">YENİ KULÜP · SEZON 1</div><h1 id="clubTitle">C48 United</h1><div class="muted">Kendi kulübünü yönet. Kadronu güçlendir. Zirveye çık.</div></div><button class="primary" onclick="showPage('matches')">Maça Hazırlan →</button></div>
+<div class="grid"><div class="metric"><div class="big" id="squadCount">11/11</div><small>Kadro oyuncusu</small></div><div class="metric"><div class="big" id="winCount">0</div><small>Galibiyet</small></div><div class="metric"><div class="big" id="playedCount">0</div><small>Oynanan maç</small></div></div>
+<div class="panel" style="margin-top:14px"><h2>Son durum</h2><div id="homeNotice" class="notice">Kulübün hazır. Taktiklerini seç ve ilk maçına çık.</div><div class="grid"><div><div class="muted">Takım uyumu</div><b id="chemistry">74%</b><div class="bar"><span id="chemBar" style="width:74%"></span></div></div><div><div class="muted">Stadyum kapasitesi</div><b id="capacity">5.000</b><div class="bar"><span id="stadBar" style="width:25%"></span></div></div><div><div class="muted">Taktik dizilişi</div><b id="formationLabel">4-3-3</b><div class="bar"><span style="width:65%"></span></div></div></div></div>
+<div class="panel"><h2>Hızlı işlemler</h2><div class="formrow"><button onclick="showPage('market')">Oyuncu ara</button><button onclick="showPage('tactics')">Taktik belirle</button><button onclick="showPage('stadium')">Stadyumu geliştir</button></div></div>
+</section>
+<section id="page-squad" class="hidden"><div class="panel"><h2>👥 Kadro ve Diziliş</h2><p class="muted">Bir oyuncuya tıkla, ardından yerini değiştirmek istediğin oyuncuya tıkla. İlk 11 sahada, yedekler sağda; kadro dışı oyuncular altta görünür.</p><div id="squadLayout" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(180px,.42fr);gap:12px;align-items:start"><div><div id="formationPitch" style="min-height:390px;border:3px solid #dff5e4;border-radius:12px;padding:12px;background:repeating-linear-gradient(0deg,#176b38 0 45px,#1b7940 45px 90px);position:relative"><div style="position:absolute;inset:8px;border:2px solid #dff5e4aa;pointer-events:none"></div><div id="formationPlayers" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;position:relative;z-index:1"></div></div></div><div><h3 style="margin:0 0 8px">🪑 Yedekler</h3><div id="benchList" style="display:grid;gap:7px"></div></div></div><div style="margin-top:16px"><h3>📦 Kadro dışı</h3><div id="reserveList" class="pitch"></div></div><div class="muted" id="swapHint" style="margin-top:10px">Değişiklik yapmak için bir oyuncu seç.</div></div></section>
+<section id="page-market" class="hidden"><div class="hero"><div><h1>Transfer Marketi</h1><div class="muted">Her 30 dakikada 10 yeni oyuncu. Her oyuncu bu market döneminde yalnızca bir kez alınabilir.</div></div><div class="chip">Yenilenme: <b id="marketTimer">30:00</b></div></div><div class="notice" id="onlineMarketStatus">Çevrim içi market bağlantısı hazırlanıyor…</div><div class="formrow" style="margin-bottom:12px"><input id="searchPlayer" placeholder="Oyuncu ara..." oninput="renderMarket()"><select id="filterRating" onchange="renderMarket()"><option value="0">Tüm reytingler</option><option value="70">70+</option><option value="80">80+</option><option value="90">90+</option><option value="100">100+</option></select></div><div class="tablewrap"><table><thead><tr><th>Oyuncu</th><th>Pozisyon</th><th>Reyting</th><th>Fiyat</th><th>İşlem</th></tr></thead><tbody id="marketRows"></tbody></table></div>
+<div class="panel" style="margin-top:16px"><h2>📋 Transfer Takip Merkezi</h2><p class="muted">Bu market döneminde hangi oyuncunun alındığını ve alıcısını takip et.</p><div class="tablewrap"><table><thead><tr><th>Oyuncu</th><th>Reyting</th><th>Durum</th><th>Satın alan</th></tr></thead><tbody id="marketTrackerRows"></tbody></table></div><div class="muted" style="margin-top:8px">Not: Bu takip listesi bu cihazdaki kayıtları gösterir. Tüm oyuncular arasında gerçek ortak sahiplik için sunucu gerekir.</div></div>
+<div class="panel" style="margin-top:18px;background:linear-gradient(135deg,#14291e,#0b1710)">
+<h2>🛒 Gerçek Oyuncu Pazarı</h2>
+<p class="muted">Kulüplerin satışa koyduğu oyuncular. Prototipte ilanlar bu tarayıcıda paylaşılır; farklı oyuncular arasında gerçek çevrim içi alışveriş için sunucu gerekir.</p>
+<div class="grid" style="margin-bottom:12px"><div class="metric"><div class="big" id="listingCount">0</div><small>Aktif ilan</small></div><div class="metric"><div class="big">%5</div><small>Pazar işlem ücreti</small></div><div class="metric"><div class="big" id="myListingCount">0</div><small>Benim ilanlarım</small></div></div>
+<h3>Oyuncunu satışa koy</h3><div class="formrow"><select id="sellPlayerSelect"></select><input id="sellPrice" type="number" min="1" step="100" placeholder="Satış fiyatı (C48)"><button class="primary" onclick="listPlayerForSale()">Pazara koy</button></div>
+<h3 style="margin-top:16px">Satış ilanları</h3><div class="tablewrap"><table><thead><tr><th>Oyuncu</th><th>Satıcı</th><th>Reyting</th><th>Fiyat</th><th>İşlem</th></tr></thead><tbody id="realMarketRows"></tbody></table></div>
+</div></section>
+<section id="page-tactics" class="hidden"><div class="panel"><h2>🧠 Maç taktikleri</h2><p class="muted">Rakibe karşı oyun tarzını ve dizilişini seç.</p><div class="formrow"><label>Diziliş <select id="formation" onchange="setTactic()"><option>4-3-3</option><option>4-4-2</option><option>3-5-2</option><option>5-3-2</option><option>4-2-3-1</option></select></label><label>Oyun tarzı <select id="style" onchange="setTactic()"><option value="balanced">Dengeli</option><option value="attack">Hücum</option><option value="defend">Savunma</option><option value="possession">Topa sahip olma</option><option value="counter">Kontra atak</option></select></label><label>Pres <select id="press" onchange="setTactic()"><option value="normal">Normal</option><option value="high">Önde pres</option><option value="low">Geri çekil</option></select></label><label>Pas oyunu <select id="passing" onchange="setTactic()"><option value="short">Kısa pas</option><option value="mixed">Karışık pas</option><option value="long">Uzun top</option></select></label><label>Tempo <select id="tempo" onchange="setTactic()"><option value="normal">Normal</option><option value="fast">Hızlı</option><option value="slow">Yavaş</option></select></label><label>Defans çizgisi <select id="line" onchange="setTactic()"><option value="balanced">Dengeli</option><option value="high">Önde</option><option value="deep">Derinde</option></select></label></div><div class="grid" style="margin-top:16px"><div class="metric"><div class="big" id="attackVal">68</div><small>Hücum gücü</small></div><div class="metric"><div class="big" id="midVal">64</div><small>Orta saha gücü</small></div><div class="metric"><div class="big" id="defVal">61</div><small>Savunma gücü</small></div></div><div class="notice" style="margin-top:12px" id="tacticText">Dengeli taktik, her alanda istikrarlı bir yaklaşım sunar.</div></div></section>
+<section id="page-matches" class="hidden"><div class="hero"><div><h1>Maç Merkezi</h1><div class="muted">Maç simülasyonunu başlat ve ödül kazan.</div></div><span class="badge">LİG MAÇI</span></div><div class="panel"><h2>🏆 C48 Lig Mücadelesi</h2><div class="grid"><div class="metric"><small>Senin takımın</small><div class="big" id="myMatchPower">62</div><b id="matchClub">C48 United</b></div><div class="metric"><small>Rakip takım</small><div class="big" id="oppPower">60</div><b>Harbor City</b></div><div class="metric"><small>Galibiyet ödülü</small><div class="big">+2.000</div><small>C48 oyun parası</small></div></div><button class="primary" style="margin-top:14px" id="playMatch" onclick="playMatch()">20 saniyelik maçı başlat</button>
+<div id="liveMatch" class="panel hidden" style="margin-top:14px;background:#0a1a10">
+  <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap"><b>📺 CANLI MAÇ YAYINI</b><span class="badge" id="liveStatus">MAÇ HAZIRLANIYOR</span></div>
+  <div id="broadcastStadium" style="position:relative;min-height:390px;border:3px solid #e6f6e8;border-radius:14px;margin:12px 0;overflow:hidden;background:linear-gradient(#182c22 0 20%,#304b39 20% 32%,#1b7540 32% 100%);">
+    <div id="crowd" style="position:absolute;inset:0 0 auto;height:32%;background:repeating-linear-gradient(90deg,#293b32 0 8px,#3e5748 8px 14px,#17291f 14px 20px);opacity:.95"></div>
+    <div style="position:absolute;top:7px;left:10px;right:10px;display:flex;justify-content:space-between;font-size:11px;font-weight:900;letter-spacing:1px;z-index:2"><span id="stadiumNameLive">C48 ARENA</span><span id="stadiumLevelLive">STADYUM SEVİYE 1</span></div>
+    <div style="position:absolute;left:8%;right:8%;top:31%;bottom:7%;border:2px solid #dff5e4aa;background:repeating-linear-gradient(90deg,#176b38 0 9%,#1b7940 9% 18%);box-shadow:inset 0 0 0 2px #ffffff12;">
+      <div style="position:absolute;left:50%;top:0;bottom:0;border-left:2px solid #dff5e4aa"></div><div style="position:absolute;left:50%;top:50%;width:76px;height:76px;border:2px solid #dff5e4aa;border-radius:50%;transform:translate(-50%,-50%)"></div>
+      <div style="position:absolute;left:0;top:30%;height:40%;width:12%;border:2px solid #dff5e4aa"></div><div style="position:absolute;right:0;top:30%;height:40%;width:12%;border:2px solid #dff5e4aa"></div>
+      <div id="broadcastPlayers" style="position:absolute;inset:0;pointer-events:none">
+        <i class="dot-player home" style="left:12%;top:24%"></i><i class="dot-player away" style="left:22%;top:62%"></i><i class="dot-player home" style="left:31%;top:39%"></i><i class="dot-player away" style="left:42%;top:22%"></i><i class="dot-player home" style="left:48%;top:67%"></i><i class="dot-player away" style="left:58%;top:40%"></i><i class="dot-player home" style="left:68%;top:28%"></i><i class="dot-player away" style="left:77%;top:62%"></i><i class="dot-player home" style="left:85%;top:43%"></i><i class="dot-player away" style="left:91%;top:23%"></i>
+      </div>
+      <div id="ballAnimation" style="font-size:25px;position:absolute;left:48%;top:53%;transition:left .6s,top .6s;z-index:2">⚽</div>
+    </div>
+    <div style="position:absolute;top:39%;left:50%;transform:translateX(-50%);background:#06140edb;border:1px solid #dff5e477;border-radius:12px;padding:6px 16px;text-align:center;z-index:3;white-space:nowrap"><div style="font-size:29px;font-weight:950"><span id="liveUs">0</span> — <span id="liveThem">0</span></div><div style="font-size:12px" id="liveMinute">00:00 / 00:20</div></div>
+  </div><div id="commentary" class="notice">Takımlar sahaya çıkıyor...</div>
+</div>
+<div id="matchResult" class="notice hidden" style="margin-top:12px"></div>
+<div id="replayWait" class="notice hidden" style="margin-top:8px"></div></div><div class="panel"><h2>Arkadaş maçları ve turnuvalar</h2><p class="muted">Bu prototipte maç simülasyonu yerel çalışır. Arkadaş davetleri, sıralamalı turnuvalar ve gerçek ödüller sunucu entegrasyonu sonrasında açılacak.</p><button onclick="showPage('club')">Kulübünü düzenle</button></div></section>
+<section id="page-friends" class="hidden">
+<div class="panel"><h2>🤝 Arkadaşlar</h2><p class="muted">Her menajerin kendine özel oyuncu kodu vardır. Kodunu arkadaşına gönderip onun kodunu ekleyebilirsin.</p>
+<div class="notice">Senin oyuncu kodun: <b id="myPlayerCode" style="font-size:20px;letter-spacing:2px">C48-000000</b> <button onclick="copyPlayerCode()">Kodu kopyala</button></div>
+<div class="formrow"><input id="friendCodeInput" placeholder="Arkadaşının kodu (örn. C48-123ABC)" maxlength="16"><button class="primary" onclick="addFriend()">Arkadaş ekle</button></div>
+<h2 style="margin-top:18px">Arkadaş listem</h2><div id="friendList" class="pitch"></div>
+<p class="muted">Not: Bu prototipte arkadaş listesi bu tarayıcıda tutulur. Kodla farklı cihazlarda arkadaş bulma için çevrim içi sunucu bağlantısı gerekir.</p>
+</div></section>
+<section id="page-versus" class="hidden">
+<div class="hero"><div><h1>⚔️ 1v1 Kulüp Kapışması</h1><div class="muted">Oda oluştur, kodunu arkadaşına gönder ve 60 saniyelik maça çık.</div></div><span class="badge">1 DAKİKA</span></div>
+<div class="panel"><h2>Oda işlemleri</h2><div class="formrow"><button class="primary" onclick="createRoom()">+ Oda oluştur</button><input id="joinRoomInput" placeholder="Arkadaşının oda kodu" maxlength="12"><button onclick="joinRoom()">Odaya katıl</button></div>
+<div id="roomCard" class="notice hidden" style="margin-top:12px"></div>
+<div id="versusMatch" class="hidden" style="margin-top:14px">
+<h2>Canlı 1v1 maç</h2><div style="background:repeating-linear-gradient(90deg,#176b38 0 80px,#1b7940 80px 160px);border:3px solid #e6f6e8;border-radius:12px;padding:20px;text-align:center"><div id="versusTeams" style="font-size:12px;font-weight:800">C48 UNITED vs RAKİP</div><div style="font-size:38px;font-weight:950"><span id="versusUs">0</span> — <span id="versusThem">0</span></div><div id="versusClock">01:00</div><div id="versusComment">Hakem başlama düdüğünü bekliyor.</div></div><button class="primary" id="startVersus" style="margin-top:12px" onclick="startVersusMatch()">1 dakikalık maçı başlat</button><div id="versusResult" class="notice hidden" style="margin-top:10px"></div>
+</div><p class="muted" style="margin-top:14px">Oda kodu oluşturma ve maç demosu çalışır. Farklı cihazlardan gerçek zamanlı 1v1 için sunucu ve WebSocket bağlantısı sonraki altyapı adımıdır.</p></div>
+</section>
+<section id="page-stadium" class="hidden"><div class="panel"><h2>🏟️ Stadyum yönetimi</h2><div class="hero"><div><div class="muted">EV SAHASI</div><h1 id="stadName">C48 Arena</h1><div class="muted">Kapasite: <b id="stadCapacity">5.000</b></div></div><div class="metric"><div class="big">Seviye <span id="stadLevel2">1</span></div><small>Geliştirme seviyesi</small></div></div><p>Stadyumunu büyütmek maç gelirlerini artırır. Geliştirme fiyatları bu sürümde 2 kat artırıldı.</p><div class="grid"><div class="metric"><div class="big">5.000</div><small>Mevcut kapasite</small></div><div class="metric"><div class="big" id="nextCap">7.500</div><small>Sonraki kapasite</small></div><div class="metric"><div class="big" id="stadCost">8.000</div><small>Geliştirme maliyeti</small></div></div><button class="primary" style="margin-top:14px" id="upgradeStadium" onclick="upgradeStadium()">Stadyumu geliştir</button></div></section>
+<section id="page-club" class="hidden"><div class="hero"><div><div class="badge">KULÜP TASARIM ATÖLYESİ</div><h1>🎨 Kulüp Kimliği</h1><div class="muted">Armanı, renklerini ve takım adını düzenle.</div></div><div class="chip">Ücretsiz hak: <b id="freeChanges">2/2</b></div></div>
+<div class="panel"><div style="display:grid;grid-template-columns:minmax(180px,.8fr) minmax(0,1.2fr);gap:16px;align-items:center"><div style="text-align:center;padding:20px;background:radial-gradient(circle,#244b30,#0b1710);border:1px solid #3b6947;border-radius:16px"><div id="crestBig" style="font-size:86px;line-height:1.3;color:var(--lime);text-shadow:0 8px 24px #000">🛡️</div><h2 id="crestName" style="margin:8px 0">C48 United</h2><div id="uniformPreview" style="display:flex;justify-content:center;gap:6px"><span style="width:42px;height:60px;border-radius:8px 8px 14px 14px;background:#baff67;border:2px solid #fff"></span><span style="width:42px;height:60px;border-radius:8px 8px 14px 14px;background:#14271b;border:2px solid #fff"></span><span style="width:42px;height:60px;border-radius:8px 8px 14px 14px;background:#f4fff6;border:2px solid #fff"></span></div></div><div><label>Takım adı<br><input id="clubNameInput" maxlength="24" value="C48 United" style="width:100%;margin:6px 0 12px"></label><div class="formrow"><label>Ana renk<br><input id="color1" type="color" value="#baff67"></label><label>İkinci renk<br><input id="color2" type="color" value="#14271b"></label><label>Üçüncü renk<br><input id="color3" type="color" value="#f4fff6"></label></div><label style="display:block;margin-top:12px">Arma sembolü<br><select id="symbol" style="width:100%;margin-top:6px"><option>🛡️</option><option>★</option><option>⚽</option><option>🐉</option><option>🦅</option><option>🐺</option><option>👑</option><option>🔥</option><option>⚡</option><option>🐍</option></select></label><p class="muted">Her kaydetme tasarım değişikliği sayılır. İlk 2 değişiklik ücretsiz; sonraki her değişiklik 1.000.000 C48.</p><button class="primary" onclick="saveClub()">Tasarımı kaydet</button><button id="paidClubChange" onclick="saveClub(true)" style="margin-left:6px">1.000.000 C48 ile değiştir</button></div></div></div></section>
+<section id="page-settings" class="hidden"><div class="hero"><div><h1>⚙️ Ayarlar</h1><div class="muted">Oyunun görünümünü kişiselleştir.</div></div></div><div class="panel"><h2>Arka plan rengi</h2><p class="muted">Bir tema seç. Tercihin bu tarayıcıda kaydedilir.</p><div class="grid" id="themeChoices"><button onclick="setTheme('purple')">🟣 Mor</button><button onclick="setTheme('red')">🔴 Kırmızı</button><button onclick="setTheme('green')">🟢 Yeşil</button><button onclick="setTheme('black')">⚫ Siyah</button><button onclick="setTheme('pink')">🩷 Pembe</button><button onclick="setTheme('yellow')">🟡 Sarı</button></div><div class="notice" style="margin-top:12px" id="themeStatus">Tema seçilmedi.</div></div></section>
+<div class="footer">Not: Bu, oynanabilir bir arayüz prototipidir. Veriler bu tarayıcıda saklanır; çok oyunculu çevrim içi ekonomi ve senkronizasyon henüz bağlı değildir.</div>
+</main></div>
+<script>
+const $=id=>document.getElementById(id);
+const initialPlayers=[
+['Emir Kaya','KL',67],['Mert Yılmaz','STP',64],['Arda Demir','STP',62],['Kaan Şahin','STP',60],['Efe Aslan','STP',61],['Deniz Aydın','MO',68],['Bora Çelik','MO',65],['Can Eren','MO',63],['Ali Koç','SĞK',66],['Kerem Polat','SLK',69],['Yiğit Arslan','SF',71]];
+let state={money:25000,stadium:1,wins:0,played:0,club:'C48 United',symbol:'★',colors:['#baff67','#14271b','#f4fff6'],formation:'4-3-3',style:'balanced',press:'normal',owned:initialPlayers.map((p,i)=>({id:'starter'+i,name:p[0],pos:p[1],rating:p[2],price:0})),bought:[],lastMarket:Date.now(),playerCode:'',friends:[],listings:[],clubChanges:0,theme:'green',passing:'short',tempo:'normal',line:'balanced',lastResult:'Kulübün hazır. Taktiklerini seç ve ilk maçına çık.'};
+const firstNames=['Luka','Mateo','Arda','Leo','Noah','Mert','Kerem','Victor','Jude','Kylian','Erling','Cristiano','Lionel','Andrés','Zinedine','Ronaldinho','Thierry','Ronaldo','Paolo','Francesco','Hakan','İlkay','Kevin','Mohamed','Sadio','Son','Virgil','Manuel','Iker','Gianluigi','Marco','Toni','David','Wayne','Didier','Samuel','Roberto','Cafu','Xavi','Sergio','Harry','Bukayo','Jamal','Lamine','Endrick'];
+const lastNames=['Yıldız','Demir','Kaya','Silva','Rossi','Müller','Öztürk','Yılmaz','Kovacs','Fernandes','Mbappé','Haaland','Messi','Ronaldo','Iniesta','Zidane','Henry','Nazario','Maldini','Totti','Çalhanoğlu','Gündoğan','De Bruyne','Salah','Mané','Son','Van Dijk','Neuer','Casillas','Buffon','Reus','Kroos','Beckham','Rooney','Drogba','Eto’o','Carlos','Alves','Hernández','Ramos','Kane','Saka','Musiala','Yamal','Silva'];
+const positions=['KL','STP','STP','STP','STP','MO','MO','MO','SĞK','SLK','SF'];
+let market=[];
+function fmt(n){return Math.floor(n).toLocaleString('tr-TR')}
+function persist(){try{localStorage.setItem('c48manager',JSON.stringify(state))}catch(e){}}
+function load(){try{let s=JSON.parse(localStorage.getItem('c48manager'));if(s&&s.owned&&s.money!==undefined)state={...state,...s}}catch(e){}}
+function generateMarket(){market=[];let seed=Math.floor(Date.now()/1800000);for(let i=0;i<10;i++){let n=(seed*7919+i*104729+1777)>>>0;let x=(Math.sin(n*12.9898)*43758.5453);x=x-Math.floor(x);let y=(Math.sin((n+41)*78.233)*12345.6789);y=y-Math.floor(y);let rating=40+Math.floor(Math.pow(Math.abs(x),2.3)*71);let pos=positions[n%positions.length];let name=firstNames[n%firstNames.length]+' '+lastNames[(n*7+i)%lastNames.length];let id='market-'+seed+'-'+i;market.push({id,name,pos,rating,price:Math.round((rating**2.18)*7.8/100)*100})}}
+function teamPower(){return Math.round(state.owned.reduce((s,p)=>s+p.rating,0)/Math.max(1,state.owned.length))}
+function updateStats(){$('money').textContent=fmt(state.money);$('stadiumLevel').textContent=state.stadium;$('teamPower').textContent=teamPower();$('squadCount').textContent=state.owned.length+'/25';$('winCount').textContent=state.wins;$('playedCount').textContent=state.played;$('clubTitle').textContent=state.club;$('matchClub').textContent=state.club;$('myMatchPower').textContent=teamPower();$('capacity').textContent=fmt(5000+(state.stadium-1)*2500);$('stadCapacity').textContent=fmt(5000+(state.stadium-1)*2500);$('stadLevel2').textContent=state.stadium;$('stadName').textContent=state.club+' Arena';$('nextCap').textContent=fmt(5000+state.stadium*2500);$('stadCost').textContent=fmt(state.stadium*16000);$('upgradeStadium').disabled=state.money<state.stadium*16000;$('formationLabel').textContent=state.formation;$('chemistry').textContent=Math.min(99,68+Math.floor(state.owned.length/2))+'%';$('chemBar').style.width=Math.min(99,68+Math.floor(state.owned.length/2))+'%';$('stadBar').style.width=Math.min(100,state.stadium*12)+'%';$('homeNotice').textContent=state.lastResult;$('clubNameInput').value=state.club;$('crest').textContent=state.symbol;$('crestName').textContent=state.club;if($('crestBig'))$('crestBig').textContent=state.symbol;if($('freeChanges'))$('freeChanges').textContent=Math.max(0,2-state.clubChanges)+'/2';if($('paidClubChange'))$('paidClubChange').disabled=state.money<1000000||state.clubChanges<2;applyTheme(state.theme)}
+function showPage(page){document.querySelectorAll('main section').forEach(s=>s.classList.add('hidden'));$('page-'+page).classList.remove('hidden');document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===page));if(page==='squad')renderSquad();if(page==='market'){renderMarket();renderRealMarket();}if(page==='tactics')setTactic();if(page==='club'){$('color1').value=state.colors?.[0]||'#baff67';$('color2').value=state.colors?.[1]||'#14271b';$('color3').value=state.colors?.[2]||'#f4fff6';$('symbol').value=state.symbol||'🛡️';$('clubNameInput').value=state.club;refreshClubPreview?.()}if(page==='settings')applyTheme(state.theme);if(page==='stadium')updateStats()}
+document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
+let selectedRosterId=null;
+function getFormationPositions(){
+ const f=state.formation||'4-3-3';
+ if(f==='4-4-2')return [[0],[1,2,3,4],[5,6,7,8],[9,10]];
+ if(f==='3-5-2')return [[0],[1,2,3],[4,5,6,7,8],[9,10]];
+ if(f==='5-3-2')return [[0],[1,2,3,4,5],[6,7,8],[9,10]];
+ if(f==='4-2-3-1')return [[0],[1,2,3,4],[5,6],[7,8,9],[10]];
+ return [[0],[1,2,3,4],[5,6,7],[8,9],[10]];
+}
+function chooseRoster(id){
+ if(selectedRosterId===null){selectedRosterId=id;renderSquad();$('swapHint').textContent='Şimdi yer değiştireceğin oyuncuya tıkla.';return}
+ if(selectedRosterId===id){selectedRosterId=null;renderSquad();$('swapHint').textContent='Seçim iptal edildi.';return}
+ let a=state.owned.findIndex(p=>p.id===selectedRosterId),b=state.owned.findIndex(p=>p.id===id);
+ if(a>=0&&b>=0){[state.owned[a],state.owned[b]]=[state.owned[b],state.owned[a]];state.lastResult='Kadro düzenin güncellendi.';persist()}
+ selectedRosterId=null;renderSquad();updateStats();$('swapHint').textContent='Oyuncuların yeri değiştirildi.'
+}
+function rosterCard(p,bench=false){let selected=selectedRosterId===p.id;return `<button class="${bench?'bench-card':'roster-card'} ${selected?'selected':''}" onclick="chooseRoster('${p.id}')" style="width:100%">${bench?`<b>${p.name}</b><span class="muted">${p.pos}</span><span class="rating">${p.rating}</span>`:`<span style="font-size:19px">👤</span><span class="name">${p.name}</span><span class="pos">${p.pos}</span><span class="rating">${p.rating}</span>`}</button>`}
+function renderSquad(){
+ if(!$('formationPlayers'))return;
+ const players=state.owned.slice(0,11),bench=state.owned.slice(11,16),reserve=state.owned.slice(16);
+ const rows=getFormationPositions();
+ $('formationPlayers').innerHTML=rows.map(row=>`<div style="grid-column:1/-1;display:flex;justify-content:space-evenly;gap:6px">${row.map(i=>players[i]?rosterCard(players[i]):'').join('')}</div>`).join('');
+ $('benchList').innerHTML=bench.length?bench.map(p=>rosterCard(p,true)).join(''):'<div class="muted">Yedek yok. Transfer marketinden oyuncu al.</div>';
+ $('reserveList').innerHTML=reserve.length?reserve.map(p=>rosterCard(p,true)).join(''):'<div class="muted">Kadro dışı oyuncun yok. 16. oyuncudan sonrası burada görünür.</div>';
+}
+
+// C48 shared market backend. Publishable key is intended for browser use; database RLS/RPC enforce permissions.
+const C48_SUPABASE_URL = 'https://vvqpylnnghxvbxfjidzg.supabase.co';
+const C48_SUPABASE_KEY = 'sb_publishable_Ufpvm_0lnnLrgCqe9pV17w_QNFqC_Yd';
+let c48Session = null;
+let onlineMarket = [];
+let onlineMarketReady = false;
+function setOnlineStatus(text, good=false){
+ const el=$('onlineMarketStatus'); if(!el)return;
+ el.textContent=text; el.style.borderColor=good?'#3f9a59':'#9b7532';
+}
+async function sbFetch(path, options={}){
+ const controller=new AbortController(); const timeout=setTimeout(()=>controller.abort(),12000);
+ const headers={'apikey':C48_SUPABASE_KEY,'Content-Type':'application/json',...(options.headers||{})};
+ if(c48Session?.access_token) headers.Authorization='Bearer '+c48Session.access_token;
+ else headers.Authorization='Bearer '+C48_SUPABASE_KEY;
+ let res; try { res=await fetch(C48_SUPABASE_URL+path,{...options,headers,signal:controller.signal}); } catch(err) { if(err.name==='AbortError') throw new Error('Sunucu 12 saniyede yanıt vermedi. Proje URL ve internet bağlantısını kontrol et.'); throw new Error('Sunucuya erişilemiyor: '+err.message+' (dosyayı HTTPS üzerinden yayınlamak gerekebilir)'); } finally { clearTimeout(timeout); }
+ const body=await res.text();
+ let data=null; try{data=body?JSON.parse(body):null}catch(e){data=body}
+ if(!res.ok) throw new Error(data?.message||data?.msg||data?.error_description||data?.hint||String(data||('HTTP '+res.status)));
+ return data;
+}
+async function connectC48Online(){
+ setOnlineStatus('Supabase sunucusuna bağlanılıyor…');
+ try{
+   const saved=localStorage.getItem('c48_supabase_session');
+   if(saved){try{c48Session=JSON.parse(saved)}catch(e){c48Session=null}}
+   if(!c48Session?.access_token){
+     // Supabase anonymous sign-in. Enable Authentication > Sign In / Providers > Anonymous Sign-Ins first.
+     c48Session=await sbFetch('/auth/v1/signup',{method:'POST',body:JSON.stringify({data:{club_name:state.club||'C48 United'}})});
+     if(!c48Session?.access_token) throw new Error('Supabase oturum anahtarı döndürmedi. Authentication > Sign In / Providers bölümünde Allow anonymous sign-ins açık ve kaydedilmiş olmalı.');
+     localStorage.setItem('c48_supabase_session',JSON.stringify(c48Session));
+   }
+   await loadOnlineProfile();
+   await loadOnlineMarket();
+ }catch(err){
+   setOnlineStatus('Sunucu bağlantısı kurulamadı: '+err.message+' — Supabase Auth ayarlarını kontrol et.');
+   console.error('C48 online market:',err);
+ }
+}
+async function loadOnlineProfile(){
+ const uid=c48Session?.user?.id;
+ if(!uid)return;
+ const rows=await sbFetch('/rest/v1/c48_profiles?select=user_id,club_name,balance&user_id=eq.'+encodeURIComponent(uid));
+ if(rows?.length){
+   state.money=Number(rows[0].balance);
+   if(rows[0].club_name)state.club=rows[0].club_name;
+   persist();updateStats();
+ }
+}
+async function loadOnlineMarket(){
+ try{
+   const rows=await sbFetch('/rest/v1/rpc/c48_get_market',{method:'POST',body:'{}'});
+   onlineMarket=(rows||[]).map(p=>({id:p.id,name:p.player_name,pos:p.player_position,rating:p.rating,price:Number(p.price),buyer:p.buyer_club,purchased:p.purchased}));
+   onlineMarketReady=true;
+   market=onlineMarket;
+   setOnlineStatus('🟢 Çevrim içi market bağlı. Tüm oyuncular aynı 10 futbolcuyu görüyor; satın alma sunucuda doğrulanıyor.',true);
+   renderMarket();renderMarketTracker();
+ }catch(err){
+   setOnlineStatus('Market verisi alınamadı: '+err.message+' — SQL fonksiyonunun başarıyla kurulduğunu ve anonim oturumun açık olduğunu kontrol et.');
+   console.error('C48 market load:',err);
+ }
+}
+
+function sharedBought(){try{return JSON.parse(localStorage.getItem('c48_market_bought')||'{}')}catch(e){return {}}}
+function renderMarket(){
+ const q=($('searchPlayer')?.value||'').toLocaleLowerCase('tr');
+ const min=+$('filterRating')?.value||0;
+ const boughtMap=sharedBought();
+ const list=market.filter(p=>p.name.toLocaleLowerCase('tr').includes(q)&&p.rating>=min);
+ const online=onlineMarketReady;
+ $('marketRows').innerHTML=list.map(p=>{
+   const bought=online?(p.purchased||!!p.buyer):(!!boughtMap[p.id]||state.bought.includes(p.id));
+   const owned=state.owned.some(x=>x.id===p.id);
+   const disabled=bought||owned||state.money<p.price||state.owned.length>=25;
+   return `<tr><td><b>${p.name}</b></td><td>${p.pos}</td><td><span class="rating">${p.rating}</span></td><td>${fmt(p.price)} C48</td><td><button ${disabled?'disabled':''} onclick="buyPlayer('${p.id}')">${bought?'Satın alındı':owned?'Kadronunda':state.money<p.price?'Yetersiz para':'Transfer et'}</button></td></tr>`;
+ }).join('')||'<tr><td colspan="5">Oyuncu bulunamadı.</td></tr>';
+ renderMarketTracker();
+}
+function renderMarketTracker(){
+ const body=$('marketTrackerRows');if(!body)return;
+ if(onlineMarketReady){
+   body.innerHTML=onlineMarket.map(p=>`<tr><td>${p.name}</td><td>${p.rating}</td><td>${p.purchased||p.buyer?'🔒 Satıldı':'🟢 Satılık'}</td><td>${p.buyer||'—'}</td></tr>`).join('');
+ }else{
+   const boughtMap=sharedBought();
+   body.innerHTML=market.map(p=>{let b=boughtMap[p.id];return `<tr><td>${p.name}</td><td>${p.rating}</td><td>${b?'🔒 Satıldı':'🟢 Satılık'}</td><td>${b?(b.buyer||'Bilinmiyor'):'—'}</td></tr>`}).join('');
+ }
+}
+async function buyPlayer(id){
+ const p=market.find(p=>p.id===id);if(!p)return;
+ if(!onlineMarketReady){msg('Çevrim içi market henüz bağlanmadı.');return}
+ if(p.purchased||p.buyer){msg('Bu oyuncu zaten satılmış.');return}
+ if(state.owned.length>=25){msg('Kadro dolu.');return}
+ try{
+   const result=await sbFetch('/rest/v1/rpc/c48_buy_market_player',{method:'POST',body:JSON.stringify({p_market_player_id:id,p_club_name:state.club})});
+   // Server is authoritative for price/balance. Add the player locally after confirmed purchase.
+   state.money=Number(result.balance);
+   state.owned.push({id:p.id,name:p.name,pos:p.pos,rating:p.rating,price:Number(result.price)});
+   state.bought.push(p.id);state.lastResult=p.name+' transfer edildi!';persist();updateStats();
+   await loadOnlineMarket();
+   msg(p.name+' takımına katıldı!');
+ }catch(err){
+   msg('Transfer başarısız: '+err.message);
+   await loadOnlineMarket();
+ }
+}
+function setTactic(){state.formation=$('formation').value;state.style=$('style').value;renderSquad();state.press=$('press').value;state.passing=$('passing')?.value||state.passing;state.tempo=$('tempo')?.value||state.tempo;state.line=$('line')?.value||state.line;let a=teamPower(),attack=a+(state.style==='attack'?9:state.style==='counter'?5:0),mid=a+(state.style==='possession'?8:0),def=a+(state.style==='defend'?9:0);if(state.press==='high'){attack+=4;def-=3}if(state.press==='low'){def+=4;attack-=2}if(state.passing==='short')mid+=3;if(state.passing==='long')attack+=3;if(state.tempo==='fast')attack+=3;if(state.tempo==='slow')mid+=2;if(state.line==='high'){attack+=2;def-=2}if(state.line==='deep')def+=3;$('attackVal').textContent=attack;$('midVal').textContent=mid;$('defVal').textContent=def;$('tacticText').textContent=({balanced:'Dengeli taktik, her alanda istikrarlı bir yaklaşım sunar.',attack:'Hücum taktiği gol bulma şansını artırır, savunma riskini yükseltir.',defend:'Savunma taktiği rakibin gol şansını azaltır.',possession:'Topa sahip olma oyunu orta saha gücünü artırır.',counter:'Kontra atak, hızlı hücumlar için avantaj sağlar.'})[state.style];$('formationLabel').textContent=state.formation;persist()}
+let matchRunning=false,matchWait=0,matchInterval=null;
+function playMatch(){
+ if(matchRunning||matchWait>0)return;
+ matchRunning=true;$('playMatch').disabled=true;$('liveMatch').classList.remove('hidden');$('matchResult').classList.add('hidden');$('replayWait').classList.add('hidden');
+ let elapsed=0, gf=0, ga=0, lastEvent=0;
+ $('liveStatus').textContent='CANLI';$('stadiumNameLive').textContent=state.club.toUpperCase()+' ARENA';$('stadiumLevelLive').textContent='STADYUM SEVİYE '+state.stadium;$('broadcastStadium').style.minHeight=(300+Math.min(6,state.stadium-1)*18)+'px';$('crowd').style.height=(32+Math.min(5,state.stadium-1)*2)+'%';$('commentary').textContent='Hakem düdüğü çaldı! Maç başladı.';$('liveUs').textContent='0';$('liveThem').textContent='0';
+ clearInterval(matchInterval);
+ matchInterval=setInterval(()=>{
+   elapsed++;let mm=String(Math.floor(elapsed/60)).padStart(2,'0'),ss=String(elapsed%60).padStart(2,'0');
+   $('liveMinute').textContent=mm+':'+ss+' / 00:20';
+   $('ballAnimation').style.left=(12+Math.random()*74)+'%';$('ballAnimation').style.top=(35+Math.random()*45)+'%';document.querySelectorAll('.dot-player').forEach((el,i)=>{const x=8+((i*19+Math.random()*14)%84),y=12+((i*23+Math.random()*20)%76);el.style.left=x+'%';el.style.top=y+'%'});
+   if(elapsed-lastEvent>=4&&Math.random()<.78){lastEvent=elapsed;let roll=Math.random();if(roll<.23){gf++;$('liveUs').textContent=gf;$('commentary').textContent='GOOOL! '+state.club+' ağları buldu!'}else if(roll<.43){ga++;$('liveThem').textContent=ga;$('commentary').textContent='Rakip hızlı çıktı ve golü buldu!'}else if(roll<.7){$('commentary').textContent='Orta sahada mücadele sürüyor, pas bağlantıları aranıyor.'}else{$('commentary').textContent='Kaleci kritik bir kurtarış yaptı!'}}
+   if(elapsed>=20){
+    clearInterval(matchInterval);matchRunning=false;state.played++;let win=gf>ga,draw=gf===ga,reward=win?5000:draw?2500:500;if(win)state.wins++;state.money+=reward;
+    state.lastResult=`Son maç: ${gf}-${ga} · ${win?'Galibiyet':draw?'Beraberlik':'Mağlubiyet'} · +${fmt(reward)} C48`;persist();updateStats();
+    $('liveStatus').textContent='MAÇ BİTTİ';$('commentary').textContent='Maç sona erdi. '+state.lastResult;$('matchResult').classList.remove('hidden');$('matchResult').textContent=state.lastResult;
+    matchWait=10;$('replayWait').classList.remove('hidden');
+    let waitInt=setInterval(()=>{matchWait--;if(matchWait>0){$('replayWait').textContent='Sonraki maça hazırlanılıyor: '+matchWait+' saniye';}else{clearInterval(waitInt);$('replayWait').textContent='Yeni maç hazır!';$('playMatch').disabled=false;setTimeout(()=>$('replayWait').classList.add('hidden'),1200)}},1000);
+   }
+ },1000);
+}
+function upgradeStadium(){let cost=state.stadium*16000;if(state.money<cost)return;state.money-=cost;state.stadium++;state.lastResult='Stadyumun geliştirildi!';persist();updateStats();msg('Stadyum seviyesi yükseldi')}
+function saveClub(paid=false){
+ if(state.clubChanges>=2&&!paid){msg('Ücretsiz tasarım hakkın bitti. Değişiklik 1.000.000 C48.');return}
+ if(state.clubChanges>=2&&paid&&state.money<1000000){msg('Yeterli paran yok.');return}
+ if(state.clubChanges>=2&&paid)state.money-=1000000;
+ let name=$('clubNameInput').value.trim();if(name)state.club=name.slice(0,24);
+ state.colors=[$('color1').value,$('color2').value,$('color3').value];state.symbol=$('symbol').value;state.clubChanges++;
+ persist();updateStats();$('uniformPreview').innerHTML=state.colors.map(c=>`<span style="width:42px;height:60px;border-radius:8px 8px 14px 14px;background:${c};border:2px solid #fff"></span>`).join('');
+ msg(state.clubChanges<=2?'Kulüp tasarımı kaydedildi!':'Tasarım güncellendi. 1.000.000 C48 ödendi.')
+}
+function refreshSellSelect(){
+ const el=$('sellPlayerSelect');if(!el)return;
+ const owned=state.owned.filter(p=>!state.listings.some(l=>l.playerId===p.id));
+ el.innerHTML=owned.map(p=>`<option value="${p.id}">${p.name} · ${p.rating} · ${p.pos}</option>`).join('')||'<option value="">Satılacak oyuncu yok</option>';
+}
+function listPlayerForSale(){
+ const id=$('sellPlayerSelect').value,p=state.owned.find(p=>p.id===id),price=Math.floor(+$('sellPrice').value);
+ if(!p||!Number.isFinite(price)||price<1){msg('Oyuncu ve geçerli fiyat seç.');return}
+ if(state.listings.some(l=>l.playerId===id)){msg('Bu oyuncu zaten pazarda.');return}
+ state.listings.push({id:'listing-'+Date.now(),playerId:id,name:p.name,pos:p.pos,rating:p.rating,price,seller:state.club,ownerCode:state.playerCode});
+ persist();renderRealMarket();refreshSellSelect();msg(p.name+' satışa kondu!')
+}
+function buyListing(id){
+ const l=state.listings.find(l=>l.id===id);if(!l)return;
+ if(l.ownerCode===state.playerCode){msg('Kendi ilanını satın alamazsın.');return}
+ if(state.money<l.price){msg('Yeterli C48 paran yok.');return}
+ if(state.owned.length>=25){msg('Kadro dolu.');return}
+ state.money-=l.price;state.owned.push({id:'user-'+Date.now(),name:l.name,pos:l.pos,rating:l.rating,price:l.price});
+ state.listings=state.listings.filter(x=>x.id!==id);state.lastResult=l.name+' pazardan alındı.';persist();updateStats();renderRealMarket();refreshSellSelect();renderSquad();msg('Transfer tamamlandı!')
+}
+function renderRealMarket(){
+ if(!$('realMarketRows'))return;
+ $('listingCount').textContent=state.listings.length;$('myListingCount').textContent=state.listings.filter(l=>l.ownerCode===state.playerCode).length;
+ $('realMarketRows').innerHTML=state.listings.map(l=>`<tr><td><b>${l.name}</b><div class="muted">${l.pos}</div></td><td>${l.seller}</td><td><span class="rating">${l.rating}</span></td><td>${fmt(l.price)} C48</td><td><button ${l.ownerCode===state.playerCode||state.money<l.price||state.owned.length>=25?'disabled':''} onclick="buyListing('${l.id}')">${l.ownerCode===state.playerCode?'Senin ilan':state.money<l.price?'Yetersiz para':'Satın al'}</button> ${l.ownerCode===state.playerCode?`<button onclick="cancelListing('${l.id}')">İptal</button>`:''}</td></tr>`).join('')||'<tr><td colspan="5">Henüz satış ilanı yok. İlk oyuncunu sen satışa koy!</td></tr>';
+ refreshSellSelect()
+}
+function cancelListing(id){state.listings=state.listings.filter(l=>l.id!==id);persist();renderRealMarket();msg('İlan kaldırıldı')}
+function applyTheme(theme){
+ const themes={purple:['#10091b','#211233','#7040a8'],red:['#1b090b','#321216','#d43a49'],green:['#08130e','#102019','#2b5038'],black:['#050505','#111111','#333333'],pink:['#1b0a15','#301426','#b54483'],yellow:['#171406','#2c260b','#a58a25']};
+ const t=themes[theme]||themes.green;document.documentElement.style.setProperty('--bg',t[0]);document.documentElement.style.setProperty('--panel',t[1]);document.documentElement.style.setProperty('--line',t[2]);
+ document.body.style.background=`radial-gradient(ellipse at top,${t[1]} 0%,${t[0]} 65%)`;
+ if($('themeStatus'))$('themeStatus').textContent='Aktif tema: '+({purple:'Mor',red:'Kırmızı',green:'Yeşil',black:'Siyah',pink:'Pembe',yellow:'Sarı'}[theme]||'Yeşil');
+}
+function setTheme(theme){state.theme=theme;persist();applyTheme(theme);msg('Arka plan teması değiştirildi')}
+
+function msg(s){let n=document.createElement('div');n.textContent=s;n.style='position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#baff67;color:#10200e;padding:12px 18px;border-radius:12px;font-weight:800;z-index:10;box-shadow:0 8px 25px #0008;max-width:90vw;text-align:center';document.body.appendChild(n);setTimeout(()=>n.remove(),2300)}
+
+function renderFriends(){
+ if(!$('friendList'))return;
+ $('myPlayerCode').textContent=state.playerCode||'C48-??????';
+ $('friendList').innerHTML=state.friends.length?state.friends.map(f=>`<div class="player"><div><b>${f.name}</b><div class="muted">${f.code}</div></div><button onclick="challengeFriend('${f.code}')">Davet et</button></div>`).join(''):'<div class="notice">Henüz arkadaş eklemedin. Arkadaşının kodunu yukarıya yaz.</div>';
+}
+function copyPlayerCode(){if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(state.playerCode).then(()=>msg('Oyuncu kodun kopyalandı')).catch(()=>msg('Oyuncu kodun: '+state.playerCode));else msg('Oyuncu kodun: '+state.playerCode)}
+function addFriend(){let code=$('friendCodeInput').value.trim().toUpperCase();if(!/^C48-[A-Z0-9]{6}$/.test(code)){msg('Kod C48-XXXXXX biçiminde olmalı');return}if(code===state.playerCode){msg('Kendi kodunu ekleyemezsin');return}if(state.friends.some(f=>f.code===code)){msg('Bu arkadaş zaten listende');return}state.friends.push({code,name:'Menajer '+code.slice(-3)});persist();renderFriends();$('friendCodeInput').value='';msg('Arkadaş listene eklendi (yerel demo)')}
+function createRoom(){let code='C48-'+Math.random().toString(36).slice(2,7).toUpperCase();$('roomCard').classList.remove('hidden');$('roomCard').innerHTML=`Oda kodun: <b style="font-size:20px;letter-spacing:2px">${code}</b> <button onclick="copyRoomCode('${code}')">Kodu kopyala</button><div class="muted" style="margin-top:7px">Arkadaşına bu kodu gönder. Bu demo sürümünde oda yerel olarak oluşturulur.</div>`;$('versusMatch').classList.remove('hidden');$('versusTeams').textContent=state.club+' vs ARKADAŞ';$('versusResult').classList.add('hidden');$('startVersus').disabled=false;window.currentRoom=code}
+function copyRoomCode(code){if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(code).then(()=>msg('Oda kodu kopyalandı')).catch(()=>msg('Oda kodu: '+code));else msg('Oda kodu: '+code)}
+function joinRoom(){let code=$('joinRoomInput').value.trim().toUpperCase();if(!/^C48-[A-Z0-9]{5}$/.test(code)){msg('Geçerli bir oda kodu gir');return}window.currentRoom=code;$('roomCard').classList.remove('hidden');$('roomCard').textContent='Oda kodu '+code+' girildi. Demo rakip bağlantısı hazır.';$('versusMatch').classList.remove('hidden');$('versusTeams').textContent=state.club+' vs ODA '+code.slice(-3);$('versusResult').classList.add('hidden');$('startVersus').disabled=false;msg('Demo odasına katıldın')}
+function challengeFriend(code){$('joinRoomInput').value='';showPage('versus');createRoom();msg(code+' kodlu arkadaşına oda kodunu gönder')}
+let versusTimer=null;
+function startVersusMatch(){if($('startVersus').disabled)return;$('startVersus').disabled=true;$('versusResult').classList.add('hidden');let left=60,a=0,b=0;$('versusUs').textContent='0';$('versusThem').textContent='0';$('versusComment').textContent='Maç başladı!';$('versusClock').textContent='01:00';clearInterval(versusTimer);versusTimer=setInterval(()=>{left--;if(Math.random()<.19){if(Math.random()<.5){a++;$('versusComment').textContent='GOOOL! '+state.club+'!'}else{b++;$('versusComment').textContent='Rakip gol attı!'}$('versusUs').textContent=a;$('versusThem').textContent=b}$('versusClock').textContent='00:'+String(left).padStart(2,'0');if(left<=0){clearInterval(versusTimer);let result=a>b?'Kazandın! +5.000 C48':a===b?'Berabere! +2.500 C48':'Kaybettin. +500 C48';state.money+=a>b?5000:a===b?2500:500;if(a>b)state.wins++;state.played++;state.lastResult='1v1: '+a+'-'+b+' · '+result;persist();updateStats();$('versusResult').classList.remove('hidden');$('versusResult').textContent='1v1 sonucu: '+a+'-'+b+' · '+result+' (demo maç)';$('versusComment').textContent='Maç sona erdi.';setTimeout(()=>$('startVersus').disabled=false,10000)}} ,1000)}
+
+load();if(!state.playerCode)state.playerCode='C48-'+Math.random().toString(36).slice(2,8).toUpperCase();if(!state.friends)state.friends=[];if(!state.listings)state.listings=[];if(!Number.isFinite(state.clubChanges))state.clubChanges=0;if(!state.theme)state.theme='green';if(!state.passing)state.passing='short';if(!state.tempo)state.tempo='normal';if(!state.line)state.line='balanced';persist();connectC48Online();generateMarket();updateStats();renderSquad();renderFriends();renderRealMarket();$('myPlayerCode').textContent=state.playerCode;let activeMarketWindow=Math.floor(Date.now()/1800000);function updateMarketClock(){const now=Date.now(),windowNow=Math.floor(now/1800000);if(windowNow!==activeMarketWindow){activeMarketWindow=windowNow;generateMarket();renderMarket();msg('Transfer marketi yenilendi! Yeni 10 oyuncu geldi.')}const left=1800000-(now%1800000);const el=$('marketTimer');if(el)el.textContent=String(Math.floor(left/60000)).padStart(2,'0')+':'+String(Math.floor((left%60000)/1000)).padStart(2,'0')}updateMarketClock();setInterval(updateMarketClock,250);
+</script>
+<script>
+window.addEventListener('load', function () {
+  const status = document.getElementById('onlineMarketStatus');
+  if (!status) return;
+  setTimeout(function () {
+    if (status.textContent.trim() === 'Çevrim içi market bağlantısı hazırlanıyor…') {
+      status.textContent = 'Bağlantı kodu başlatılamadı. Sayfayı Ctrl+F5 ile yenile; devam ederse F12 > Console ekranındaki kırmızı hatayı gönder.';
+      status.style.borderColor = '#d94b4b';
+    }
+  }, 2500);
+});
+window.addEventListener('error', function (event) {
+  const status = document.getElementById('onlineMarketStatus');
+  if (status && status.textContent.includes('hazırlanıyor')) {
+    status.textContent = 'JavaScript hatası: ' + (event.message || 'bilinmeyen hata') + '. F12 > Console ekranından ayrıntıyı kontrol et.';
+    status.style.borderColor = '#d94b4b';
+  }
+});
+</script>
+
+</body></html>
