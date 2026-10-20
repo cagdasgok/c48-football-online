@@ -265,10 +265,13 @@ header,.sidebar,.panel{box-shadow:0 12px 30px #0002}
 @media(max-width:700px){.match-stand.stand-left,.match-stand.stand-right{width:14px;font-size:9px}.match-stand{letter-spacing:2px}}
 
 .roster-card.rating-green,.bench-card.rating-green,.market-card.rating-green,.loot-player-card.rating-green{border:3px solid #35e06f!important;box-shadow:0 0 13px #35e06f66!important}.roster-card.rating-blue,.bench-card.rating-blue,.market-card.rating-blue,.loot-player-card.rating-blue{border:3px solid #39a9ff!important;box-shadow:0 0 10px #39a9ff55!important}
+
+.season-rewards{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px}.season-reward{border:1px solid #35563b;border-radius:12px;background:#0c1a10;padding:11px;min-width:0}.season-reward.locked{opacity:.55}.season-reward.ready{border-color:#baff67;box-shadow:0 0 0 1px #baff6733}.season-reward b{display:block;font-size:13px}.season-reward small{display:block;color:var(--muted);margin:5px 0 8px}.season-missions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.season-mission{padding:11px;border:1px solid #294833;border-radius:10px;background:#0c1a10}.season-mission .mission-top{display:flex;justify-content:space-between;gap:8px;font-size:13px;font-weight:800}.season-mission small{display:block;color:var(--muted);margin-top:5px}.season-progress{height:6px;border-radius:99px;background:#274432;overflow:hidden;margin-top:8px}.season-progress span{display:block;height:100%;background:var(--lime)}.season-mission.done{border-color:#568b4e}.v21-goal-event{display:block;margin-top:5px;color:#dfffc8;font-size:12px}.v21-assist{display:block;color:#a9c4b0;font-size:10px;margin-left:12px}.box-preview-btn{width:100%;margin-top:5px;background:#192d20;font-size:12px;padding:8px 4px}@media(max-width:800px){.season-rewards{grid-template-columns:repeat(3,minmax(0,1fr))}.season-missions{grid-template-columns:1fr}}@media(max-width:450px){.season-rewards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
 </style></head><body><div id="c48Intro"><div class="intro-pitch"></div><div><div class="intro-title">C48</div><div class="intro-sub">FOOTBALL MANAGER</div><div style="text-align:center;position:relative;margin-top:18px;color:#c4dfc9;font-size:12px;letter-spacing:3px">SEZON 1 · SÜRÜM 1.5</div></div></div>
 <header><div class="logo">C48 <span>FOOTBALL MANAGER</span></div><div class="stats"><button onclick="showPage('profile')" style="padding:7px 10px">👤 <span id="topProfileName">Profil</span></button><div class="chip">💰 <b id="money">25.000</b> C48</div><div class="chip">🏟️ Seviye <b id="stadiumLevel">1</b></div><div class="chip">⭐ Güç <b id="teamPower">62</b></div></div></header>
 <div class="layout"><aside class="sidebar"><div class="muted" style="padding:6px 9px 12px">KULÜP MERKEZİ</div><div class="nav" id="nav">
-<button class="active" data-page="home">🏠 Genel Bakış</button><button data-page="squad">👥 Kadro</button><button data-page="training">🏋️ Antrenman</button><button data-page="scout">🔎 Oyuncu Ara</button><button data-page="market">🛒 Market</button><button data-page="sell">💸 Oyuncu Sat</button><button data-page="league">🏆 Lig</button><button data-page="tactics">🧠 Taktikler</button><button data-page="matches">⚽ Maçlar</button><button data-page="profile">👤 Profil</button><button data-page="ranking">🏆 Reyting Sıralaması</button><button data-page="stadium">🏟️ Stadyum</button><button data-page="club">🎨 Kulüp</button><button data-page="settings">⚙️ Ayarlar</button></div><div class="footer">C48 Studios · v1.6.7 UPDATE</div></aside>
+<button class="active" data-page="home">🏠 Genel Bakış</button><button data-page="squad">👥 Kadro</button><button data-page="training">🏋️ Antrenman</button><button data-page="scout">🔎 Oyuncu Ara</button><button data-page="market">🛒 Market</button><button data-page="sell">💸 Oyuncu Sat</button><button data-page="league">🏆 Lig</button><button data-page="season">🎖️ Sezon & Görevler</button><button data-page="tactics">🧠 Taktikler</button><button data-page="matches">⚽ Maçlar</button><button data-page="profile">👤 Profil</button><button data-page="ranking">🏆 Reyting Sıralaması</button><button data-page="stadium">🏟️ Stadyum</button><button data-page="club">🎨 Kulüp</button><button data-page="settings">⚙️ Ayarlar</button></div><div class="footer">C48 Studios · v2.1 UPDATE</div></aside>
 <main class="main">
 <section id="page-home">
 <div class="hero"><div><div class="badge">YENİ KULÜP · SEZON 1</div><h1 id="clubTitle">C48 United</h1><div class="muted">Kendi kulübünü yönet. Kadronu güçlendir. Zirveye çık.</div></div><button class="primary" onclick="showPage('matches')">Maça Hazırlan →</button></div>
@@ -300,6 +303,11 @@ header,.sidebar,.panel{box-shadow:0 12px 30px #0002}
   <div class="panel"><h3>🎯 Son Kutu Sonucun</h3><div id="boxResult" class="box-result">Henüz kutu açmadın. İlk oyuncunu keşfet!</div></div>
   <div class="panel"><h3>📚 Şans Bilgisi</h3><p class="muted">Her kutunun reyting olasılıkları farklıdır. Pahalı kutularda yüksek reytingli oyuncu çıkma ihtimali artar; en iyi oyuncu garantisi yoktur.</p></div>
 </div>
+</section>
+<section id="page-season" class="hidden">
+<div class="hero"><div><div class="badge">C48 SEASON PASS</div><h1>🎖️ Sezon ve Görevler</h1><div class="muted">50 görev tamamla, 30 ödül aç. Ödüller bu cihazdaki oyun kaydına eklenir.</div></div><div class="metric"><div class="big" id="seasonMissionCount">0/50</div><small>Tamamlanan görev</small></div></div>
+<div class="panel"><h2>🏆 Ödül yolu · 30 kademe</h2><div class="muted" style="margin-bottom:12px">İlk 29 ödül C48 parasıdır. 30. ödülde üç özel oyuncudan yalnızca birini seçebilirsin.</div><div id="seasonRewards" class="season-rewards"></div></div>
+<div class="panel"><h2>📋 Görev listesi · 50 görev</h2><div class="muted" style="margin-bottom:12px">Görev ilerlemesi maçların, galibiyetlerin, kadronun ve lig haftalarının durumuna göre güncellenir.</div><div id="seasonMissions" class="season-missions"></div></div>
 </section>
 <section id="page-profile" class="hidden"><div class="hero"><div><div class="badge">MENAJER KARTI</div><h1>👤 Profilim</h1><div class="muted">Kulübün, paran, reytingin ve kadron tek yerde.</div></div></div><div id="onlineProfileStatus" class="notice">Supabase profili bağlanıyor…</div><div id="profileCard" class="panel"></div><div class="panel"><h2>👥 Arkadaş ekle</h2><p class="muted">Arkadaşının C48 kodunu gir. İkiniz de aynı Supabase sunucusuna bağlı olmalısınız.</p><div class="formrow"><input id="onlineFriendCode" placeholder="Arkadaş kodu (C48-XXXXXX)" maxlength="16"><button class="primary" onclick="addOnlineFriend()">Arkadaş ekle</button><button onclick="refreshOnlineSocial()">Yenile</button></div><div id="onlineFriendStatus" class="muted" style="margin-top:8px"></div></div><div class="panel"><h2>👥 Arkadaş profilleri</h2><div id="friendProfiles" class="pitch"></div></div></section><section id="page-ranking" class="hidden"><div class="hero"><div><div class="badge">C48 LEADERBOARD</div><h1>🏆 Reyting Sıralaması</h1><div class="muted">Takımlar toplam kadro reyting ortalamasına göre sıralanır.</div></div></div><div class="panel"><div class="tablewrap"><table><thead><tr><th>#</th><th>Kulüp</th><th>Reyting</th><th>Oyuncu</th><th>Bakiye</th></tr></thead><tbody id="ratingRankingRows"></tbody></table></div><p class="muted">Çevrim içi sıralama Supabase sunucusuna kayıtlı kulüpleri reytinge göre gösterir. Bakiye ve kadro bilgileri oyuncu profillerinde görünür.</p></div></section><section id="page-tactics" class="hidden"><div class="panel"><h2>🧠 Maç taktikleri</h2><p class="muted">Rakibe karşı oyun tarzını ve dizilişini seç.</p><div class="formrow"><label>Diziliş <select id="formation" onchange="setTactic()"><option>4-3-3</option><option>4-4-2</option><option>3-5-2</option><option>5-3-2</option><option>4-2-3-1</option></select></label><label>Oyun tarzı <select id="style" onchange="setTactic()"><option value="balanced">Dengeli</option><option value="attack">Hücum</option><option value="defend">Savunma</option><option value="possession">Topa sahip olma</option><option value="counter">Kontra atak</option></select></label><label>Pres <select id="press" onchange="setTactic()"><option value="normal">Normal</option><option value="high">Önde pres</option><option value="low">Geri çekil</option></select></label><label>Pas oyunu <select id="passing" onchange="setTactic()"><option value="short">Kısa pas</option><option value="mixed">Karışık pas</option><option value="long">Uzun top</option></select></label><label>Tempo <select id="tempo" onchange="setTactic()"><option value="normal">Normal</option><option value="fast">Hızlı</option><option value="slow">Yavaş</option></select></label><label>Defans çizgisi <select id="line" onchange="setTactic()"><option value="balanced">Dengeli</option><option value="high">Önde</option><option value="deep">Derinde</option></select></label></div><div class="grid" style="margin-top:16px"><div class="metric"><div class="big" id="attackVal">68</div><small>Hücum gücü</small></div><div class="metric"><div class="big" id="midVal">64</div><small>Orta saha gücü</small></div><div class="metric"><div class="big" id="defVal">61</div><small>Savunma gücü</small></div></div><div class="notice" style="margin-top:12px" id="tacticText">Dengeli taktik, her alanda istikrarlı bir yaklaşım sunar.</div></div></section>
 <section id="page-matches" class="hidden" style="display:none!important"><div class="hero"><div><h1>Maç Merkezi</h1><div class="muted">Maç simülasyonunu başlat ve ödül kazan.</div></div><span class="badge">LİG MAÇI</span></div><div class="panel"><h2>🏆 C48 Lig Mücadelesi</h2><div class="grid"><div class="metric"><small>Senin takımın</small><div class="big" id="myMatchPower">62</div><b id="matchClub">C48 United</b></div><div class="metric"><small>Rakip takım</small><div class="big" id="oppPower">60</div><b>Harbor City</b></div><div class="metric"><small>Galibiyet ödülü</small><div class="big">+2.000</div><small>C48 oyun parası</small></div></div><button class="primary" style="margin-top:14px" id="playMatch" onclick="playMatch()">20 saniyelik maçı başlat</button>
@@ -1386,7 +1394,7 @@ getLeague=function(){const l=_getLeagueV15();if(l.teams&&l.teams[0]){l.teams[0].
 realPlayerData.forEach(p=>{if(p.name==='Lionel Messi'){p.rating=107;p.price=5600000;}if(p.name==='Lamine Yamal'){p.rating=109;p.price=7500000;}});
 famousPlayerCatalog.forEach(p=>{if(p[0]==='Lamine Yamal'){p[2]=109;}});
 // Start page with updated profile/ranking labels and tiers.
-window.addEventListener('load',()=>{renderBoxGridV151();document.querySelectorAll('#page-versus').forEach(e=>e.remove());const oldFriends=document.querySelector('#page-friends');if(oldFriends)oldFriends.remove();renderProfileV15();renderRatingRankingV15();applyRatingFrames();setInterval(()=>{if(c48Session?.user?.id){refreshOnlineRanking().catch(()=>{});refreshOnlineSocial().catch(()=>{});syncOnlineProfile(false).catch(()=>{});}},30000);const footer=document.querySelector('.footer');if(footer)footer.textContent='C48 Studios · v1.6.7 UPDATE';const sellBtn=document.querySelector('#page-sell button[onclick="listPlayerForSale()"]');if(sellBtn)sellBtn.textContent='💸 Oyuncuyu anında sat';const sellHeading=document.querySelector('#page-sell h1');if(sellHeading)sellHeading.textContent='💸 Oyuncuyu Anında Sat';const desc=document.querySelector('#page-sell .hero .muted');if(desc)desc.textContent='Oyuncunu piyasa değerinin %25’ine satarsın; %75 zarar uygulanır.';const priceLabel=document.querySelector('#page-sell label');if(priceLabel)priceLabel.firstChild.textContent='Satışta alacağın para (C48) ';});
+window.addEventListener('load',()=>{renderBoxGridV151();document.querySelectorAll('#page-versus').forEach(e=>e.remove());const oldFriends=document.querySelector('#page-friends');if(oldFriends)oldFriends.remove();renderProfileV15();renderRatingRankingV15();applyRatingFrames();setInterval(()=>{if(c48Session?.user?.id){refreshOnlineRanking().catch(()=>{});refreshOnlineSocial().catch(()=>{});syncOnlineProfile(false).catch(()=>{});}},30000);const footer=document.querySelector('.footer');if(footer)footer.textContent='C48 Studios · v2.1 UPDATE';const sellBtn=document.querySelector('#page-sell button[onclick="listPlayerForSale()"]');if(sellBtn)sellBtn.textContent='💸 Oyuncuyu anında sat';const sellHeading=document.querySelector('#page-sell h1');if(sellHeading)sellHeading.textContent='💸 Oyuncuyu Anında Sat';const desc=document.querySelector('#page-sell .hero .muted');if(desc)desc.textContent='Oyuncunu piyasa değerinin %25’ine satarsın; %75 zarar uygulanır.';const priceLabel=document.querySelector('#page-sell label');if(priceLabel)priceLabel.firstChild.textContent='Satışta alacağın para (C48) ';});
 </script>
 
 
@@ -1430,7 +1438,7 @@ Object.assign(transferBoxTypes,{
 });
 // refresh pools after the player database changes and re-render visible screens
 try{generateScoutPool();generateMarket();renderRealMarket();renderBoxGridV151();renderProfileV15();renderRatingRankingV15();}catch(e){console.warn('v1.6 refresh:',e);}
-window.addEventListener('load',()=>{const desc=document.querySelector('#page-sell .hero .muted');if(desc)desc.textContent='Oyuncunu piyasa değerinin %15’ine satarsın; %85 zarar uygulanır.';const footer=document.querySelector('.footer');if(footer)footer.textContent='C48 Studios · v1.6.7 UPDATE';});
+window.addEventListener('load',()=>{const desc=document.querySelector('#page-sell .hero .muted');if(desc)desc.textContent='Oyuncunu piyasa değerinin %15’ine satarsın; %85 zarar uygulanır.';const footer=document.querySelector('.footer');if(footer)footer.textContent='C48 Studios · v2.1 UPDATE';});
 </script>
 
 
@@ -1492,7 +1500,7 @@ const c48161RenderProfile=renderProfileV15;
 renderProfileV15=function(){c48161RenderProfile();const card=$('profileCard');if(card){let badge=card.querySelector('[data-c48-cups]');if(!badge){badge=document.createElement('div');badge.dataset.c48Cups='1';badge.style.cssText='margin-top:10px;padding:9px 12px;border:1px solid #bba34a;background:#292614;border-radius:10px;font-weight:850;color:#ffe783';const heading=card.querySelector('h3');if(heading)card.insertBefore(badge,heading);else card.appendChild(badge);}badge.textContent='🏆 Kazanılan Lig Kupaları: '+(Number(state.cups)||0);}};
 // Update current club state in storage and refresh the visible market/profile.
 try{generateScoutPool();generateMarket();renderRealMarket();renderBoxGridV151();renderProfileV15();renderRatingRankingV15();renderTraining();applyRatingFrames();}catch(e){console.warn('v1.6.1 refresh:',e);}
-window.addEventListener('load',()=>{const footer=document.querySelector('.footer');if(footer)footer.textContent='C48 Studios · v1.6.7 UPDATE';});
+window.addEventListener('load',()=>{const footer=document.querySelector('.footer');if(footer)footer.textContent='C48 Studios · v2.1 UPDATE';});
 </script>
 
 
@@ -1575,7 +1583,7 @@ window.addEventListener('load',()=>{const footer=document.querySelector('.footer
     if (typeof renderScout === 'function' && document.getElementById('scoutRows')) renderScout();
     if (typeof renderMarket === 'function' && document.getElementById('marketRows')) renderMarket();
     if (typeof applyRatingFrames === 'function') applyRatingFrames();
-    const footer = document.querySelector('.footer'); if (footer) footer.textContent = 'C48 Studios · v1.6.7 UPDATE';
+    const footer = document.querySelector('.footer'); if (footer) footer.textContent = 'C48 Studios · v2.1 UPDATE';
   } catch(e) { console.warn('C48 v1.6.7 patch:', e); }
 })();
 </script>
@@ -1731,4 +1739,89 @@ window.addEventListener('load',()=>{const footer=document.querySelector('.footer
   const footer=document.querySelector('.footer');if(footer)footer.textContent='C48 Studios · v2.0.1 UPDATE';
 })();
 </script>
+
+<script>
+// C48 Football Manager v2.1: goal events, box contents preview, season pass and exclusive players.
+(function(){
+ const $=id=>document.getElementById(id);
+ const specialSeasonPlayers=[
+  {id:'season-vlahovic',name:'Dušan Vlahović',pos:'SF',rating:101,price:2500000,club:'C48 Sezon Ödülü'},
+  {id:'season-greenwood',name:'Mason Greenwood',pos:'OM',rating:101,price:2600000,club:'C48 Sezon Ödülü'},
+  {id:'season-osimhen',name:'Victor Osimhen',pos:'SF',rating:101,price:2900000,club:'C48 Sezon Ödülü'}
+ ];
+ const missionDefs=[];
+ const milestones=[
+  ['İlk adım','Oyna 1 maç','played',1],['Isınma turu','Oyna 2 maç','played',2],['Maç ritmi','Oyna 3 maç','played',3],['Düzenli menajer','Oyna 4 maç','played',4],['Maç ustası','Oyna 5 maç','played',5],
+  ['İlk zafer','Kazan 1 maç','wins',1],['Kazanan takım','Kazan 2 maç','wins',2],['Galibiyet serisi','Kazan 3 maç','wins',3],['Zafer peşinde','Kazan 4 maç','wins',4],['Şampiyon ruhu','Kazan 5 maç','wins',5],
+  ['Kadro kurucu','Kadroda 12 oyuncu bulundur','squad',12],['Geniş kadro','Kadroda 13 oyuncu bulundur','squad',13],['Derin kadro','Kadroda 14 oyuncu bulundur','squad',14],['Yedek gücü','Kadroda 15 oyuncu bulundur','squad',15],['Tam kadro','Kadroda 16 oyuncu bulundur','squad',16],
+  ['Lig yolcusu','Lig haftasını 1 tamamla','week',1],['Lig takipçisi','Lig haftasını 2 tamamla','week',2],['Lig oyuncusu','Lig haftasını 3 tamamla','week',3],['Lig deneyimi','Lig haftasını 4 tamamla','week',4],['Lig tutkunu','Lig haftasını 5 tamamla','week',5],
+  ['Altı maç','Oyna 6 maç','played',6],['Yedi maç','Oyna 7 maç','played',7],['Sekiz maç','Oyna 8 maç','played',8],['Dokuz maç','Oyna 9 maç','played',9],['On maç','Oyna 10 maç','played',10],
+  ['Altı zafer','Kazan 6 maç','wins',6],['Yedi zafer','Kazan 7 maç','wins',7],['Sekiz zafer','Kazan 8 maç','wins',8],['Dokuz zafer','Kazan 9 maç','wins',9],['On zafer','Kazan 10 maç','wins',10],
+  ['Koleksiyoncu I','Kadroda 17 oyuncu bulundur','squad',17],['Koleksiyoncu II','Kadroda 18 oyuncu bulundur','squad',18],['Koleksiyoncu III','Kadroda 19 oyuncu bulundur','squad',19],['Koleksiyoncu IV','Kadroda 20 oyuncu bulundur','squad',20],['Koleksiyoncu V','Kadroda 21 oyuncu bulundur','squad',21],
+  ['Lig temposu I','Lig haftasını 6 tamamla','week',6],['Lig temposu II','Lig haftasını 7 tamamla','week',7],['Lig temposu III','Lig haftasını 8 tamamla','week',8],['Lig temposu IV','Lig haftasını 9 tamamla','week',9],['Lig temposu V','Lig haftasını 10 tamamla','week',10],
+  ['On bir maç','Oyna 11 maç','played',11],['On iki maç','Oyna 12 maç','played',12],['On üç maç','Oyna 13 maç','played',13],['On dört maç','Oyna 14 maç','played',14],['On beş maç','Oyna 15 maç','played',15],
+  ['On bir zafer','Kazan 11 maç','wins',11],['On iki zafer','Kazan 12 maç','wins',12],['On üç zafer','Kazan 13 maç','wins',13],['On dört zafer','Kazan 14 maç','wins',14],['Sezon efsanesi','Kazan 15 maç','wins',15]
+ ];
+ milestones.forEach((m,i)=>missionDefs.push({id:i+1,title:m[0],desc:m[1],metric:m[2],target:m[3]}));
+ const moneyRewards=[1000,1500,2000,2500,3000,3500,4000,4500,5000,6000,7000,8000,9000,10000,11000,12000,13000,14000,15000,16000,17000,18000,19000,20000,10000,12000,14000,16000,18000];
+ function initPass(){state.seasonPass=state.seasonPass||{claimed:[],chosenPlayer:null};state.seasonPass.claimed=Array.isArray(state.seasonPass.claimed)?state.seasonPass.claimed:[];}
+ function metricValue(key){if(key==='played')return Number(state.played)||0;if(key==='wins')return Number(state.wins)||0;if(key==='squad')return (state.owned||[]).length;if(key==='week')return Number(getLeague()?.week)||0;return 0;}
+ function missionProgress(m){return Math.min(m.target,metricValue(m.metric));}
+ function doneCount(){return missionDefs.filter(m=>missionProgress(m)>=m.target).length;}
+ function renderSeason(){initPass();const count=doneCount();if($('seasonMissionCount'))$('seasonMissionCount').textContent=count+'/50';const rewards=$('seasonRewards');if(rewards){rewards.innerHTML=Array.from({length:30},(_,i)=>{const level=i+1,need=Math.ceil(level*50/30),claimed=state.seasonPass.claimed.includes(level),ready=count>=need&&!claimed;let reward=level===30?'Üç özel oyuncudan birini seç':`${(moneyRewards[level-1]||20000).toLocaleString('tr-TR')} C48`;return `<div class="season-reward ${claimed?'claimed':ready?'ready':'locked'}"><b>🎁 Kademe ${level}</b><small>${reward}<br>${claimed?'Alındı':`Gerekli görev: ${need}/50`}</small><button ${ready?'':'disabled'} onclick="claimC48SeasonReward(${level})">${claimed?'Alındı':ready?'Ödülü al':'Kilitli'}</button></div>`}).join('');}
+ const missions=$('seasonMissions');if(missions)missions.innerHTML=missionDefs.map(m=>{const value=missionProgress(m),done=value>=m.target;return `<div class="season-mission ${done?'done':''}"><div class="mission-top"><span>${done?'✅':'🎯'} ${m.id}. ${m.title}</span><span>${value}/${m.target}</span></div><small>${m.desc}</small><div class="season-progress"><span style="width:${Math.round(value/m.target*100)}%"></span></div></div>`}).join('');}
+ window.claimC48SeasonReward=function(level){initPass();if(state.seasonPass.claimed.includes(level)){msg('Bu ödülü zaten aldın.');return;}const need=Math.ceil(level*50/30);if(doneCount()<need){msg(`Bu ödül için ${need} görev tamamlamalısın.`);return;}if(level===30){const choice=prompt('30. ödül: Birini seç ve numarasını yaz:\n1) Dušan Vlahović · SF · 101 reyting · 2.5M\n2) Mason Greenwood · OM · 101 reyting · 2.6M\n3) Victor Osimhen · SF · 101 reyting · 2.9M\n\nSeçimin (1/2/3):');const idx=Number(choice)-1;if(![0,1,2].includes(idx)){msg('Ödül seçimi iptal edildi.');return;}const p=specialSeasonPlayers[idx];if(state.owned.some(x=>x.id===p.id||x.name===p.name)){msg('Bu özel oyuncuyu zaten aldın.');return;}if(state.owned.length>=25){msg('Kadro dolu! Önce kadroda yer aç.');return;}state.owned.push({...p,id:p.id+'-'+Date.now()});state.seasonPass.chosenPlayer=p.name;}else{state.money+=moneyRewards[level-1]||20000;}state.seasonPass.claimed.push(level);state.lastResult=level===30?'Sezon ödülü: '+state.seasonPass.chosenPlayer+' kadroya katıldı.':`Sezon ödülü: +${(moneyRewards[level-1]||20000).toLocaleString('tr-TR')} C48`;persist();updateStats();renderSeason();renderSquad();syncBoxBalance();msg(level===30?state.seasonPass.chosenPlayer+' sezon ödülüyle kadrona eklendi!':'Sezon ödülü alındı!');};
+ // Chest contents preview, listing examples from the exact pool without changing the odds.
+ window.previewC48Box=function(type){const b=transferBoxTypes[type];if(!b)return;let pool=[];try{pool=getBoxPool(type)||[]}catch(e){}const candidates=pool.filter(p=>Number(p.rating)>=b.min&&Number(p.rating)<=b.max);const unique=[...new Map(candidates.map(p=>[p.name,p])).values()];const names=unique.slice(0,18).map(p=>`${p.name} · ${p.pos} · ${p.rating}`).join('\n');alert(`${b.name} içeriği\nReyting aralığı: ${b.min}–${b.max}\n\nÖrnek çıkabilecek oyuncular:\n${names||'Bu kutu havuzunda örnek oyuncu bulunamadı.'}\n\nListe örnektir; her açılışta bu isimlerden biri garanti değildir.`);};
+ const oldRenderBoxes=renderBoxGridV151;
+ renderBoxGridV151=function(){oldRenderBoxes();document.querySelectorAll('#boxGridV151 .loot-box').forEach((card,i)=>{const key=['bronze','silver','gold','academy','diamond','legend','pro','ultimate'][i];if(!key||card.querySelector('.box-preview-btn'))return;const btn=document.createElement('button');btn.className='box-preview-btn';btn.textContent='👀 İçinden kimler çıkabilir?';btn.onclick=()=>previewC48Box(key);const open=card.querySelector('.open-box-btn');if(open)open.insertAdjacentElement('afterend',btn);});};
+ // Show scorer as the main event and any assister underneath in smaller text.
+ const oldRenderLeagueV21=renderLeague;
+ renderLeague=function(){oldRenderLeagueV21();const l=getLeague();const wrap=$('leagueResults');if(!wrap)return;wrap.querySelectorAll('.league-fixture').forEach((card,i)=>{const r=l.results[i];if(!r?.events?.length)return;let el=card.querySelector('.v21-goal-events');if(!el){el=document.createElement('div');el.className='v21-goal-events';card.appendChild(el);}el.innerHTML=r.events.map(ev=>{const match=String(ev).match(/^(.+?) ⚽(?: \((.+?) 🎯\))?$/);if(!match)return `<span class="v21-goal-event">${escapeHtml(ev)}</span>`;return `<span class="v21-goal-event">⚽ ${escapeHtml(match[1])}${match[2]?`<span class="v21-assist">↳ Asist: ${escapeHtml(match[2])}</span>`:''}</span>`;}).join('');});};
+ // Keep season task/reward UI in sync with game navigation and actions.
+ const oldShowPage=showPage;
+ showPage=function(page){oldShowPage(page);if(page==='season')renderSeason();};
+ const oldUpdateStats=updateStats;
+ updateStats=function(){oldUpdateStats();try{if(!$('page-season')?.classList.contains('hidden'))renderSeason();}catch(e){}};
+ // Prevent season-only players from appearing in the normal market or random boxes.
+ const oldRandomBoxPlayer=randomBoxPlayer;
+ randomBoxPlayer=function(rating,type){const p=oldRandomBoxPlayer(rating,type);if(specialSeasonPlayers.some(x=>x.name===p.name)){const pool=(getBoxPool(type)||[]).filter(x=>!specialSeasonPlayers.some(y=>y.name===x.name)&&x.rating>=transferBoxTypes[type].min&&x.rating<=transferBoxTypes[type].max);const alt=pool[Math.floor(Math.random()*pool.length)];if(alt)return {...p,name:alt.name,pos:alt.pos,rating:Math.max(transferBoxTypes[type].min,Math.min(transferBoxTypes[type].max,alt.rating))};p.name='C48 Akademi Oyuncusu';}return p;};
+ // Refresh the chest preview after the base render and initialize saved season data.
+ initPass();
+ try{renderBoxGridV151();renderSeason();}catch(e){console.warn('C48 v2.1 setup:',e);}
+ const footer=document.querySelector('.footer');if(footer)footer.textContent='C48 Studios · v2.1 UPDATE';
+})();
+</script>
+
+
+<style>
+/* v2.1.1: season-exclusive player cards */
+.market-card.c48-special-season-card{position:relative!important;border:2px solid #d9c94a!important;box-shadow:0 0 0 1px #d9c94a44,0 0 15px #d9c94a24!important}
+.market-card.c48-special-season-card:before{content:'★ ÖZEL KART';position:absolute;top:7px;right:7px;z-index:5;padding:3px 8px;border:1px solid #f1df69;border-radius:6px;background:linear-gradient(135deg,#594c0c,#b6a62d);color:#fffbe0;font-size:10px;font-weight:900;letter-spacing:.5px}
+</style>
+<script>
+(function(){
+ const special={
+  'Dušan Vlahović':{pos:'SF',rating:101,price:2500000},
+  'Mason Greenwood':{pos:'OM',rating:101,price:2600000},
+  'Victor Osimhen':{pos:'SF',rating:101,price:2900000}
+ };
+ function fixPool(pool){if(!Array.isArray(pool))return;pool.forEach(p=>{const v=special[p.name];if(v){p.pos=v.pos;p.rating=v.rating;p.price=v.price;p.c48SpecialSeason=true;}});}
+ // Ensure all three season-exclusive players are available in the scout/search list.
+ try{
+  Object.entries(special).forEach(([name,v],i)=>{
+   const entry={id:'season-special-'+i,name,pos:v.pos,rating:v.rating,price:v.price,club:'C48 Sezon Ödülü',c48SpecialSeason:true};
+   if(Array.isArray(realPlayerData)&&!realPlayerData.some(p=>p.name===name))realPlayerData.push({...entry});
+   if(Array.isArray(scoutPool)&&!scoutPool.some(p=>p.name===name))scoutPool.push({...entry});
+  });
+  fixPool(realPlayerData);fixPool(scoutPool);fixPool(extraPlayers);fixPool(state.owned);fixPool(typeof boxPlayers!=='undefined'?boxPlayers:null);
+ }catch(e){}
+ const oldRenderScout=renderScout;
+ renderScout=function(){oldRenderScout();const rows=document.getElementById('scoutRows');if(!rows)return;rows.querySelectorAll('.market-card').forEach(card=>{const name=card.querySelector('.market-player-name')?.textContent?.trim();const v=special[name];if(!v)return;card.classList.add('c48-special-season-card');const rating=card.querySelector('.market-rating');if(rating){rating.innerHTML=`${v.rating}<small>REYTİNG</small>`;}const tag=card.querySelector('.market-tag');if(tag)tag.textContent=v.pos;const price=card.querySelector('.market-price');if(price)price.innerHTML=`<small>FİYAT</small>${v.price.toLocaleString('tr-TR')} C48`;});};
+ // Also correct already-owned copies and keep the custom card marker when squad/market cards are rendered.
+ try{state.owned.forEach(p=>{const v=special[p.name];if(v){Object.assign(p,v);p.c48SpecialSeason=true;}});if(typeof persist==='function')persist();}catch(e){}
+ try{if(typeof renderScout==='function')renderScout();}catch(e){}
+})();
+</script>
+
 </body></html>
