@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>C48 Football Manager Online v0.7 - Transfer Güncellemesi</title>
+<html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>C48 Football Manager Online v0.9 - Transfer Arama ve Market Dengesi</title>
 <style>
 :root{--bg:#09120e;--panel:#12231a;--line:#294d38;--lime:#baff67;--muted:#a9c4b0;--white:#f4fff6}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--white);font-family:system-ui,Segoe UI,Arial}button,input,select{font:inherit}button{cursor:pointer;background:#1b3825;border:1px solid #3e6848;color:var(--white);border-radius:10px;padding:10px 13px;font-weight:750}button.primary{background:var(--lime);color:#12200e;border-color:var(--lime)}button:disabled{opacity:.4;cursor:not-allowed}header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:#0e1d14;border-bottom:1px solid var(--line);gap:12px;flex-wrap:wrap}.logo{font-weight:950;font-size:20px;letter-spacing:.5px}.logo span{color:var(--lime)}.stats{display:flex;gap:8px;flex-wrap:wrap}.chip{border:1px solid var(--line);background:#13271a;padding:7px 10px;border-radius:99px;font-size:13px}.layout{max-width:1300px;margin:auto;padding:16px;display:grid;grid-template-columns:230px 1fr;gap:15px}.sidebar,.panel{background:var(--panel);border:1px solid var(--line);border-radius:15px}.sidebar{padding:12px;height:max-content;position:sticky;top:12px}.nav{display:flex;flex-direction:column;gap:7px}.nav button{text-align:left;background:transparent;border-color:transparent}.nav button.active{background:#25432d;border-color:#47734e;color:var(--lime)}.main{min-width:0}.hero{padding:20px;border-radius:15px;background:linear-gradient(115deg,#214b2c,#10251a 70%);border:1px solid #3c6c47;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap}.hero h1{margin:4px 0 8px;font-size:clamp(23px,4vw,36px)}.muted{color:var(--muted);font-size:13px}.panel{padding:16px;margin-bottom:14px}.panel h2{font-size:18px;margin:0 0 13px}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.metric{padding:13px;border-radius:12px;background:#0d1c13;border:1px solid #294833}.metric .big{font-size:24px;font-weight:900}.metric small{display:block;color:var(--muted);margin-top:3px}.pitch{display:grid;grid-template-columns:1fr 1fr;gap:8px}.player{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px;background:#0d1b12;border:1px solid #2b4b35;border-radius:10px;font-size:13px}.rating{font-weight:900;color:var(--lime)}.roster-card{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;background:#10261a;border:2px solid #6e9676;border-radius:10px;padding:8px 4px;cursor:pointer;color:#fff;min-width:0}.roster-card.selected{border-color:var(--lime);box-shadow:0 0 0 2px #baff6755}.roster-card .name{font-size:11px;font-weight:800;overflow-wrap:anywhere}.roster-card .pos{font-size:10px;color:#c5e8ce}.roster-card .rating{font-size:17px}.bench-card{cursor:pointer;padding:9px;background:#0d1b12;border:2px solid #294b35;border-radius:9px;font-size:12px}.bench-card.selected{border-color:var(--lime)}.tablewrap{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:13px;min-width:560px}th,td{text-align:left;padding:10px;border-bottom:1px solid #294333}th{color:var(--muted);font-weight:650}input,select{background:#0b1910;color:var(--white);border:1px solid #365740;border-radius:8px;padding:9px;max-width:100%}.formrow{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.formrow input{flex:1;min-width:120px}.notice{background:#172f20;border:1px solid #3a6744;padding:10px 12px;border-radius:10px;font-size:13px;margin-bottom:12px}.bar{height:8px;background:#274432;border-radius:99px;overflow:hidden;margin-top:7px}.bar span{display:block;height:100%;background:var(--lime)}.hidden{display:none!important}.badge{font-size:11px;border-radius:99px;padding:4px 7px;background:#28462f;color:#d8ffd8}.footer{padding:8px 2px;color:var(--muted);font-size:12px}@media(max-width:800px){#squadLayout{grid-template-columns:minmax(0,1fr)!important}#formationPitch{min-height:340px!important}#benchList{grid-template-columns:repeat(2,minmax(0,1fr))!important}.layout{grid-template-columns:1fr;padding:10px}.sidebar{position:static;padding:8px}.nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}.nav button{text-align:center;padding:9px 5px;font-size:12px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{padding:15px}.pitch{grid-template-columns:1fr}header{padding:12px}.panel{padding:12px}}@media(max-width:400px){.grid{grid-template-columns:1fr}.nav{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
@@ -48,10 +48,26 @@ header,.sidebar,.panel{box-shadow:0 12px 30px #0002}
 .market-empty{grid-column:1/-1;text-align:center;padding:28px;border:1px dashed #365740;border-radius:12px;color:var(--muted)}
 @media(max-width:950px){.market-player-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.market-toolbar{grid-template-columns:repeat(2,minmax(0,1fr))}.market-search{grid-column:1/-1}}
 @media(max-width:520px){.market-player-grid{grid-template-columns:1fr}.market-toolbar{grid-template-columns:1fr}.market-search{grid-column:auto}.market-card{padding:13px}}
+
+/* v0.8 player portraits and position feedback */
+.market-avatar.real-face{overflow:hidden;padding:0;background:#203d29}
+.market-avatar.real-face img{width:100%;height:100%;object-fit:cover;display:block}
+.roster-card .player-face{width:28px;height:28px;object-fit:cover;border-radius:50%;border:1px solid #719b70}
+.market-card .market-avatar{width:48px;height:48px}
+.position-hint{font-size:11px;color:var(--muted);margin:6px 0 10px}
+
+/* v0.9 market player lookup */
+.player-lookup-panel{border:1px solid #365740;border-radius:13px;padding:14px;background:linear-gradient(135deg,#13271b,#0b1710)}
+.lookup-result{margin-top:10px;padding:10px;border-radius:9px;font-size:13px}
+.lookup-found{border:1px solid #365740;background:#0a160e}
+.lookup-missing{border:1px solid #66512a;background:#211b0b;color:#f0d79b}
+.lookup-player{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid #294333}
+.lookup-player:last-child{border-bottom:0}
+@media(max-width:600px){.lookup-player{align-items:flex-start;flex-direction:column}}
 </style></head><body>
 <header><div class="logo">C48 <span>FOOTBALL MANAGER</span></div><div class="stats"><div class="chip">💰 <b id="money">25.000</b> C48</div><div class="chip">🏟️ Seviye <b id="stadiumLevel">1</b></div><div class="chip">⭐ Güç <b id="teamPower">62</b></div></div></header>
 <div class="layout"><aside class="sidebar"><div class="muted" style="padding:6px 9px 12px">KULÜP MERKEZİ</div><div class="nav" id="nav">
-<button class="active" data-page="home">🏠 Genel Bakış</button><button data-page="squad">👥 Kadro</button><button data-page="market">🔄 Transfer Marketi</button><button data-page="tactics">🧠 Taktikler</button><button data-page="matches">⚽ Maçlar</button><button data-page="versus">⚔️ 1v1 Oda</button><button data-page="friends">🤝 Arkadaşlar</button><button data-page="stadium">🏟️ Stadyum</button><button data-page="club">🎨 Kulüp</button><button data-page="settings">⚙️ Ayarlar</button></div><div class="footer">C48 Studios · TRANSFER GÜNCELLEMESİ v0.7</div></aside>
+<button class="active" data-page="home">🏠 Genel Bakış</button><button data-page="squad">👥 Kadro</button><button data-page="market">🔄 Transfer Marketi</button><button data-page="tactics">🧠 Taktikler</button><button data-page="matches">⚽ Maçlar</button><button data-page="versus">⚔️ 1v1 Oda</button><button data-page="friends">🤝 Arkadaşlar</button><button data-page="stadium">🏟️ Stadyum</button><button data-page="club">🎨 Kulüp</button><button data-page="settings">⚙️ Ayarlar</button></div><div class="footer">C48 Studios · v0.9 TRANSFER ARAMA VE MARKET DENGESİ</div></aside>
 <main class="main">
 <section id="page-home">
 <div class="hero"><div><div class="badge">YENİ KULÜP · SEZON 1</div><h1 id="clubTitle">C48 United</h1><div class="muted">Kendi kulübünü yönet. Kadronu güçlendir. Zirveye çık.</div></div><button class="primary" onclick="showPage('matches')">Maça Hazırlan →</button></div>
@@ -67,6 +83,12 @@ header,.sidebar,.panel{box-shadow:0 12px 30px #0002}
 <select id="sortMarket" aria-label="Sıralama" onchange="renderMarket()"><option value="rating-desc">En yüksek reyting</option><option value="price-asc">En ucuz</option><option value="price-desc">En pahalı</option><option value="name-asc">İsim A–Z</option></select>
 </div>
 <div class="market-summary"><span>⚽ <b id="marketVisibleCount">20</b> oyuncu listeleniyor</span><span>🔄 Pazar <b>30 dakikada</b> yenilenir</span><span>💳 İşlemler C48 bakiyesiyle yapılır</span></div>
+<div class="panel player-lookup-panel" style="margin:0 0 14px">
+<h3>🔎 Oyuncu Bulucu</h3>
+<p class="muted">İstediğin futbolcuyu ara; bu transfer döneminde markette olup olmadığını kontrol et.</p>
+<div class="formrow"><input id="lookupPlayerName" placeholder="Örn. Cristiano Ronaldo, Messi, Arda Güler..." oninput="lookupMarketPlayer()"><button onclick="lookupMarketPlayer()">Market'te ara</button></div>
+<div id="lookupPlayerResult" class="lookup-result muted">Bir oyuncu adı yazmaya başla.</div>
+</div>
 <div id="marketRows" class="market-player-grid"></div>
 <div class="panel" style="margin-top:16px"><h2>📋 Transfer Takip Merkezi</h2><p class="muted">Bu market döneminde hangi oyuncunun alındığını ve alıcısını takip et.</p><div class="tablewrap"><table><thead><tr><th>Oyuncu</th><th>Reyting</th><th>Durum</th><th>Satın alan</th></tr></thead><tbody id="marketTrackerRows"></tbody></table></div><div class="muted" style="margin-top:8px">Not: Bu takip listesi bu cihazdaki kayıtları gösterir. Tüm oyuncular arasında gerçek ortak sahiplik için sunucu gerekir.</div></div>
 <div class="panel" style="margin-top:18px;background:linear-gradient(135deg,#14291e,#0b1710)">
@@ -121,7 +143,7 @@ header,.sidebar,.panel{box-shadow:0 12px 30px #0002}
 const $=id=>document.getElementById(id);
 const initialPlayers=[
 ['Emir Kaya','KL',67],['Mert Yılmaz','STP',64],['Arda Demir','STP',62],['Kaan Şahin','STP',60],['Efe Aslan','STP',61],['Deniz Aydın','MO',68],['Bora Çelik','MO',65],['Can Eren','MO',63],['Ali Koç','SĞK',66],['Kerem Polat','SLK',69],['Yiğit Arslan','SF',71]];
-let state={money:25000,stadium:1,wins:0,played:0,club:'C48 United',symbol:'★',colors:['#baff67','#14271b','#f4fff6'],formation:'4-3-3',style:'balanced',press:'normal',owned:initialPlayers.map((p,i)=>({id:'starter'+i,name:p[0],pos:p[1],rating:p[2],price:0})),bought:[],lastMarket:Date.now(),playerCode:'',friends:[],listings:[],clubChanges:0,theme:'green',passing:'short',tempo:'normal',line:'balanced',lastResult:'Kulübün hazır. Taktiklerini seç ve ilk maçına çık.'};
+let state={money:50000,stadium:1,wins:0,played:0,club:'C48 United',symbol:'★',colors:['#baff67','#14271b','#f4fff6'],formation:'4-3-3',style:'balanced',press:'normal',owned:initialPlayers.map((p,i)=>({id:'starter'+i,name:p[0],pos:p[1],rating:p[2],price:0})),bought:[],lastMarket:Date.now(),playerCode:'',friends:[],listings:[],clubChanges:0,theme:'green',passing:'short',tempo:'normal',line:'balanced',lastResult:'Kulübün hazır. Taktiklerini seç ve ilk maçına çık.'};
 const firstNames=['Luka','Mateo','Arda','Leo','Noah','Mert','Kerem','Victor','Jude','Kylian','Erling','Cristiano','Lionel','Andrés','Zinedine','Ronaldinho','Thierry','Ronaldo','Paolo','Francesco','Hakan','İlkay','Kevin','Mohamed','Sadio','Son','Virgil','Manuel','Iker','Gianluigi','Marco','Toni','David','Wayne','Didier','Samuel','Roberto','Cafu','Xavi','Sergio','Harry','Bukayo','Jamal','Lamine','Endrick'];
 const lastNames=['Yıldız','Demir','Kaya','Silva','Rossi','Müller','Öztürk','Yılmaz','Kovacs','Fernandes','Mbappé','Haaland','Messi','Ronaldo','Iniesta','Zidane','Henry','Nazario','Maldini','Totti','Çalhanoğlu','Gündoğan','De Bruyne','Salah','Mané','Son','Van Dijk','Neuer','Casillas','Buffon','Reus','Kroos','Beckham','Rooney','Drogba','Eto’o','Carlos','Alves','Hernández','Ramos','Kane','Saka','Musiala','Yamal','Silva'];
 const positions=['KL','STP','STP','STP','STP','MO','MO','MO','SĞK','SLK','SF'];
@@ -129,7 +151,65 @@ let market=[];
 function fmt(n){return Math.floor(n).toLocaleString('tr-TR')}
 function persist(){try{localStorage.setItem('c48manager',JSON.stringify(state))}catch(e){}}
 function load(){try{let s=JSON.parse(localStorage.getItem('c48manager'));if(s&&s.owned&&s.money!==undefined)state={...state,...s}}catch(e){}}
-function generateMarket(){market=[];let seed=Math.floor(Date.now()/1800000);for(let i=0;i<20;i++){let n=(seed*7919+i*104729+1777)>>>0;let x=(Math.sin(n*12.9898)*43758.5453);x=x-Math.floor(x);let y=(Math.sin((n+41)*78.233)*12345.6789);y=y-Math.floor(y);let rating=40+Math.floor(Math.pow(Math.abs(x),2.3)*71);let pos=positions[n%positions.length];let name=firstNames[n%firstNames.length]+' '+lastNames[(n*7+i)%lastNames.length];let id='market-'+seed+'-'+i;market.push({id,name,pos,rating,price:Math.round((rating**2.18)*7.8/100)*100})}}
+function priceForRating(r){
+ if(r<=60)return Math.round((5000+((Math.max(40,r)-40)/20)*145000)/1000)*1000;
+ if(r<=80)return Math.round((150000+((r-60)/20)*300000)/1000)*1000;
+ if(r<=100)return Math.round((450000+((r-80)/20)*200000)/1000)*1000;
+ if(r<110)return Math.round((650000+((r-100)/10)*50000)/1000)*1000;
+ return Math.round((700000+Math.random()*300000)/1000)*1000;
+}
+const featuredPlayers=[
+ {name:'Cristiano Ronaldo',pos:'SF',rating:110,key:'Cristiano Ronaldo'},
+ {name:'Lionel Messi',pos:'SF',rating:104,key:'Lionel Messi'},
+ {name:'Lamine Yamal',pos:'SĞK',rating:94,key:'Lamine Yamal'},
+ {name:'Arda Güler',pos:'MO',rating:89,key:'Arda Güler'},
+ {name:'Sergio Ramos',pos:'STP',rating:88,key:'Sergio Ramos'},
+ {name:'Kylian Mbappé',pos:'SF',rating:93,key:'Kylian Mbappé'},
+ {name:'Erling Haaland',pos:'SF',rating:91,key:'Erling Haaland'}
+];
+function generateMarket(){
+ market=[];
+ const seed=Math.floor(Date.now()/1800000);
+ // Exactly 2 elite (100-110) and 5 high-rated (80-99) players.
+ const top=[
+   {...featuredPlayers[0],rating:110},
+   {...featuredPlayers[1],rating:100+((seed%11))}
+ ];
+ const high=[
+   {...featuredPlayers[2],rating:80+((seed*3)%20)},
+   {...featuredPlayers[3],rating:80+((seed*7+3)%20)},
+   {...featuredPlayers[4],rating:80+((seed*5+6)%20)},
+   {...featuredPlayers[5],rating:80+((seed*9+1)%20)},
+   {...featuredPlayers[6],rating:80+((seed*11+4)%20)}
+ ];
+ [...top,...high].forEach((p,i)=>market.push({...p,id:'market-'+seed+'-featured-'+i,price:priceForRating(p.rating)}));
+ for(let i=7;i<20;i++){
+   const n=(seed*7919+i*104729+1777)>>>0;
+   const x=Math.abs(Math.sin(n*12.9898)*43758.5453)%1;
+   const rating=40+Math.floor(x*40); // remaining 13 are chance-based, rating 40-79
+   const pos=positions[n%positions.length];
+   const name=firstNames[n%firstNames.length]+' '+lastNames[(n*7+i)%lastNames.length];
+   market.push({id:'market-'+seed+'-'+i,name,pos,rating,price:priceForRating(rating)});
+ }
+}
+function lookupMarketPlayer(){
+ const input=($('lookupPlayerName')?.value||'').trim().toLocaleLowerCase('tr');
+ const result=$('lookupPlayerResult');
+ if(!result)return;
+ if(!input){result.className='lookup-result muted';result.textContent='Bir oyuncu adı yazmaya başla.';return;}
+ const found=market.filter(p=>p.name.toLocaleLowerCase('tr').includes(input));
+ if(found.length){
+   result.className='lookup-result lookup-found';
+   result.innerHTML=found.map(p=>{
+     const bought=(onlineMarketReady&&(p.purchased||p.buyer))||sharedBought()[p.id]||state.bought.includes(p.id);
+     return `<div class="lookup-player"><div><b>${p.name}</b><div class="muted">${p.pos} · Reyting ${p.rating} · ${fmt(p.price)} C48</div></div><span class="market-tag ${bought?'sold-label':''}">${bought?'🔒 Satılmış':'🟢 Bu markette var'}</span></div>`;
+   }).join('');
+ }else{
+   const known=featuredPlayers.find(p=>p.name.toLocaleLowerCase('tr').includes(input));
+   result.className='lookup-result lookup-missing';
+   result.innerHTML=`<b>${known?known.name:'Bu isimde oyuncu'}</b> bu 30 dakikalık market döneminde bulunmuyor.<div class="muted">Yeni market dönemi başladığında oyuncu havuzu yenilenir. Bu arama oyuncuyu otomatik satın almaz.</div>`;
+ }
+}
 function teamPower(){return Math.round(state.owned.reduce((s,p)=>s+p.rating,0)/Math.max(1,state.owned.length))}
 function updateStats(){$('money').textContent=fmt(state.money);$('stadiumLevel').textContent=state.stadium;$('teamPower').textContent=teamPower();$('squadCount').textContent=state.owned.length+'/25';$('winCount').textContent=state.wins;$('playedCount').textContent=state.played;$('clubTitle').textContent=state.club;$('matchClub').textContent=state.club;$('myMatchPower').textContent=teamPower();$('capacity').textContent=fmt(5000+(state.stadium-1)*2500);$('stadCapacity').textContent=fmt(5000+(state.stadium-1)*2500);$('stadLevel2').textContent=state.stadium;$('stadName').textContent=state.club+' Arena';$('nextCap').textContent=fmt(5000+state.stadium*2500);$('stadCost').textContent=fmt(state.stadium*16000);$('upgradeStadium').disabled=state.money<state.stadium*16000;$('formationLabel').textContent=state.formation;$('chemistry').textContent=Math.min(99,68+Math.floor(state.owned.length/2))+'%';$('chemBar').style.width=Math.min(99,68+Math.floor(state.owned.length/2))+'%';$('stadBar').style.width=Math.min(100,state.stadium*12)+'%';$('homeNotice').textContent=state.lastResult;$('clubNameInput').value=state.club;if($('crest'))$('crest').textContent=state.symbol;$('crestName').textContent=state.club;if($('crestBig'))$('crestBig').textContent=state.symbol;if($('freeChanges'))$('freeChanges').textContent=Math.max(0,2-state.clubChanges)+'/2';if($('paidClubChange'))$('paidClubChange').disabled=state.money<1000000||state.clubChanges<2;applyTheme(state.theme)}
 function showPage(page){document.querySelectorAll('main section').forEach(s=>s.classList.add('hidden'));$('page-'+page).classList.remove('hidden');document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===page));if(page==='squad')renderSquad();if(page==='market'){renderMarket();renderRealMarket();}if(page==='tactics')setTactic();if(page==='club'){$('color1').value=state.colors?.[0]||'#baff67';$('color2').value=state.colors?.[1]||'#14271b';$('color3').value=state.colors?.[2]||'#f4fff6';$('symbol').value=state.symbol||'🛡️';$('clubNameInput').value=state.club;refreshClubPreview?.()}if(page==='settings')applyTheme(state.theme);if(page==='stadium')updateStats()}
@@ -143,14 +223,58 @@ function getFormationPositions(){
  if(f==='4-2-3-1')return [[0],[1,2,3,4],[5,6],[7,8,9],[10]];
  return [[0],[1,2,3,4],[5,6,7],[8,9],[10]];
 }
-function chooseRoster(id){
- if(selectedRosterId===null){selectedRosterId=id;renderSquad();$('swapHint').textContent='Şimdi yer değiştireceğin oyuncuya tıkla.';return}
- if(selectedRosterId===id){selectedRosterId=null;renderSquad();$('swapHint').textContent='Seçim iptal edildi.';return}
- let a=state.owned.findIndex(p=>p.id===selectedRosterId),b=state.owned.findIndex(p=>p.id===id);
- if(a>=0&&b>=0){[state.owned[a],state.owned[b]]=[state.owned[b],state.owned[a]];state.lastResult='Kadro düzenin güncellendi.';persist()}
- selectedRosterId=null;renderSquad();updateStats();$('swapHint').textContent='Oyuncuların yeri değiştirildi.'
+function roleForSlot(index){
+ const rows=getFormationPositions();
+ for(let rowIndex=0;rowIndex<rows.length;rowIndex++){
+   if(rows[rowIndex].includes(index)){
+     if(rowIndex===0)return 'GK';
+     if(rowIndex===1)return 'DEF';
+     if(rowIndex===rows.length-1)return 'ATT';
+     return 'MID';
+   }
+ }
+ return 'BENCH';
 }
-function rosterCard(p,bench=false){let selected=selectedRosterId===p.id;return `<button class="${bench?'bench-card':'roster-card'} ${selected?'selected':''}" onclick="chooseRoster('${p.id}')" style="width:100%">${bench?`<b>${p.name}</b><span class="muted">${p.pos}</span><span class="rating">${p.rating}</span>`:`<span style="font-size:19px">👤</span><span class="name">${p.name}</span><span class="pos">${p.pos}</span><span class="rating">${p.rating}</span>`}</button>`}
+function playerFitsSlot(player,index){
+ const role=roleForSlot(index);
+ if(role==='GK')return player.pos==='KL';
+ if(role==='DEF')return ['STP','SLB','SĞB'].includes(player.pos);
+ if(role==='MID')return ['MO','SĞK','SLK','MDO','MOO'].includes(player.pos);
+ if(role==='ATT')return ['SF','SĞK','SLK'].includes(player.pos);
+ return true;
+}
+function chooseRoster(id){
+ if(selectedRosterId===null){
+   selectedRosterId=id;renderSquad();
+   $('swapHint').textContent='Şimdi yer değiştireceğin oyuncuya tıkla.';
+   return;
+ }
+ if(selectedRosterId===id){
+   selectedRosterId=null;renderSquad();$('swapHint').textContent='Seçim iptal edildi.';return;
+ }
+ const a=state.owned.findIndex(p=>p.id===selectedRosterId),b=state.owned.findIndex(p=>p.id===id);
+ if(a>=0&&b>=0){
+   const pa=state.owned[a],pb=state.owned[b];
+   const aOnPitch=a<11,bOnPitch=b<11;
+   if(aOnPitch&&!playerFitsSlot(pb,a)){
+     msg(`${pb.pos} mevkiindeki ${pb.name}, ${roleForSlot(a)==='GK'?'kaleci':roleForSlot(a)==='DEF'?'defans':roleForSlot(a)==='MID'?'orta saha':'hücum'} pozisyonunda oynayamaz.`);
+     selectedRosterId=null;renderSquad();return;
+   }
+   if(bOnPitch&&!playerFitsSlot(pa,b)){
+     msg(`${pa.pos} mevkiindeki ${pa.name}, seçilen oyuncunun saha pozisyonunda oynayamaz.`);
+     selectedRosterId=null;renderSquad();return;
+   }
+   [state.owned[a],state.owned[b]]=[state.owned[b],state.owned[a]];
+   state.lastResult='Kadro düzenin güncellendi.';persist();
+ }
+ selectedRosterId=null;renderSquad();updateStats();
+ $('swapHint').textContent='Oyuncuların yeri değiştirildi.';
+}
+function portraitMarkup(name,small=false){
+ const real=['Cristiano Ronaldo','Lionel Messi','Lamine Yamal','Arda Güler','Sergio Ramos'].includes(name);
+ return real?`<span class="player-face-slot" data-player-face="${name}">⚽</span>`:`<span style="font-size:19px">👤</span>`;
+}
+function rosterCard(p,bench=false){let selected=selectedRosterId===p.id;return `<button class="${bench?'bench-card':'roster-card'} ${selected?'selected':''}" onclick="chooseRoster('${p.id}')" style="width:100%">${bench?`${portraitMarkup(p.name,true)}<b>${p.name}</b><span class="muted">${p.pos}</span><span class="rating">${p.rating}</span>`:`${portraitMarkup(p.name)}<span class="name">${p.name}</span><span class="pos">${p.pos}</span><span class="rating">${p.rating}</span>`}</button>`}
 function renderSquad(){
  if(!$('formationPlayers'))return;
  const players=state.owned.slice(0,11),bench=state.owned.slice(11,16),reserve=state.owned.slice(16);
@@ -269,7 +393,7 @@ function renderMarket(){
    const action=bought?'Satıldı':owned?'Kadromda':state.money<p.price?'Para yetmiyor':state.owned.length>=25?'Kadro dolu':'Transfer et';
    const tag=bought?'<span class="market-tag sold-label">🔒 Satıldı</span>':owned?'<span class="market-tag owned-label">✓ Kadromda</span>':'<span class="market-tag">🟢 Satılık</span>';
    return `<article class="market-card">
-     <div class="market-card-top"><div class="market-avatar">⚽</div><div class="market-rating">${p.rating}<small>REYTİNG</small></div></div>
+     <div class="market-card-top"><div class="market-avatar real-face" data-player-face="${p.name}">⚽</div><div class="market-rating">${p.rating}<small>REYTİNG</small></div></div>
      <div class="market-player-name">${p.name}</div>
      <div class="market-player-meta"><span class="market-tag">${p.pos}</span>${tag}</div>
      <div class="market-card-bottom"><div class="market-price"><small>TRANSFER BEDELİ</small>${fmt(p.price)} <span style="font-size:11px;color:var(--muted)">C48</span></div><button class="market-buy ${!disabled?'primary':''}" ${disabled?'disabled':''} onclick="buyPlayer('${p.id}')">${action}</button></div>
@@ -387,7 +511,30 @@ function challengeFriend(code){$('joinRoomInput').value='';showPage('versus');cr
 let versusTimer=null;
 function startVersusMatch(){if($('startVersus').disabled)return;$('startVersus').disabled=true;$('versusResult').classList.add('hidden');let left=60,a=0,b=0;$('versusUs').textContent='0';$('versusThem').textContent='0';$('versusComment').textContent='Maç başladı!';$('versusClock').textContent='01:00';clearInterval(versusTimer);versusTimer=setInterval(()=>{left--;if(Math.random()<.19){if(Math.random()<.5){a++;$('versusComment').textContent='GOOOL! '+state.club+'!'}else{b++;$('versusComment').textContent='Rakip gol attı!'}$('versusUs').textContent=a;$('versusThem').textContent=b}$('versusClock').textContent='00:'+String(left).padStart(2,'0');if(left<=0){clearInterval(versusTimer);let result=a>b?'Kazandın! +5.000 C48':a===b?'Berabere! +2.500 C48':'Kaybettin. +500 C48';state.money+=a>b?5000:a===b?2500:500;if(a>b)state.wins++;state.played++;state.lastResult='1v1: '+a+'-'+b+' · '+result;persist();updateStats();$('versusResult').classList.remove('hidden');$('versusResult').textContent='1v1 sonucu: '+a+'-'+b+' · '+result+' (demo maç)';$('versusComment').textContent='Maç sona erdi.';setTimeout(()=>$('startVersus').disabled=false,10000)}} ,1000)}
 
-load();if(!state.playerCode)state.playerCode='C48-'+Math.random().toString(36).slice(2,8).toUpperCase();if(!state.friends)state.friends=[];if(!state.listings)state.listings=[];if(!Number.isFinite(state.clubChanges))state.clubChanges=0;if(!state.theme)state.theme='green';if(!state.passing)state.passing='short';if(!state.tempo)state.tempo='normal';if(!state.line)state.line='balanced';persist();connectC48Online();generateMarket();updateStats();renderSquad();renderFriends();renderRealMarket();$('myPlayerCode').textContent=state.playerCode;let activeMarketWindow=Math.floor(Date.now()/1800000);function updateMarketClock(){const now=Date.now(),windowNow=Math.floor(now/1800000);if(windowNow!==activeMarketWindow){activeMarketWindow=windowNow;generateMarket();renderMarket();msg('Transfer marketi yenilendi! Yeni 20 oyuncu geldi.')}const left=1800000-(now%1800000);const el=$('marketTimer');if(el)el.textContent=String(Math.floor(left/60000)).padStart(2,'0')+':'+String(Math.floor((left%60000)/1000)).padStart(2,'0')}updateMarketClock();setInterval(updateMarketClock,250);
+const portraitCache={};
+async function loadPortraits(){
+ const names=['Cristiano Ronaldo','Lionel Messi','Lamine Yamal','Arda Güler','Sergio Ramos','Kylian Mbappé','Erling Haaland'];
+ for(const name of names){
+   if(portraitCache[name]!==undefined)continue;
+   portraitCache[name]=null;
+   try{
+     const url='https://en.wikipedia.org/api/rest_v1/page/summary/'+encodeURIComponent(name.replace(/ /g,'_'));
+     const response=await fetch(url,{headers:{'Accept':'application/json'}});
+     if(!response.ok)continue;
+     const data=await response.json();
+     portraitCache[name]=data.thumbnail?.source||null;
+   }catch(e){portraitCache[name]=null;}
+ }
+ document.querySelectorAll('[data-player-face]').forEach(el=>{
+   const name=el.getAttribute('data-player-face'),src=portraitCache[name];
+   if(src){
+     el.classList.add('real-face');
+     if(el.classList.contains('market-avatar'))el.innerHTML=`<img alt="${name}" loading="lazy" src="${src}">`;
+     else el.innerHTML=`<img class="player-face" alt="${name}" loading="lazy" src="${src}">`;
+   }
+ });
+}
+load();if(!state.playerCode)state.playerCode='C48-'+Math.random().toString(36).slice(2,8).toUpperCase();if(!state.friends)state.friends=[];if(!state.listings)state.listings=[];if(!Number.isFinite(state.clubChanges))state.clubChanges=0;if(!state.theme)state.theme='green';if(!state.passing)state.passing='short';if(!state.tempo)state.tempo='normal';if(!state.line)state.line='balanced';persist();connectC48Online();generateMarket();updateStats();renderSquad();renderFriends();renderRealMarket();loadPortraits();$('myPlayerCode').textContent=state.playerCode;let activeMarketWindow=Math.floor(Date.now()/1800000);function updateMarketClock(){const now=Date.now(),windowNow=Math.floor(now/1800000);if(windowNow!==activeMarketWindow){activeMarketWindow=windowNow;generateMarket();renderMarket();msg('Transfer marketi yenilendi! Yeni 20 oyuncu geldi.')}const left=1800000-(now%1800000);const el=$('marketTimer');if(el)el.textContent=String(Math.floor(left/60000)).padStart(2,'0')+':'+String(Math.floor((left%60000)/1000)).padStart(2,'0')}updateMarketClock();setInterval(updateMarketClock,250);
 </script>
 <script>
 window.addEventListener('load', function () {
