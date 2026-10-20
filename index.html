@@ -267,7 +267,7 @@ header,.sidebar,.panel{box-shadow:0 12px 30px #0002}
 </style></head><body><div id="c48Intro"><div class="intro-pitch"></div><div><div class="intro-title">C48</div><div class="intro-sub">FOOTBALL MANAGER</div><div style="text-align:center;position:relative;margin-top:18px;color:#c4dfc9;font-size:12px;letter-spacing:3px">SEZON 1 · SÜRÜM 1.5</div></div></div>
 <header><div class="logo">C48 <span>FOOTBALL MANAGER</span></div><div class="stats"><button onclick="showPage('profile')" style="padding:7px 10px">👤 <span id="topProfileName">Profil</span></button><div class="chip">💰 <b id="money">25.000</b> C48</div><div class="chip">🏟️ Seviye <b id="stadiumLevel">1</b></div><div class="chip">⭐ Güç <b id="teamPower">62</b></div></div></header>
 <div class="layout"><aside class="sidebar"><div class="muted" style="padding:6px 9px 12px">KULÜP MERKEZİ</div><div class="nav" id="nav">
-<button class="active" data-page="home">🏠 Genel Bakış</button><button data-page="squad">👥 Kadro</button><button data-page="training">🏋️ Antrenman</button><button data-page="scout">🔎 Oyuncu Ara</button><button data-page="market">🛒 Market</button><button data-page="sell">💸 Oyuncu Sat</button><button data-page="league">🏆 Lig</button><button data-page="tactics">🧠 Taktikler</button><button data-page="matches">⚽ Maçlar</button><button data-page="profile">👤 Profil</button><button data-page="ranking">🏆 Reyting Sıralaması</button><button data-page="stadium">🏟️ Stadyum</button><button data-page="club">🎨 Kulüp</button><button data-page="settings">⚙️ Ayarlar</button></div><div class="footer">C48 Studios · v1.5.5 ONLINE UPDATE</div></aside>
+<button class="active" data-page="home">🏠 Genel Bakış</button><button data-page="squad">👥 Kadro</button><button data-page="training">🏋️ Antrenman</button><button data-page="scout">🔎 Oyuncu Ara</button><button data-page="market">🛒 Market</button><button data-page="sell">💸 Oyuncu Sat</button><button data-page="league">🏆 Lig</button><button data-page="tactics">🧠 Taktikler</button><button data-page="matches">⚽ Maçlar</button><button data-page="profile">👤 Profil</button><button data-page="ranking">🏆 Reyting Sıralaması</button><button data-page="stadium">🏟️ Stadyum</button><button data-page="club">🎨 Kulüp</button><button data-page="settings">⚙️ Ayarlar</button></div><div class="footer">C48 Studios · v1.6 UPDATE</div></aside>
 <main class="main">
 <section id="page-home">
 <div class="hero"><div><div class="badge">YENİ KULÜP · SEZON 1</div><h1 id="clubTitle">C48 United</h1><div class="muted">Kendi kulübünü yönet. Kadronu güçlendir. Zirveye çık.</div></div><button class="primary" onclick="showPage('matches')">Maça Hazırlan →</button></div>
@@ -694,7 +694,7 @@ function renderScout(){
  rows.innerHTML=visible.length?visible.map(p=>{
   const owned=state.owned.some(x=>String(x.id)===String(p.id)||normalizePlayerSearch(x.name)===normalizePlayerSearch(p.name));const sold=onlineMarketReady?(!!p.purchased||!!p.buyer):!!boughtMap[p.id]||state.bought.includes(p.id);
   const label=owned?'👕 Benim kadrom':sold?'🔒 Satılmış':'🟢 Uygun';const col=owned?'#baff67':sold?'#f3a6a6':'#9ce7b0';
-  return `<article class="market-card"><div class="market-card-top"><div class="market-avatar real-face" data-player-face="${escapeHtml(p.name)}">⚽</div><div class="market-rating">${p.rating}<small>REYTİNG</small></div></div><div class="market-player-name">${escapeHtml(p.name)}</div><div class="market-player-meta"><span class="market-tag">${escapeHtml(p.pos)}</span><span class="market-tag">${escapeHtml(p.club||'Dünya Kulüpleri')}</span><span class="market-tag" style="color:${col}">${label}</span></div><div class="market-card-bottom"><div class="market-price"><small>TAHMİNİ DEĞER</small>${fmt(p.price||priceForRating(p.rating))} C48</div></div></article>`;
+  return `<article class="market-card"><div class="market-card-top"><div class="market-avatar real-face" data-player-face="${escapeHtml(p.name)}">⚽</div><div class="market-rating">${p.rating}<small>REYTİNG</small></div></div><div class="market-player-name">${escapeHtml(p.name)}</div><div class="market-player-meta"><span class="market-tag">${escapeHtml(p.pos)}</span><span class="market-tag" style="color:${col}">${label}</span></div><div class="market-card-bottom"><div class="market-price"><small>TAHMİNİ DEĞER</small>${fmt(p.price||priceForRating(p.rating))} C48</div></div></article>`;
  }).join(''):'<div class="notice">Bu filtrelerle oyuncu bulunamadı. Aramayı veya filtreleri değiştir.</div>';
  const pag=$('scoutPagination');if(pag)pag.innerHTML=`<button ${scoutPage<=1?'disabled':''} onclick="scoutPage=Math.max(1,scoutPage-1);renderScout()">← Önceki</button><span class="muted">${(list.length?((scoutPage-1)*SCOUT_PAGE_SIZE+1):0).toLocaleString('tr-TR')}–${Math.min(scoutPage*SCOUT_PAGE_SIZE,list.length).toLocaleString('tr-TR')} / ${list.length.toLocaleString('tr-TR')}</span><button ${scoutPage>=pages?'disabled':''} onclick="scoutPage=Math.min(${pages},scoutPage+1);renderScout()">Sonraki →</button>`;
  if(typeof decoratePlayerFaces==='function')decoratePlayerFaces();
@@ -1383,7 +1383,51 @@ getLeague=function(){const l=_getLeagueV15();if(l.teams&&l.teams[0]){l.teams[0].
 realPlayerData.forEach(p=>{if(p.name==='Lionel Messi'){p.rating=107;p.price=5600000;}if(p.name==='Lamine Yamal'){p.rating=109;p.price=7500000;}});
 famousPlayerCatalog.forEach(p=>{if(p[0]==='Lamine Yamal'){p[2]=109;}});
 // Start page with updated profile/ranking labels and tiers.
-window.addEventListener('load',()=>{renderBoxGridV151();document.querySelectorAll('#page-versus').forEach(e=>e.remove());const oldFriends=document.querySelector('#page-friends');if(oldFriends)oldFriends.remove();renderProfileV15();renderRatingRankingV15();applyRatingFrames();setInterval(()=>{if(c48Session?.user?.id){refreshOnlineRanking().catch(()=>{});refreshOnlineSocial().catch(()=>{});syncOnlineProfile(false).catch(()=>{});}},30000);const footer=document.querySelector('.footer');if(footer)footer.textContent='C48 Studios · v1.5.5 ONLINE UPDATE';const sellBtn=document.querySelector('#page-sell button[onclick="listPlayerForSale()"]');if(sellBtn)sellBtn.textContent='💸 Oyuncuyu anında sat';const sellHeading=document.querySelector('#page-sell h1');if(sellHeading)sellHeading.textContent='💸 Oyuncuyu Anında Sat';const desc=document.querySelector('#page-sell .hero .muted');if(desc)desc.textContent='Oyuncunu piyasa değerinin %25’ine satarsın; %75 zarar uygulanır.';const priceLabel=document.querySelector('#page-sell label');if(priceLabel)priceLabel.firstChild.textContent='Satışta alacağın para (C48) ';});
+window.addEventListener('load',()=>{renderBoxGridV151();document.querySelectorAll('#page-versus').forEach(e=>e.remove());const oldFriends=document.querySelector('#page-friends');if(oldFriends)oldFriends.remove();renderProfileV15();renderRatingRankingV15();applyRatingFrames();setInterval(()=>{if(c48Session?.user?.id){refreshOnlineRanking().catch(()=>{});refreshOnlineSocial().catch(()=>{});syncOnlineProfile(false).catch(()=>{});}},30000);const footer=document.querySelector('.footer');if(footer)footer.textContent='C48 Studios · v1.6 UPDATE';const sellBtn=document.querySelector('#page-sell button[onclick="listPlayerForSale()"]');if(sellBtn)sellBtn.textContent='💸 Oyuncuyu anında sat';const sellHeading=document.querySelector('#page-sell h1');if(sellHeading)sellHeading.textContent='💸 Oyuncuyu Anında Sat';const desc=document.querySelector('#page-sell .hero .muted');if(desc)desc.textContent='Oyuncunu piyasa değerinin %25’ine satarsın; %75 zarar uygulanır.';const priceLabel=document.querySelector('#page-sell label');if(priceLabel)priceLabel.firstChild.textContent='Satışta alacağın para (C48) ';});
+</script>
+
+
+<script>
+// C48 Football Manager v1.6 update
+// 1) Instant sale payout is 15% of value (85% loss).
+playerSalePriceDefault=function(p){const value=Number(p.price)||priceForRating(Number(p.rating)||0);return Math.max(1000,Math.round(value*0.15/1000)*1000);};
+renderSellPage=function(){const sel=$('sellPlayerSelect');if(!sel)return;const active=state.owned.filter(p=>!p._startingElevenLocked);sel.innerHTML=active.map(p=>`<option value="${String(p.id).replace(/"/g,'&quot;')}">${escapeHtml(p.name)} · ${p.rating} reyting · ${p.pos}</option>`).join('');const selected=active.find(p=>String(p.id)===String(sel.value))||active[0];if($('sellPriceInput'))$('sellPriceInput').value=selected?playerSalePriceDefault(selected):'';if($('mySellListings'))$('mySellListings').innerHTML='<div class="notice">Oyuncunu anında piyasa değerinin %15’ine satarsın (%85 zarar).</div>';if($('allSellListings'))$('allSellListings').innerHTML='<div class="muted">Satışlar anında tamamlanır.</div>';};
+listPlayerForSale=function(){const id=$('sellPlayerSelect')?.value;const p=state.owned.find(x=>String(x.id)===String(id));if(!p){msg('Satılacak oyuncu seç.');return;}if(state.owned.length<=11){msg('İlk 11 oyuncun korunuyor. Satmak için önce yedek oyuncu ekle.');return;}const value=Number(p.price)||priceForRating(p.rating);const payout=playerSalePriceDefault(p);if(!confirm(`${p.name} oyuncusunu ${fmt(value)} C48 değerinden %85 zarar ile ${fmt(payout)} C48 karşılığında satmak istiyor musun?`))return;state.owned=state.owned.filter(x=>x.id!==p.id);state.money+=payout;state.lastResult=`${p.name} satıldı: +${fmt(payout)} C48 (%85 zarar).`;persist();updateStats();renderSquad();renderSellPage();msg(`${p.name} satıldı! +${fmt(payout)} C48`);};
+// 2) League match income: 2,500 C48 per completed player league match/week.
+const _finishLeagueWeekV16=finishLeagueWeek;
+finishLeagueWeek=function(){const before=getLeague().week;_finishLeagueWeekV16();const after=getLeague().week;if(after>before){state.money-=1000;state.money+=2500;state.lastResult=String(state.lastResult||'').replace('Lig maçı geliri: +1.000 C48.','');state.lastResult+=` Lig maçı geliri: +2.500 C48.`;persist();updateStats();msg('Lig maçı geliri: +2.500 C48');}renderProfileV15();renderRatingRankingV15();};
+// 3) Correct well-known player positions; also hide club labels in all player market cards.
+const positionFixes={
+'Son Heung-min':'SLK','Son Heung Min':'SLK','Declan Rice':'MO','Bruno Fernandes':'MO','Trent Alexander-Arnold':'SĞK','Edinson Cavani':'SF','Ángel Di María':'SĞK','Lautaro Martínez':'SF','Julián Álvarez':'SF','Paulo Dybala':'SF','James Rodríguez':'MO','Darwin Núñez':'SF','Federico Valverde':'MO','Enzo Fernández':'MO','Emiliano Martínez':'KL','Raphinha':'SĞK','Endrick Felipe':'SF','Gabriel Jesus':'SF','Richarlison':'SF','Casemiro':'MO','Jan Oblak':'KL','Gianluigi Donnarumma':'KL','Petr Čech':'KL','Edwin van der Sar':'KL','Dani Alves':'SĞK','Cafu':'SĞK','Paolo Maldini':'STP','Alessandro Nesta':'STP','Fabio Cannavaro':'STP','Giorgio Chiellini':'STP','Andrea Pirlo':'MO','Andrés Iniesta':'MO','Xavi Hernández':'MO','Sergio Busquets':'MO','Dennis Bergkamp':'SF','Patrick Vieira':'MO','Wayne Rooney':'SF','Frank Lampard':'MO','Paul Scholes':'MO','Didier Drogba':'SF','Yaya Touré':'MO','Franck Ribéry':'SLK','Ruud Gullit':'MO','Marco van Basten':'SF','Francesco Toldo':'KL','Fernando Torres':'SF','David Villa':'SF','Fernando Hierro':'STP','Xabi Alonso':'MO','Juan Mata':'MO','Isco Alarcón':'MO','Dani Carvajal':'STP','Jordi Alba':'SLK','Álvaro Morata':'SF','Nico Williams':'SLK','David de Gea':'KL','Pepe Reina':'KL','Mustafa Yönat':'KL','Mustafa Yonat':'KL'
+};
+realPlayerData.forEach(p=>{if(positionFixes[p.name])p.pos=positionFixes[p.name];});
+famousPlayerCatalog.forEach(p=>{if(positionFixes[p[0]])p[1]=positionFixes[p[0]];});
+// 4) Exact requested player ratings/prices and add Mustafa Yönat.
+realPlayerData.forEach(p=>{
+ if(p.name==='Ronaldo Nazário'){p.rating=114;p.price=18000000;p.pos='SF';}
+ if(p.name==='Lamine Yamal'){p.rating=109;p.price=4500000;p.pos='SĞK';}
+ if(p.name==='Kylian Mbappé'){p.rating=111;p.price=12000000;p.pos='SF';}
+});
+if(!realPlayerData.some(p=>p.name==='Mustafa Yönat'||p.name==='Mustafa Yonat'))realPlayerData.push({id:'real-mustafa-yonat',name:'Mustafa Yönat',pos:'KL',rating:113,price:18000000});
+const famousOverrides={
+'Ronaldo Nazário':['SF',114,18000000], 'Lamine Yamal':['SĞK',109,4500000], 'Kylian Mbappé':['SF',111,12000000], 'Mustafa Yönat':['KL',113,18000000]
+};
+for(const [name,[pos,rating,price]] of Object.entries(famousOverrides)){
+ let item=famousPlayerCatalog.find(p=>p[0]===name);
+ if(item){item[1]=pos;item[2]=rating;}else famousPlayerCatalog.push([name,pos,rating]);
+}
+// Ensure special players have exact prices in box results too.
+const _randomBoxPlayerV16=randomBoxPlayer;
+randomBoxPlayer=function(rating,box){const p=_randomBoxPlayerV16(rating,box);if(p.name==='Ronaldo Nazário'){p.rating=114;p.price=18000000;p.pos='SF';}if(p.name==='Lamine Yamal'){p.rating=109;p.price=4500000;p.pos='SĞK';}if(p.name==='Kylian Mbappé'){p.rating=111;p.price=12000000;p.pos='SF';}if(p.name==='Mustafa Yönat'||p.name==='Mustafa Yonat'){p.name='Mustafa Yönat';p.rating=113;p.price=18000000;p.pos='KL';}return p;};
+// 5) Requested box pricing and rating bands.
+Object.assign(transferBoxTypes,{
+ legend:{name:'Elit Kutusu',price:550000,min:80,max:103,count:1400,bands:[[80,103,100]]},
+ pro:{name:'Şampiyon Kutusu',price:1500000,min:90,max:112,count:1000,bands:[[90,112,100]]},
+ ultimate:{name:'C48 Efsaneler Kutusu',price:4500000,min:100,max:118,count:500,bands:[[100,118,100]]}
+});
+// refresh pools after the player database changes and re-render visible screens
+try{generateScoutPool();generateMarket();renderRealMarket();renderBoxGridV151();renderProfileV15();renderRatingRankingV15();}catch(e){console.warn('v1.6 refresh:',e);}
+window.addEventListener('load',()=>{const desc=document.querySelector('#page-sell .hero .muted');if(desc)desc.textContent='Oyuncunu piyasa değerinin %15’ine satarsın; %85 zarar uygulanır.';const footer=document.querySelector('.footer');if(footer)footer.textContent='C48 Studios · v1.6 UPDATE';});
 </script>
 
 </body></html>
