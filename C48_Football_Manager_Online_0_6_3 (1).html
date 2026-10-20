@@ -640,8 +640,16 @@ async function loadOnlineProfile(){
  if(!uid)return;
  const rows=await sbFetch('/rest/v1/c48_profiles?select=user_id,club_name,balance&user_id=eq.'+encodeURIComponent(uid));
  if(rows?.length){
-   state.money=Number(rows[0].balance);
-   if(rows[0].club_name)state.club=rows[0].club_name;
+   // Keep the locally saved career balance on refresh. The old code replaced it
+   // with the server's default 100,000 C48 every time the page loaded.
+   let hasLocalCareer=false;
+   try{
+     const localRaw=localStorage.getItem(SAVE_KEY)||localStorage.getItem('c48manager_real_roster_v144')||localStorage.getItem('c48manager_real_roster_v141');
+     const localSave=localRaw?JSON.parse(localRaw):null;
+     hasLocalCareer=!!(localSave&&Array.isArray(localSave.owned)&&Number.isFinite(Number(localSave.money)));
+   }catch(e){}
+   if(!hasLocalCareer)state.money=Number(rows[0].balance);
+   if(rows[0].club_name&&!hasLocalCareer)state.club=rows[0].club_name;
    persist();updateStats();
  }
 }
