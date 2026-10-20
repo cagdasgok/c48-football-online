@@ -264,6 +264,7 @@ header,.sidebar,.panel{box-shadow:0 12px 30px #0002}
 #broadcastStadium.goal-celebration{animation:stadiumShake .24s linear 4;filter:saturate(1.4)}#broadcastStadium.goal-celebration .match-stand{animation:crowdCheer .12s ease-in-out infinite alternate;color:#fff}
 @media(max-width:700px){.match-stand.stand-left,.match-stand.stand-right{width:14px;font-size:9px}.match-stand{letter-spacing:2px}}
 
+.roster-card.rating-green,.bench-card.rating-green,.market-card.rating-green,.loot-player-card.rating-green{border:3px solid #35e06f!important;box-shadow:0 0 13px #35e06f66!important}.roster-card.rating-blue,.bench-card.rating-blue,.market-card.rating-blue,.loot-player-card.rating-blue{border:3px solid #39a9ff!important;box-shadow:0 0 10px #39a9ff55!important}
 </style></head><body><div id="c48Intro"><div class="intro-pitch"></div><div><div class="intro-title">C48</div><div class="intro-sub">FOOTBALL MANAGER</div><div style="text-align:center;position:relative;margin-top:18px;color:#c4dfc9;font-size:12px;letter-spacing:3px">SEZON 1 · SÜRÜM 1.5</div></div></div>
 <header><div class="logo">C48 <span>FOOTBALL MANAGER</span></div><div class="stats"><button onclick="showPage('profile')" style="padding:7px 10px">👤 <span id="topProfileName">Profil</span></button><div class="chip">💰 <b id="money">25.000</b> C48</div><div class="chip">🏟️ Seviye <b id="stadiumLevel">1</b></div><div class="chip">⭐ Güç <b id="teamPower">62</b></div></div></header>
 <div class="layout"><aside class="sidebar"><div class="muted" style="padding:6px 9px 12px">KULÜP MERKEZİ</div><div class="nav" id="nav">
@@ -395,7 +396,7 @@ function generateScoutPool(){
  const famous=realPlayerData.filter(p=>!(p.id&&p.id.startsWith('low-'))).slice(0,400).map(p=>p.name==='Cristiano Ronaldo'?{...p,rating:118,price:22000000}:p);
  const budget=realPlayerData.filter(p=>p.id&&p.id.startsWith('low-')).slice(0,100);
  const source=[...famous,...budget];
- scoutPool=source.map((p,i)=>({...p,club:worldClubNames[i%worldClubNames.length],price:p.name==='Cristiano Ronaldo'?22000000:((p.id&&p.id.startsWith('low-'))?p.price:priceForRating(p.rating))}));
+ scoutPool=source.map((p,i)=>({...p,club:worldClubNames[i%worldClubNames.length],price:(p.price>0?p.price:((p.id&&p.id.startsWith('low-'))?p.price:priceForRating(p.rating)))}));
  // Oyuncu arama ve kutular için havuzun toplamı tam 500 olsun.
 }
 function fmt(n){return Math.floor(n).toLocaleString('tr-TR')}
@@ -420,7 +421,7 @@ function generateMarket(){
    const vb=Math.abs(Math.sin((seed+parseInt(b.id.replace(/\D/g,''))*17)*12.9898)*43758.5453)%1;
    return va-vb;
  });
- shuffled.slice(0,20).forEach((p,i)=>market.push({...p,id:'market-'+seed+'-'+i,price:p.name==='Cristiano Ronaldo'?22000000:((p.id&&p.id.startsWith('low-'))?p.price:priceForRating(p.rating))}));
+ shuffled.slice(0,20).forEach((p,i)=>market.push({...p,id:'market-'+seed+'-'+i,price:(p.price>0?p.price:((p.id&&p.id.startsWith('low-'))?p.price:priceForRating(p.rating)))}));
 }
 function normalizePlayerSearch(value){
  return String(value||'').toLocaleLowerCase('tr-TR')
@@ -781,7 +782,7 @@ function toggleTrainingFor(id){
 function upgradeTrainingFacility(){const cost=trainingCosts[state.trainingLevel];if(!cost)return;if(state.money<cost){msg('Yeterli paran yok.');return;}state.money-=cost;state.trainingLevel++;state.trainingSlots=trainingSlotCount();state.lastResult='Antrenman tesisi seviye '+(state.trainingLevel+1)+' oldu.';persist();updateStats();renderTraining();msg('Tesis yükseltildi! '+(state.trainingLevel>=3?'3. antrenman slotu açıldı.':'Antrenman süresi kısaldı.'));}
 function processTrainingTicks(){
  const jobs=state.trainingJobs||{};let changed=false;const now=Date.now();
- Object.entries(jobs).forEach(([id,job])=>{const p=state.owned.find(x=>String(x.id)===String(id));if(!p){delete jobs[id];changed=true;return;}if(now-Number(job.startedAt)>=trainingSeconds()*1000){p.rating=Math.min(120,Number(p.rating||0)+1);job.startedAt=now;changed=true;state.lastResult=p.name+' antrenmanla +1 reyting kazandı!';}});
+ Object.entries(jobs).forEach(([id,job])=>{const p=state.owned.find(x=>String(x.id)===String(id));if(!p){delete jobs[id];changed=true;return;}if(now-Number(job.startedAt)>=trainingSeconds()*1000){p.rating=Number(p.rating||0)+1;job.startedAt=now;changed=true;state.lastResult=p.name+' antrenmanla +1 reyting kazandı!';}});
  if(changed){persist();updateStats();if(!$('page-squad').classList.contains('hidden'))renderSquad();if(!$('page-scout').classList.contains('hidden'))renderScout();if(!$('page-market').classList.contains('hidden'))syncBoxBalance();}
  if(!$('page-training').classList.contains('hidden'))renderTraining();
 }
@@ -1342,8 +1343,8 @@ function playerSalePriceDefault(p){return Math.max(1000,Math.round((Number(p.pri
 function renderSellPage(){const sel=$('sellPlayerSelect');if(!sel)return;const active=state.owned.filter(p=>!p._startingElevenLocked);sel.innerHTML=active.map(p=>`<option value="${String(p.id).replace(/"/g,'&quot;')}">${escapeHtml(p.name)} · ${p.rating} reyting · ${p.pos}</option>`).join('');const selected=active.find(p=>String(p.id)===String(sel.value))||active[0];if($('sellPriceInput'))$('sellPriceInput').value=selected?playerSalePriceDefault(selected):'';if($('mySellListings'))$('mySellListings').innerHTML='<div class="notice">Yeni sistem: oyuncunu anında, piyasa değerinin %25’ine satarsın.</div>';if($('allSellListings'))$('allSellListings').innerHTML='<div class="muted">İlan sistemi kaldırıldı. Satışlar anında tamamlanır.</div>';}
 function listPlayerForSale(){const id=$('sellPlayerSelect')?.value;const p=state.owned.find(x=>String(x.id)===String(id));if(!p){msg('Satılacak oyuncu seç.');return;}if(state.owned.length<=11){msg('İlk 11 oyuncun korunuyor. Satmak için önce yedek oyuncu ekle.');return;}const value=Number(p.price)||priceForRating(p.rating);const payout=playerSalePriceDefault(p);if(!confirm(`${p.name} oyuncusunu ${fmt(value)} C48 değerinden %75 zarar ile ${fmt(payout)} C48 karşılığında satmak istiyor musun?`))return;state.owned=state.owned.filter(x=>x.id!==p.id);state.money+=payout;state.lastResult=`${p.name} satıldı: +${fmt(payout)} C48 (%75 zarar).`;persist();updateStats();renderSquad();renderSellPage();msg(`${p.name} satıldı! +${fmt(payout)} C48`);}
 // Rare-player card border tiers.
-function ratingTier(r){return r>=111?'rainbow':r>=100?'yellow':r>=90?'red':'';}
-function applyRatingFrames(){document.querySelectorAll('.roster-card,.bench-card,.market-card,.loot-player-card').forEach(el=>{const txt=el.innerText||'';const m=txt.match(/(?:^|\n)(\d{2,3})(?:\n|$)/);if(!m)return;const r=Number(m[1]);const tier=ratingTier(r);el.style.borderWidth=tier?'3px':'';el.style.borderColor=tier==='rainbow'?'#d35cff':tier==='yellow'?'#ffd84d':tier==='red'?'#ff4b4b':'';if(tier==='rainbow')el.style.boxShadow='0 0 12px #d35cff88';});}
+function ratingTier(r){return r>=120?'green':r>=111?'rainbow':r>=100?'yellow':r>=90?'red':r>=70&&r<=80?'blue':'';}
+function applyRatingFrames(){document.querySelectorAll('.roster-card,.bench-card,.market-card,.loot-player-card').forEach(el=>{const txt=el.innerText||'';const m=txt.match(/(?:^|\n)(\d{2,3})(?:\n|$)/);if(!m)return;const r=Number(m[1]);const tier=ratingTier(r);el.classList.remove('rating-green','rating-blue');if(tier==='green')el.classList.add('rating-green');if(tier==='blue')el.classList.add('rating-blue');el.style.borderWidth=tier?'3px':'';el.style.borderColor=tier==='green'?'#35e06f':tier==='blue'?'#39a9ff':tier==='rainbow'?'#d35cff':tier==='yellow'?'#ffd84d':tier==='red'?'#ff4b4b':'';el.style.boxShadow=tier==='green'?'0 0 13px #35e06f66':tier==='blue'?'0 0 10px #39a9ff55':tier==='rainbow'?'0 0 12px #d35cff88':'';});}
 function renderProfileV15(){
  if(!$('profileCard'))return;
  const avg=teamPower();$('topProfileName').textContent=state.club;
@@ -1436,13 +1437,13 @@ window.addEventListener('load',()=>{const desc=document.querySelector('#page-sel
 // C48 Football Manager v1.6.1
 // Exact player market updates, training caps/value growth, profile trophy count, and league prizes.
 const c48161PlayerUpdates={
- 'Ronaldo Nazário':{pos:'SF',rating:114,price:12500000},
- 'Kylian Mbappé':{pos:'SF',rating:111,price:10000000},
+ 'Ronaldo Nazário':{pos:'SF',rating:114,price:16000000},
+ 'Kylian Mbappé':{pos:'SF',rating:111,price:14000000},
  'Zinedine Zidane':{pos:'MO',rating:110,price:8500000},
  'Kaká':{pos:'MO',rating:110,price:6700000},
  'Gavi':{pos:'MO',rating:101,price:1300000},
- 'Mustafa Yönat':{pos:'KL',rating:113,price:18700000},
- 'Mustafa Yonat':{pos:'KL',rating:113,price:18700000}
+ 'Mustafa Yönat':{pos:'KL',rating:113,price:20500000},
+ 'Mustafa Yonat':{pos:'KL',rating:113,price:20500000}
 };
 realPlayerData.forEach(p=>{const u=c48161PlayerUpdates[p.name];if(u)Object.assign(p,u);});
 if(!realPlayerData.some(p=>p.name==='Mustafa Yönat'||p.name==='Mustafa Yonat'))realPlayerData.push({id:'real-mustafa-yonat',name:'Mustafa Yönat',pos:'KL',rating:113,price:18700000});
@@ -1471,13 +1472,13 @@ processTrainingTicks=function(){
   if(!p){delete jobs[id];changed=true;return;}
   if(!Number.isFinite(Number(job.baseRating))){job.baseRating=Number(p.rating)||0;job.gains=0;changed=true;}
   if(!Number.isFinite(Number(job.gains)))job.gains=Math.max(0,(Number(p.rating)||0)-Number(job.baseRating));
-  if(Number(job.gains)>=10||Number(p.rating)>=120){delete jobs[id];changed=true;state.lastResult=p.name+' antrenman sınırına ulaştı.';return;}
+  if(Number(job.gains)>=10){delete jobs[id];changed=true;state.lastResult=p.name+' antrenman sınırına ulaştı (+10).';return;}
   if(now-Number(job.startedAt)>=trainingSeconds()*1000){
    const before=Number(p.rating)||0;
-   p.rating=Math.min(120,Number(p.rating||0)+1);
+   p.rating=Number(p.rating||0)+1;
    const gained=p.rating-before;
    if(gained>0){p.price=(Number(p.price)||priceForRating(before))+1000000;job.gains=Number(job.gains)+gained;job.startedAt=now;changed=true;state.lastResult=p.name+' antrenmanla +1 reyting ve +1.000.000 C48 piyasa değeri kazandı!';}
-   if(Number(job.gains)>=10||p.rating>=120)delete jobs[id];
+   if(Number(job.gains)>=10)delete jobs[id];
   }
  });
  if(changed){persist();updateStats();if(!$('page-squad').classList.contains('hidden'))renderSquad();if(!$('page-scout').classList.contains('hidden'))renderScout();if(!$('page-market').classList.contains('hidden'))syncBoxBalance();renderProfileV15();}
@@ -1491,6 +1492,66 @@ renderProfileV15=function(){c48161RenderProfile();const card=$('profileCard');if
 // Update current club state in storage and refresh the visible market/profile.
 try{generateScoutPool();generateMarket();renderRealMarket();renderBoxGridV151();renderProfileV15();renderRatingRankingV15();renderTraining();applyRatingFrames();}catch(e){console.warn('v1.6.1 refresh:',e);}
 window.addEventListener('load',()=>{const footer=document.querySelector('.footer');if(footer)footer.textContent='C48 Studios · v1.6.1 UPDATE';});
+</script>
+
+
+<script>
+// C48 Football Manager v1.6.5 final overrides
+const c48165Overrides={
+ 'Ronaldo Nazário':{pos:'SF',rating:114,price:16000000},
+ 'Kylian Mbappé':{pos:'SF',rating:111,price:14000000},
+ 'Lamine Yamal':{pos:'SĞK',rating:109,price:7500000},
+ 'Mustafa Yönat':{pos:'KL',rating:113,price:20500000},
+ 'Mustafa Yonat':{pos:'KL',rating:113,price:20500000}
+};
+realPlayerData.forEach(p=>{const u=c48165Overrides[p.name];if(u)Object.assign(p,u);});
+if(!realPlayerData.some(p=>p.name==='Mustafa Yönat'||p.name==='Mustafa Yonat'))realPlayerData.push({id:'real-mustafa-yonat',name:'Mustafa Yönat',pos:'KL',rating:113,price:20500000});
+for(const [name,u] of Object.entries(c48165Overrides)){
+ const item=famousPlayerCatalog.find(p=>p[0]===name);
+ if(item){item[1]=u.pos;item[2]=u.rating;} else if(name!=='Mustafa Yonat')famousPlayerCatalog.push([name,u.pos,u.rating]);
+}
+const c48165OldScout=generateScoutPool;
+generateScoutPool=function(){c48165OldScout();scoutPool=scoutPool.map(p=>{const u=c48165Overrides[p.name];return u?{...p,...u}:p;});};
+const c48165OldRandomBox=randomBoxPlayer;
+randomBoxPlayer=function(rating,box){let p=c48165OldRandomBox(rating,box);const u=c48165Overrides[p.name];if(u)Object.assign(p,u);if(p.name==='Mustafa Yonat')p.name='Mustafa Yönat';return p;};
+// Update existing roster players to new values without resetting the save.
+state.owned.forEach(p=>{const u=c48165Overrides[p.name];if(u){p.pos=u.pos;p.rating=u.rating;p.price=u.price;}});
+// 120+ green, 70-80 blue; the higher special tiers retain their existing colors below 120.
+const c48165RenderSquad=renderSquad;
+renderSquad=function(){c48165RenderSquad();applyRatingFrames();};
+const c48165RenderTraining=renderTraining;
+renderTraining=function(){c48165RenderTraining();applyRatingFrames();};
+try{generateScoutPool();generateMarket();renderRealMarket();renderProfileV15();renderRatingRankingV15();renderSquad();renderTraining();applyRatingFrames();persist();}catch(e){console.warn('v1.6.5 refresh:',e);}
+window.addEventListener('load',()=>{const footer=document.querySelector('.footer');if(footer)footer.textContent='C48 Studios · v1.6.5 UPDATE';});
+</script>
+
+
+<script>
+// v1.6.6 hotfix: ensure Mustafa Yönat is included in the actual searchable 500-player scout pool.
+(function(){
+  const mustafa = {id:'real-mustafa-yonat', name:'Mustafa Yönat', pos:'KL', rating:113, price:20500000, club:'C48 Özel Oyuncular'};
+  if (!Array.isArray(realPlayerData)) return;
+  let source = realPlayerData.find(p => p.name === 'Mustafa Yönat' || p.name === 'Mustafa Yonat');
+  if (!source) {
+    source = {...mustafa};
+    realPlayerData.push(source);
+  } else {
+    Object.assign(source, mustafa);
+  }
+  if (typeof scoutPool !== 'undefined' && Array.isArray(scoutPool)) {
+    scoutPool = scoutPool.filter(p => p.name !== 'Mustafa Yönat' && p.name !== 'Mustafa Yonat');
+    scoutPool.push({...mustafa});
+  }
+  if (Array.isArray(famousPlayerCatalog) && !famousPlayerCatalog.some(p => p[0] === 'Mustafa Yönat')) {
+    famousPlayerCatalog.push(['Mustafa Yönat','KL',113]);
+  }
+  if (typeof renderScout === 'function') {
+    const search = document.getElementById('scoutSearch');
+    if (search && /mustafa/i.test(search.value)) renderScout();
+  }
+  const footer = document.querySelector('.footer');
+  if (footer) footer.textContent = 'C48 Studios · v1.6.6 UPDATE';
+})();
 </script>
 
 </body></html>
