@@ -300,7 +300,7 @@ header,.sidebar,.panel{box-shadow:0 12px 30px #0002}
   <div class="panel"><h3>📚 Şans Bilgisi</h3><p class="muted">Her kutunun reyting olasılıkları farklıdır. Pahalı kutularda yüksek reytingli oyuncu çıkma ihtimali artar; en iyi oyuncu garantisi yoktur.</p></div>
 </div>
 </section>
-<section id="page-profile" class="hidden"><div class="hero"><div><div class="badge">MENAJER KARTI</div><h1>👤 Profilim</h1><div class="muted">Kulübün, paran, reytingin ve kadron tek yerde.</div></div></div><div id="profileCard" class="panel"></div><div class="panel"><h2>👥 Arkadaş profili</h2><p class="muted">Bu sürümde arkadaş kodları yerel prototip verisi. Başka cihazdaki gerçek kadro ve bakiye için sunucu profilleri gerekir.</p><div id="friendProfiles" class="pitch"></div></div></section><section id="page-ranking" class="hidden"><div class="hero"><div><div class="badge">C48 LEADERBOARD</div><h1>🏆 Reyting Sıralaması</h1><div class="muted">Takımlar toplam kadro reyting ortalamasına göre sıralanır.</div></div></div><div class="panel"><div class="tablewrap"><table><thead><tr><th>#</th><th>Kulüp</th><th>Reyting</th><th>Oyuncu</th><th>Bakiye</th></tr></thead><tbody id="ratingRankingRows"></tbody></table></div><p class="muted">Sıralama şu an bu oyunun yerel lig takımları ve senin kulübün üzerinden demo olarak oluşturulur; tüm oyuncuların çevrim içi ortak sıralaması için sunucu veritabanı gerekir.</p></div></section><section id="page-tactics" class="hidden"><div class="panel"><h2>🧠 Maç taktikleri</h2><p class="muted">Rakibe karşı oyun tarzını ve dizilişini seç.</p><div class="formrow"><label>Diziliş <select id="formation" onchange="setTactic()"><option>4-3-3</option><option>4-4-2</option><option>3-5-2</option><option>5-3-2</option><option>4-2-3-1</option></select></label><label>Oyun tarzı <select id="style" onchange="setTactic()"><option value="balanced">Dengeli</option><option value="attack">Hücum</option><option value="defend">Savunma</option><option value="possession">Topa sahip olma</option><option value="counter">Kontra atak</option></select></label><label>Pres <select id="press" onchange="setTactic()"><option value="normal">Normal</option><option value="high">Önde pres</option><option value="low">Geri çekil</option></select></label><label>Pas oyunu <select id="passing" onchange="setTactic()"><option value="short">Kısa pas</option><option value="mixed">Karışık pas</option><option value="long">Uzun top</option></select></label><label>Tempo <select id="tempo" onchange="setTactic()"><option value="normal">Normal</option><option value="fast">Hızlı</option><option value="slow">Yavaş</option></select></label><label>Defans çizgisi <select id="line" onchange="setTactic()"><option value="balanced">Dengeli</option><option value="high">Önde</option><option value="deep">Derinde</option></select></label></div><div class="grid" style="margin-top:16px"><div class="metric"><div class="big" id="attackVal">68</div><small>Hücum gücü</small></div><div class="metric"><div class="big" id="midVal">64</div><small>Orta saha gücü</small></div><div class="metric"><div class="big" id="defVal">61</div><small>Savunma gücü</small></div></div><div class="notice" style="margin-top:12px" id="tacticText">Dengeli taktik, her alanda istikrarlı bir yaklaşım sunar.</div></div></section>
+<section id="page-profile" class="hidden"><div class="hero"><div><div class="badge">MENAJER KARTI</div><h1>👤 Profilim</h1><div class="muted">Kulübün, paran, reytingin ve kadron tek yerde.</div></div></div><div id="onlineProfileStatus" class="notice">Supabase profili bağlanıyor…</div><div id="profileCard" class="panel"></div><div class="panel"><h2>👥 Arkadaş ekle</h2><p class="muted">Arkadaşının C48 kodunu gir. İkiniz de aynı Supabase sunucusuna bağlı olmalısınız.</p><div class="formrow"><input id="onlineFriendCode" placeholder="Arkadaş kodu (C48-XXXXXX)" maxlength="16"><button class="primary" onclick="addOnlineFriend()">Arkadaş ekle</button><button onclick="refreshOnlineSocial()">Yenile</button></div><div id="onlineFriendStatus" class="muted" style="margin-top:8px"></div></div><div class="panel"><h2>👥 Arkadaş profilleri</h2><div id="friendProfiles" class="pitch"></div></div></section><section id="page-ranking" class="hidden"><div class="hero"><div><div class="badge">C48 LEADERBOARD</div><h1>🏆 Reyting Sıralaması</h1><div class="muted">Takımlar toplam kadro reyting ortalamasına göre sıralanır.</div></div></div><div class="panel"><div class="tablewrap"><table><thead><tr><th>#</th><th>Kulüp</th><th>Reyting</th><th>Oyuncu</th><th>Bakiye</th></tr></thead><tbody id="ratingRankingRows"></tbody></table></div><p class="muted">Çevrim içi sıralama Supabase sunucusuna kayıtlı kulüpleri reytinge göre gösterir. Bakiye ve kadro bilgileri oyuncu profillerinde görünür.</p></div></section><section id="page-tactics" class="hidden"><div class="panel"><h2>🧠 Maç taktikleri</h2><p class="muted">Rakibe karşı oyun tarzını ve dizilişini seç.</p><div class="formrow"><label>Diziliş <select id="formation" onchange="setTactic()"><option>4-3-3</option><option>4-4-2</option><option>3-5-2</option><option>5-3-2</option><option>4-2-3-1</option></select></label><label>Oyun tarzı <select id="style" onchange="setTactic()"><option value="balanced">Dengeli</option><option value="attack">Hücum</option><option value="defend">Savunma</option><option value="possession">Topa sahip olma</option><option value="counter">Kontra atak</option></select></label><label>Pres <select id="press" onchange="setTactic()"><option value="normal">Normal</option><option value="high">Önde pres</option><option value="low">Geri çekil</option></select></label><label>Pas oyunu <select id="passing" onchange="setTactic()"><option value="short">Kısa pas</option><option value="mixed">Karışık pas</option><option value="long">Uzun top</option></select></label><label>Tempo <select id="tempo" onchange="setTactic()"><option value="normal">Normal</option><option value="fast">Hızlı</option><option value="slow">Yavaş</option></select></label><label>Defans çizgisi <select id="line" onchange="setTactic()"><option value="balanced">Dengeli</option><option value="high">Önde</option><option value="deep">Derinde</option></select></label></div><div class="grid" style="margin-top:16px"><div class="metric"><div class="big" id="attackVal">68</div><small>Hücum gücü</small></div><div class="metric"><div class="big" id="midVal">64</div><small>Orta saha gücü</small></div><div class="metric"><div class="big" id="defVal">61</div><small>Savunma gücü</small></div></div><div class="notice" style="margin-top:12px" id="tacticText">Dengeli taktik, her alanda istikrarlı bir yaklaşım sunar.</div></div></section>
 <section id="page-matches" class="hidden" style="display:none!important"><div class="hero"><div><h1>Maç Merkezi</h1><div class="muted">Maç simülasyonunu başlat ve ödül kazan.</div></div><span class="badge">LİG MAÇI</span></div><div class="panel"><h2>🏆 C48 Lig Mücadelesi</h2><div class="grid"><div class="metric"><small>Senin takımın</small><div class="big" id="myMatchPower">62</div><b id="matchClub">C48 United</b></div><div class="metric"><small>Rakip takım</small><div class="big" id="oppPower">60</div><b>Harbor City</b></div><div class="metric"><small>Galibiyet ödülü</small><div class="big">+2.000</div><small>C48 oyun parası</small></div></div><button class="primary" style="margin-top:14px" id="playMatch" onclick="playMatch()">20 saniyelik maçı başlat</button>
 <div id="liveMatch" class="panel hidden" style="margin-top:14px;background:#0a1a10">
   <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap"><b>📺 CANLI MAÇ YAYINI</b><span class="badge" id="liveStatus">MAÇ HAZIRLANIYOR</span></div>
@@ -400,7 +400,7 @@ function generateScoutPool(){
 }
 function fmt(n){return Math.floor(n).toLocaleString('tr-TR')}
 const SAVE_KEY='c48manager_save_v145';
-function persist(){try{localStorage.setItem(SAVE_KEY,JSON.stringify(state));localStorage.setItem('c48manager_real_roster_v144',JSON.stringify(state))}catch(e){}}
+function persist(){try{localStorage.setItem(SAVE_KEY,JSON.stringify(state));localStorage.setItem('c48manager_real_roster_v144',JSON.stringify(state))}catch(e){} if(typeof c48Session!=='undefined'&&c48Session?.user?.id&&typeof syncOnlineProfile==='function')syncOnlineProfile(false).catch(()=>{});}
 function load(){try{let raw=localStorage.getItem(SAVE_KEY)||localStorage.getItem('c48manager_real_roster_v144')||localStorage.getItem('c48manager_real_roster_v141');let saved=raw?JSON.parse(raw):null;if(saved&&Array.isArray(saved.owned)&&Number.isFinite(Number(saved.money))){state={...state,...saved,money:Number(saved.money),trainingLevel:Number(saved.trainingLevel)||0,trainingSlots:Number(saved.trainingSlots)||2,trainingJobs:saved.trainingJobs||{}};}}catch(e){}}
 function priceForRating(r){
  let base;
@@ -579,6 +579,8 @@ async function connectC48Online(){
      }else throw profileErr;
    }
    await loadOnlineMarket();
+   await refreshOnlineRanking();
+   setOnlineProfileStatus('🟢 Profil, arkadaşlar ve sıralama sunucuya bağlı.',true);
  }catch(err){
    setOnlineStatus('Sunucu bağlantısı kurulamadı: '+err.message);
    console.error('C48 online market:',err);
@@ -587,21 +589,76 @@ async function connectC48Online(){
 async function loadOnlineProfile(){
  const uid=c48Session?.user?.id;
  if(!uid)return;
- const rows=await sbFetch('/rest/v1/c48_profiles?select=user_id,club_name,balance&user_id=eq.'+encodeURIComponent(uid));
+ const rows=await sbFetch('/rest/v1/c48_profiles?select=user_id,club_name,balance,player_code,team_rating,squad,updated_at&user_id=eq.'+encodeURIComponent(uid));
  if(rows?.length){
-   // Keep the locally saved career balance on refresh. The old code replaced it
-   // with the server's default 100,000 C48 every time the page loaded.
-   let hasLocalCareer=false;
-   try{
-     const localRaw=localStorage.getItem(SAVE_KEY)||localStorage.getItem('c48manager_real_roster_v144')||localStorage.getItem('c48manager_real_roster_v141');
-     const localSave=localRaw?JSON.parse(localRaw):null;
-     hasLocalCareer=!!(localSave&&Array.isArray(localSave.owned)&&Number.isFinite(Number(localSave.money)));
-   }catch(e){}
-   if(!hasLocalCareer)state.money=Number(rows[0].balance);
-   if(rows[0].club_name&&!hasLocalCareer)state.club=rows[0].club_name;
-   persist();updateStats();
+   // Keep local career progression as the authority for this browser, then publish it to the shared profile.
+   if(rows[0].player_code)state.playerCode=rows[0].player_code;
+   else if(!state.playerCode)state.playerCode='C48-'+Math.random().toString(36).slice(2,8).toUpperCase();
+   await syncOnlineProfile(true);
+ }else{
+   if(!state.playerCode)state.playerCode='C48-'+Math.random().toString(36).slice(2,8).toUpperCase();
+   await syncOnlineProfile(true);
+ }
+ updateStats();
+ await refreshOnlineSocial();
+}
+let c48ProfileSyncTimer=null;
+function onlineProfilePayload(){
+ return {user_id:c48Session?.user?.id,club_name:String(state.club||'C48 United').slice(0,60),balance:Math.max(0,Math.floor(Number(state.money)||0)),player_code:state.playerCode,team_rating:teamPower(),squad:(state.owned||[]).map(p=>({id:String(p.id),name:String(p.name),pos:String(p.pos||''),rating:Number(p.rating)||0,price:Number(p.price)||priceForRating(Number(p.rating)||0)})),updated_at:new Date().toISOString()};
+}
+async function syncOnlineProfile(immediate=false){
+ if(!c48Session?.user?.id||!c48Session?.access_token)return;
+ if(c48ProfileSyncTimer){clearTimeout(c48ProfileSyncTimer);c48ProfileSyncTimer=null;}
+ if(!immediate){c48ProfileSyncTimer=setTimeout(()=>syncOnlineProfile(true).catch(e=>setOnlineProfileStatus('Profil kaydedilemedi: '+e.message,false)),900);return;}
+ try{
+   const payload=onlineProfilePayload();
+   await sbFetch('/rest/v1/c48_profiles?on_conflict=user_id',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify(payload)});
+   setOnlineProfileStatus('🟢 Profilin Supabase sunucusuna kaydedildi.',true);
+   refreshOnlineRanking().catch(()=>{});
+ }catch(e){setOnlineProfileStatus('Profil sunucuya yazılamadı: '+e.message+' · SQL kurulumunu kontrol et.',false);throw e;}
+}
+function setOnlineProfileStatus(message,good=false){const el=$('onlineProfileStatus');if(el){el.textContent=message;el.style.borderColor=good?'#3f9a59':'#9b7532';}}
+async function refreshOnlineSocial(){
+ if(!c48Session?.user?.id)return;
+ try{
+   const me=c48Session.user.id;
+   const rel=await sbFetch('/rest/v1/c48_friendships?select=friend_user_id&user_id=eq.'+encodeURIComponent(me));
+   const ids=(rel||[]).map(x=>x.friend_user_id).filter(Boolean);
+   let friends=[];
+   if(ids.length){
+     const inList='('+ids.join(',')+')';
+     friends=await sbFetch('/rest/v1/c48_profiles?select=user_id,club_name,balance,player_code,team_rating,squad,updated_at&user_id=in.'+encodeURIComponent(inList));
+   }
+   window.c48OnlineFriends=friends||[];
+   renderProfileV15();
+   await refreshOnlineRanking();
+   const fs=$('onlineFriendStatus');if(fs)fs.textContent=`Sunucuda ${friends.length} arkadaş kayıtlı.`;
+ }catch(e){
+   setOnlineProfileStatus('Profil bağlı; arkadaş/sıralama verisi alınamadı: '+e.message,false);
+   console.error('C48 social load:',e);
  }
 }
+async function addOnlineFriend(){
+ const input=$('onlineFriendCode');const code=(input?.value||'').trim().toUpperCase();
+ if(!/^C48-[A-Z0-9]{6}$/.test(code)){msg('Kod C48-XXXXXX biçiminde olmalı.');return;}
+ if(!c48Session?.user?.id){msg('Önce Supabase bağlantısının kurulmasını bekle.');return;}
+ try{
+   const found=await sbFetch('/rest/v1/c48_profiles?select=user_id,player_code,club_name&player_code=eq.'+encodeURIComponent(code));
+   if(!found?.length){msg('Bu kodla kayıtlı oyuncu bulunamadı. Arkadaşın oyunu en az bir kez açmalı.');return;}
+   const friendId=found[0].user_id;
+   if(friendId===c48Session.user.id){msg('Kendini arkadaş ekleyemezsin.');return;}
+   await sbFetch('/rest/v1/c48_friendships',{method:'POST',headers:{Prefer:'resolution=ignore-duplicates,return=minimal'},body:JSON.stringify({user_id:c48Session.user.id,friend_user_id:friendId})});
+   // Friendship is stored for the player who added the code; no permission escalation to write another user's row.
+   if(input)input.value='';await refreshOnlineSocial();msg('Arkadaş eklendi: '+(found[0].club_name||code));
+ }catch(e){msg('Arkadaş eklenemedi: '+e.message);console.error(e);}
+}
+async function refreshOnlineRanking(){
+ try{
+   const rows=await sbFetch('/rest/v1/c48_profiles?select=user_id,club_name,balance,player_code,team_rating,squad,updated_at&order=team_rating.desc&limit=200');
+   window.c48OnlineRanking=rows||[];renderRatingRankingV15();
+ }catch(e){console.error('C48 ranking:',e);}
+}
+
 async function loadOnlineMarket(){
  try{
    const rows=await sbFetch('/rest/v1/rpc/c48_get_market',{method:'POST',body:'{}'});
@@ -1283,8 +1340,27 @@ function listPlayerForSale(){const id=$('sellPlayerSelect')?.value;const p=state
 // Rare-player card border tiers.
 function ratingTier(r){return r>=111?'rainbow':r>=100?'yellow':r>=90?'red':'';}
 function applyRatingFrames(){document.querySelectorAll('.roster-card,.bench-card,.market-card,.loot-player-card').forEach(el=>{const txt=el.innerText||'';const m=txt.match(/(?:^|\n)(\d{2,3})(?:\n|$)/);if(!m)return;const r=Number(m[1]);const tier=ratingTier(r);el.style.borderWidth=tier?'3px':'';el.style.borderColor=tier==='rainbow'?'#d35cff':tier==='yellow'?'#ffd84d':tier==='red'?'#ff4b4b':'';if(tier==='rainbow')el.style.boxShadow='0 0 12px #d35cff88';});}
-function renderProfileV15(){if(!$('profileCard'))return;const avg=teamPower();$('topProfileName').textContent=state.club;const sorted=[...state.owned].sort((a,b)=>b.rating-a.rating);$('profileCard').innerHTML=`<div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap"><div style="width:86px;height:86px;border-radius:20px;background:linear-gradient(145deg,#294d38,#101a12);display:grid;place-items:center;font-size:48px;border:2px solid #baff67">${escapeHtml(state.symbol||'★')}</div><div><h2 style="margin:0 0 5px">${escapeHtml(state.club)}</h2><div class="muted">Menajer kodu: <b>${escapeHtml(state.playerCode||'C48-??????')}</b></div><div style="margin-top:7px">⭐ Kadro reytingi: <b class="rating">${avg}</b> · 👥 ${state.owned.length} oyuncu · 💰 ${fmt(state.money)} C48</div></div></div><h3 style="margin-top:18px">Kadro</h3><div class="pitch">${sorted.map(p=>`<div class="player" style="border-color:${ratingTier(p.rating)==='rainbow'?'#d35cff':ratingTier(p.rating)==='yellow'?'#ffd84d':ratingTier(p.rating)==='red'?'#ff4b4b':'#294333'}"><div><b>${escapeHtml(p.name)}</b><div class="muted">${escapeHtml(p.pos)}</div></div><div style="text-align:right"><b class="rating">${p.rating}</b><div class="muted">${fmt(Number(p.price)||priceForRating(p.rating))} C48</div></div></div>`).join('')}</div>`;const fp=$('friendProfiles');if(fp)fp.innerHTML=(state.friends||[]).length?state.friends.map(f=>`<div class="player" style="display:block"><b>${escapeHtml(f.name)}</b><div class="muted">${escapeHtml(f.code)}</div><div class="muted">Bu arkadaşın gerçek kadro/para bilgisi sunucuda kayıtlı değil.</div></div>`).join(''):'<div class="muted">Henüz arkadaş kodu eklenmemiş. Farklı cihazdaki profilleri görmek için ortak sunucu profili gerekir.</div>';}
-function renderRatingRankingV15(){const el=$('ratingRankingRows');if(!el)return;const l=getLeague();const rows=[{name:state.club,rating:teamPower(),count:state.owned.length,money:state.money,mine:true},...l.teams.slice(1).map(t=>({name:t.name,rating:t.power||60,count:11,money:0}))].sort((a,b)=>b.rating-a.rating);el.innerHTML=rows.map((r,i)=>`<tr ${r.mine?'style="background:#243d29;font-weight:900"':''}><td>${i+1}</td><td>${escapeHtml(r.name)} ${r.mine?'👤':''}</td><td><b class="rating">${r.rating}</b></td><td>${r.count}</td><td>${r.mine?fmt(r.money)+' C48':'—'}</td></tr>`).join('');}
+function renderProfileV15(){
+ if(!$('profileCard'))return;
+ const avg=teamPower();$('topProfileName').textContent=state.club;
+ const sorted=[...state.owned].sort((a,b)=>b.rating-a.rating);
+ $('profileCard').innerHTML=`<div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap"><div style="width:86px;height:86px;border-radius:20px;background:linear-gradient(145deg,#294d38,#101a12);display:grid;place-items:center;font-size:48px;border:2px solid #baff67">${escapeHtml(state.symbol||'★')}</div><div><h2 style="margin:0 0 5px">${escapeHtml(state.club)}</h2><div class="muted">Menajer kodun: <b>${escapeHtml(state.playerCode||'C48-??????')}</b> <button onclick="copyPlayerCode()">Kodu kopyala</button></div><div style="margin-top:7px">⭐ Kadro reytingi: <b class="rating">${avg}</b> · 👥 ${state.owned.length} oyuncu · 💰 ${fmt(state.money)} C48</div></div></div><h3 style="margin-top:18px">Kadro</h3><div class="pitch">${sorted.map(p=>`<div class="player" style="border-color:${ratingTier(p.rating)==='rainbow'?'#d35cff':ratingTier(p.rating)==='yellow'?'#ffd84d':ratingTier(p.rating)==='red'?'#ff4b4b':'#294333'}"><div><b>${escapeHtml(p.name)}</b><div class="muted">${escapeHtml(p.pos)}</div></div><div style="text-align:right"><b class="rating">${p.rating}</b><div class="muted">${fmt(Number(p.price)||priceForRating(p.rating))} C48</div></div></div>`).join('')}</div>`;
+ const fp=$('friendProfiles');if(!fp)return;
+ const friends=window.c48OnlineFriends||[];
+ fp.innerHTML=friends.length?friends.map(f=>{const squad=Array.isArray(f.squad)?f.squad:[];const roster=[...squad].sort((a,b)=>(Number(b.rating)||0)-(Number(a.rating)||0));return `<details class="player" style="display:block;margin:8px 0"><summary style="cursor:pointer"><b>${escapeHtml(f.club_name||'C48 Kulübü')}</b> · ⭐ ${Number(f.team_rating)||0} · 💰 ${fmt(Number(f.balance)||0)} C48 · ${roster.length} oyuncu <span class="muted">(${escapeHtml(f.player_code||'kod yok')})</span></summary><div class="pitch" style="margin-top:10px">${roster.map(p=>`<div class="player"><div><b>${escapeHtml(p.name||'Oyuncu')}</b><div class="muted">${escapeHtml(p.pos||'')}</div></div><div style="text-align:right"><b class="rating">${Number(p.rating)||0}</b><div class="muted">${fmt(Number(p.price)||0)} C48</div></div></div>`).join('')||'<div class="muted">Henüz kadro bilgisi yok.</div>'}</div></details>`}).join(''):'<div class="muted">Henüz çevrim içi arkadaşın yok. Arkadaşının kodunu yukarıya gir.</div>';
+}
+function renderRatingRankingV15(){
+ const el=$('ratingRankingRows');if(!el)return;
+ const remote=window.c48OnlineRanking;
+ if(Array.isArray(remote)&&remote.length){
+  const rows=[...remote].sort((a,b)=>(Number(b.team_rating)||0)-(Number(a.team_rating)||0));
+  el.innerHTML=rows.map((r,i)=>`<tr ${r.user_id===c48Session?.user?.id?'style="background:#243d29;font-weight:900"':''}><td>${i+1}</td><td>${escapeHtml(r.club_name||'C48 Kulübü')} ${r.user_id===c48Session?.user?.id?'👤':''}<div class="muted">${escapeHtml(r.player_code||'')}</div></td><td><b class="rating">${Number(r.team_rating)||0}</b></td><td>${Array.isArray(r.squad)?r.squad.length:0}</td><td>${fmt(Number(r.balance)||0)} C48</td></tr>`).join('');
+ }else{
+  const l=getLeague();const rows=[{name:state.club,rating:teamPower(),count:state.owned.length,money:state.money,mine:true},...l.teams.slice(1).map(t=>({name:t.name,rating:t.power||60,count:11,money:0}))].sort((a,b)=>b.rating-a.rating);
+  el.innerHTML=rows.map((r,i)=>`<tr ${r.mine?'style="background:#243d29;font-weight:900"':''}><td>${i+1}</td><td>${escapeHtml(r.name)} ${r.mine?'👤':''}</td><td><b class="rating">${r.rating}</b></td><td>${r.count}</td><td>${r.mine?fmt(r.money)+' C48':'—'}</td></tr>`).join('');
+ }
+}
+
 const _showPageV15=showPage;
 showPage=function(page){if(page==='versus')page='home';_showPageV15(page);if(page==='profile')renderProfileV15();if(page==='ranking')renderRatingRankingV15();applyRatingFrames();};
 const _renderSquadV15=renderSquad;
