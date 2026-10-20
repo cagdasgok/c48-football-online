@@ -192,12 +192,20 @@ function generateMarket(){
    market.push({id:'market-'+seed+'-'+i,name,pos,rating,price:priceForRating(rating)});
  }
 }
+function normalizePlayerSearch(value){
+ return String(value||'').toLocaleLowerCase('tr-TR')
+   .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+   .replace(/ı/g,'i').trim();
+}
 function lookupMarketPlayer(){
- const input=($('lookupPlayerName')?.value||'').trim().toLocaleLowerCase('tr');
+ const raw=($('lookupPlayerName')?.value||'').trim();
+ const input=normalizePlayerSearch(raw);
  const result=$('lookupPlayerResult');
  if(!result)return;
  if(!input){result.className='lookup-result muted';result.textContent='Bir oyuncu adı yazmaya başla.';return;}
- const found=market.filter(p=>p.name.toLocaleLowerCase('tr').includes(input));
+ // Search the exact same array used by the market cards (onlineMarket after server load).
+ const source=Array.isArray(market)?market:[];
+ const found=source.filter(p=>normalizePlayerSearch(p.name).includes(input));
  if(found.length){
    result.className='lookup-result lookup-found';
    result.innerHTML=found.map(p=>{
@@ -205,9 +213,8 @@ function lookupMarketPlayer(){
      return `<div class="lookup-player"><div><b>${p.name}</b><div class="muted">${p.pos} · Reyting ${p.rating} · ${fmt(p.price)} C48</div></div><span class="market-tag ${bought?'sold-label':''}">${bought?'🔒 Satılmış':'🟢 Bu markette var'}</span></div>`;
    }).join('');
  }else{
-   const known=featuredPlayers.find(p=>p.name.toLocaleLowerCase('tr').includes(input));
    result.className='lookup-result lookup-missing';
-   result.innerHTML=`<b>${known?known.name:'Bu isimde oyuncu'}</b> bu 30 dakikalık market döneminde bulunmuyor.<div class="muted">Yeni market dönemi başladığında oyuncu havuzu yenilenir. Bu arama oyuncuyu otomatik satın almaz.</div>`;
+   result.innerHTML=`<b>${raw.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}</b> bu 30 dakikalık market döneminde bulunmuyor.<div class="muted">Arama mevcut marketteki 20 oyuncuyu kontrol eder; oyuncuyu otomatik satın almaz.</div>`;
  }
 }
 function teamPower(){return Math.round(state.owned.reduce((s,p)=>s+p.rating,0)/Math.max(1,state.owned.length))}
