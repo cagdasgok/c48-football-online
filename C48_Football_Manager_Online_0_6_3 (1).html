@@ -64,10 +64,43 @@ header,.sidebar,.panel{box-shadow:0 12px 30px #0002}
 .lookup-player{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid #294333}
 .lookup-player:last-child{border-bottom:0}
 @media(max-width:600px){.lookup-player{align-items:flex-start;flex-direction:column}}
+
+/* v1.0 Transfer Boxes */
+.boxes-hero{position:relative;text-align:center;padding:25px 18px 22px;margin-bottom:16px;border:1px solid #574322;border-radius:18px;background:radial-gradient(ellipse at top,#44321b 0%,#152318 54%,#0b140e 100%);overflow:hidden}
+.boxes-eyebrow{font-size:11px;letter-spacing:3px;color:#baff67;font-weight:900}
+.boxes-hero h1{margin:7px 0;font-size:clamp(26px,4vw,44px);letter-spacing:1px;background:linear-gradient(90deg,#fff1b7,#ffc34e,#fff8db);-webkit-background-clip:text;background-clip:text;color:transparent}
+.boxes-hero p{margin:0;color:#c8d5cb}
+.boxes-balance{display:inline-block;margin-top:14px;padding:8px 15px;border-radius:999px;background:#090e0b;border:1px solid #465c3d;color:#d6e6d7;font-size:13px}
+.boxes-balance b{color:#baff67}
+.box-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;align-items:stretch}
+.loot-box{--box-glow:#a56a36;min-width:0;border:1px solid var(--box-glow);border-radius:16px;padding:13px 11px;background:linear-gradient(180deg,color-mix(in srgb,var(--box-glow) 15%,#101a12),#0b120d 65%);box-shadow:inset 0 1px 0 #ffffff20,0 8px 22px #0003;display:flex;flex-direction:column;gap:9px;transition:transform .18s,border-color .18s}
+.loot-box:hover{transform:translateY(-3px);box-shadow:0 12px 30px color-mix(in srgb,var(--box-glow) 20%,transparent)}
+.loot-box.bronze{--box-glow:#d98036}.loot-box.silver{--box-glow:#a6c8f7}.loot-box.gold{--box-glow:#f4bc32}.loot-box.diamond{--box-glow:#13bfff}.loot-box.legend{--box-glow:#d35cff}
+.box-tier{text-align:center;font-weight:900;font-size:clamp(13px,1.25vw,18px);color:var(--box-glow)}
+.box-tagline{text-align:center;min-height:34px;margin:0;font-size:11px;color:#c5d0c7}
+.chest-art{position:relative;display:flex;align-items:center;justify-content:center;height:95px;font-size:72px;filter:drop-shadow(0 5px 12px color-mix(in srgb,var(--box-glow) 50%,transparent));background:radial-gradient(ellipse,color-mix(in srgb,var(--box-glow) 18%,transparent),transparent 70%)}
+.chest-art span{position:absolute;right:15%;top:8%;font-size:23px}
+.box-cost{text-align:center;background:#060a07;border:1px solid color-mix(in srgb,var(--box-glow) 30%,#202a22);border-radius:10px;padding:9px 3px;font-size:clamp(14px,1.25vw,19px);font-weight:900;color:#fff}
+.box-cost small{font-size:10px;color:#9aa79e}
+.odds{display:grid;gap:0;flex:1;border-radius:9px;overflow:hidden;background:#0002}
+.odds div{display:flex;justify-content:space-between;gap:3px;padding:5px 4px;border-bottom:1px solid #ffffff0d;font-size:10px;color:#dce5dd}
+.odds b{white-space:nowrap;color:#fff}
+.open-box-btn{border:1px solid color-mix(in srgb,var(--box-glow) 70%,white);border-radius:9px;padding:10px 5px;background:linear-gradient(180deg,color-mix(in srgb,var(--box-glow) 80%,white),var(--box-glow));color:#10130e;font-weight:900;cursor:pointer;font-size:13px}
+.open-box-btn:hover{filter:brightness(1.1)}
+.open-box-btn:disabled{opacity:.45;cursor:not-allowed;filter:grayscale(.5)}
+.box-desc{text-align:center;font-size:10px;color:#9da99f}
+.box-bottom-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:14px}
+.box-bottom-grid .panel{margin:0}
+.box-bottom-grid ol{padding-left:20px;margin-bottom:0;color:#c7d3c9;font-size:12px}
+.box-result{padding:10px;border-radius:10px;background:#0b170e;border:1px solid #294a31;color:#cbdacb;font-size:13px}
+.box-result strong{color:#baff67;font-size:17px}
+@media(max-width:1100px){.box-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:680px){.box-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.box-bottom-grid{grid-template-columns:1fr}.chest-art{height:75px;font-size:56px}}
+
 </style></head><body>
 <header><div class="logo">C48 <span>FOOTBALL MANAGER</span></div><div class="stats"><div class="chip">💰 <b id="money">25.000</b> C48</div><div class="chip">🏟️ Seviye <b id="stadiumLevel">1</b></div><div class="chip">⭐ Güç <b id="teamPower">62</b></div></div></header>
 <div class="layout"><aside class="sidebar"><div class="muted" style="padding:6px 9px 12px">KULÜP MERKEZİ</div><div class="nav" id="nav">
-<button class="active" data-page="home">🏠 Genel Bakış</button><button data-page="squad">👥 Kadro</button><button data-page="market">🔄 Transfer Marketi</button><button data-page="tactics">🧠 Taktikler</button><button data-page="matches">⚽ Maçlar</button><button data-page="versus">⚔️ 1v1 Oda</button><button data-page="friends">🤝 Arkadaşlar</button><button data-page="stadium">🏟️ Stadyum</button><button data-page="club">🎨 Kulüp</button><button data-page="settings">⚙️ Ayarlar</button></div><div class="footer">C48 Studios · v0.9 TRANSFER ARAMA VE MARKET DENGESİ</div></aside>
+<button class="active" data-page="home">🏠 Genel Bakış</button><button data-page="squad">👥 Kadro</button><button data-page="market">🎁 Transfer Kutuları</button><button data-page="tactics">🧠 Taktikler</button><button data-page="matches">⚽ Maçlar</button><button data-page="versus">⚔️ 1v1 Oda</button><button data-page="friends">🤝 Arkadaşlar</button><button data-page="stadium">🏟️ Stadyum</button><button data-page="club">🎨 Kulüp</button><button data-page="settings">⚙️ Ayarlar</button></div><div class="footer">C48 Studios · v1.0 TRANSFER KUTULARI</div></aside>
 <main class="main">
 <section id="page-home">
 <div class="hero"><div><div class="badge">YENİ KULÜP · SEZON 1</div><h1 id="clubTitle">C48 United</h1><div class="muted">Kendi kulübünü yönet. Kadronu güçlendir. Zirveye çık.</div></div><button class="primary" onclick="showPage('matches')">Maça Hazırlan →</button></div>
@@ -76,28 +109,92 @@ header,.sidebar,.panel{box-shadow:0 12px 30px #0002}
 <div class="panel"><h2>Hızlı işlemler</h2><div class="formrow"><button onclick="showPage('market')">Oyuncu ara</button><button onclick="showPage('tactics')">Taktik belirle</button><button onclick="showPage('stadium')">Stadyumu geliştir</button></div></div>
 </section>
 <section id="page-squad" class="hidden"><div class="panel"><h2>👥 Kadro ve Diziliş</h2><p class="muted">Bir oyuncuya tıkla, ardından yerini değiştirmek istediğin oyuncuya tıkla. İlk 11 sahada, yedekler sağda; kadro dışı oyuncular altta görünür.</p><div id="squadLayout" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(180px,.42fr);gap:12px;align-items:start"><div><div id="formationPitch" style="min-height:390px;border:3px solid #dff5e4;border-radius:12px;padding:12px;background:repeating-linear-gradient(0deg,#176b38 0 45px,#1b7940 45px 90px);position:relative"><div style="position:absolute;inset:8px;border:2px solid #dff5e4aa;pointer-events:none"></div><div id="formationPlayers" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;position:relative;z-index:1"></div></div></div><div><h3 style="margin:0 0 8px">🪑 Yedekler</h3><div id="benchList" style="display:grid;gap:7px"></div></div></div><div style="margin-top:16px"><h3>📦 Kadro dışı</h3><div id="reserveList" class="pitch"></div></div><div class="muted" id="swapHint" style="margin-top:10px">Değişiklik yapmak için bir oyuncu seç.</div></div></section>
-<section id="page-market" class="hidden"><div class="hero"><div><h1>Transfer Marketi</h1><div class="muted">20 oyunculu transfer havuzu · Her 30 dakikada yenilenir · Her oyuncu dönem başına bir kez alınabilir.</div></div><div class="chip">Yenilenme: <b id="marketTimer">30:00</b></div></div><div class="notice" id="onlineMarketStatus">Çevrim içi market bağlantısı hazırlanıyor…</div><div class="market-toolbar">
-<div class="market-search"><span>⌕</span><input id="searchPlayer" placeholder="Oyuncu adı ara..." oninput="renderMarket()"></div>
-<select id="filterPosition" aria-label="Pozisyona göre filtrele" onchange="renderMarket()"><option value="">Tüm mevkiler</option><option>KL</option><option>STP</option><option>MO</option><option>SĞK</option><option>SLK</option><option>SF</option></select>
-<select id="filterRating" aria-label="Minimum reyting" onchange="renderMarket()"><option value="0">Tüm reytingler</option><option value="60">60+</option><option value="70">70+</option><option value="80">80+</option><option value="90">90+</option><option value="100">100+</option></select>
-<select id="sortMarket" aria-label="Sıralama" onchange="renderMarket()"><option value="rating-desc">En yüksek reyting</option><option value="price-asc">En ucuz</option><option value="price-desc">En pahalı</option><option value="name-asc">İsim A–Z</option></select>
+<section id="page-market" class="hidden">
+<div class="boxes-hero">
+  <div class="boxes-eyebrow">C48 FOOTBALL • TRANSFER MERKEZİ</div>
+  <h1>🎁 TRANSFER KUTULARI</h1>
+  <p>Efsanevi oyuncuları şansını deneyerek keşfet!</p>
+  <div class="boxes-balance">🪙 BAKİYEN: <b id="boxBalance">100.000 C48</b></div>
 </div>
-<div class="market-summary"><span>⚽ <b id="marketVisibleCount">20</b> oyuncu listeleniyor</span><span>🔄 Pazar <b>30 dakikada</b> yenilenir</span><span>💳 İşlemler C48 bakiyesiyle yapılır</span></div>
-<div class="panel player-lookup-panel" style="margin:0 0 14px">
-<h3>🔎 Oyuncu Bulucu</h3>
-<p class="muted">İstediğin futbolcuyu ara; bu transfer döneminde markette olup olmadığını kontrol et.</p>
-<div class="formrow"><input id="lookupPlayerName" placeholder="Örn. Cristiano Ronaldo, Messi, Arda Güler..." oninput="lookupMarketPlayer()"><button onclick="lookupMarketPlayer()">Market'te ara</button></div>
-<div id="lookupPlayerResult" class="lookup-result muted">Bir oyuncu adı yazmaya başla.</div>
+<div class="box-grid">
+  <article class="loot-box bronze">
+    <div class="box-tier">BRONZ KUTU</div><p class="box-tagline">Yeni yetenekleri keşfet!</p>
+    <div class="chest-art">📦<span>⚽</span></div>
+    <div class="box-cost">🪙 5.000 <small>C48</small></div>
+    <div class="odds">
+      <div><span>40–60 Reyting</span><b>70%</b></div>
+      <div><span>61–75 Reyting</span><b>25%</b></div>
+      <div><span>76–85 Reyting</span><b>4.5%</b></div>
+      <div><span>86+ Reyting</span><b>0.5%</b></div>
+    </div>
+    <button class="open-box-btn" onclick="openTransferBox('bronze')">🗝️ Kutu Aç</button>
+    <div class="box-desc">Başlangıç için ideal</div>
+  </article>
+  <article class="loot-box silver">
+    <div class="box-tier">GÜMÜŞ KUTU</div><p class="box-tagline">Kaliteli oyuncular seni bekliyor!</p>
+    <div class="chest-art">🧰<span>✨</span></div>
+    <div class="box-cost">🪙 150.000 <small>C48</small></div>
+    <div class="odds">
+      <div><span>40–60 Reyting</span><b>35%</b></div>
+      <div><span>61–75 Reyting</span><b>40%</b></div>
+      <div><span>76–85 Reyting</span><b>18%</b></div>
+      <div><span>86–99 Reyting</span><b>6%</b></div>
+      <div><span>100+ Reyting</span><b>1%</b></div>
+    </div>
+    <button class="open-box-btn" onclick="openTransferBox('silver')">🗝️ Kutu Aç</button>
+    <div class="box-desc">Daha iyi reyting şansı</div>
+  </article>
+  <article class="loot-box gold">
+    <div class="box-tier">ALTIN KUTU</div><p class="box-tagline">Yıldız oyuncular burada!</p>
+    <div class="chest-art">🗃️<span>⭐</span></div>
+    <div class="box-cost">🪙 500.000 <small>C48</small></div>
+    <div class="odds">
+      <div><span>40–60 Reyting</span><b>20%</b></div>
+      <div><span>61–75 Reyting</span><b>30%</b></div>
+      <div><span>76–85 Reyting</span><b>30%</b></div>
+      <div><span>86–94 Reyting</span><b>15%</b></div>
+      <div><span>95–100 Reyting</span><b>5%</b></div>
+    </div>
+    <button class="open-box-btn" onclick="openTransferBox('gold')">🗝️ Kutu Aç</button>
+    <div class="box-desc">Yıldız bulma şansı</div>
+  </article>
+  <article class="loot-box diamond">
+    <div class="box-tier">ELMAS KUTU</div><p class="box-tagline">Dünya yıldızlarına yaklaş!</p>
+    <div class="chest-art">💎<span>⚡</span></div>
+    <div class="box-cost">🪙 750.000 <small>C48</small></div>
+    <div class="odds">
+      <div><span>40–70 Reyting</span><b>10%</b></div>
+      <div><span>71–85 Reyting</span><b>30%</b></div>
+      <div><span>86–94 Reyting</span><b>35%</b></div>
+      <div><span>95–100 Reyting</span><b>20%</b></div>
+      <div><span>101–105 Reyting</span><b>4%</b></div>
+      <div><span>106–110 Reyting</span><b>1%</b></div>
+    </div>
+    <button class="open-box-btn" onclick="openTransferBox('diamond')">🗝️ Kutu Aç</button>
+    <div class="box-desc">Çok yüksek reyting ihtimali</div>
+  </article>
+  <article class="loot-box legend">
+    <div class="box-tier">EFSANEVİ KUTU</div><p class="box-tagline">En iyileri senin olabilir!</p>
+    <div class="chest-art">👑<span>🌟</span></div>
+    <div class="box-cost">🪙 1.000.000 <small>C48</small></div>
+    <div class="odds">
+      <div><span>40–75 Reyting</span><b>5%</b></div>
+      <div><span>76–85 Reyting</span><b>20%</b></div>
+      <div><span>86–94 Reyting</span><b>30%</b></div>
+      <div><span>95–100 Reyting</span><b>30%</b></div>
+      <div><span>101–105 Reyting</span><b>10%</b></div>
+      <div><span>106–110 Reyting</span><b>5%</b></div>
+    </div>
+    <button class="open-box-btn" onclick="openTransferBox('legend')">🗝️ Kutu Aç</button>
+    <div class="box-desc">En nadir oyuncu şansı</div>
+  </article>
 </div>
-<div id="marketRows" class="market-player-grid"></div>
-<div class="panel" style="margin-top:16px"><h2>📋 Transfer Takip Merkezi</h2><p class="muted">Bu market döneminde hangi oyuncunun alındığını ve alıcısını takip et.</p><div class="tablewrap"><table><thead><tr><th>Oyuncu</th><th>Reyting</th><th>Durum</th><th>Satın alan</th></tr></thead><tbody id="marketTrackerRows"></tbody></table></div><div class="muted" style="margin-top:8px">Not: Bu takip listesi bu cihazdaki kayıtları gösterir. Tüm oyuncular arasında gerçek ortak sahiplik için sunucu gerekir.</div></div>
-<div class="panel" style="margin-top:18px;background:linear-gradient(135deg,#14291e,#0b1710)">
-<h2>🛒 Gerçek Oyuncu Pazarı</h2>
-<p class="muted">Kulüplerin satışa koyduğu oyuncular. Prototipte ilanlar bu tarayıcıda paylaşılır; farklı oyuncular arasında gerçek çevrim içi alışveriş için sunucu gerekir.</p>
-<div class="grid" style="margin-bottom:12px"><div class="metric"><div class="big" id="listingCount">0</div><small>Aktif ilan</small></div><div class="metric"><div class="big">%5</div><small>Pazar işlem ücreti</small></div><div class="metric"><div class="big" id="myListingCount">0</div><small>Benim ilanlarım</small></div></div>
-<h3>Oyuncunu satışa koy</h3><div class="formrow"><select id="sellPlayerSelect"></select><input id="sellPrice" type="number" min="1" step="100" placeholder="Satış fiyatı (C48)"><button class="primary" onclick="listPlayerForSale()">Pazara koy</button></div>
-<h3 style="margin-top:16px">Satış ilanları</h3><div class="tablewrap"><table><thead><tr><th>Oyuncu</th><th>Satıcı</th><th>Reyting</th><th>Fiyat</th><th>İşlem</th></tr></thead><tbody id="realMarketRows"></tbody></table></div>
-</div></section>
+<div class="box-bottom-grid">
+  <div class="panel"><h3>ℹ️ Nasıl Çalışır?</h3><ol><li>İstediğin kutuyu seç ve satın al.</li><li>Kutuyu aç, şansını dene.</li><li>Çıkan oyuncu kadrona eklenir.</li></ol></div>
+  <div class="panel"><h3>🎯 Son Kutu Sonucun</h3><div id="boxResult" class="box-result">Henüz kutu açmadın. İlk oyuncunu keşfet!</div></div>
+  <div class="panel"><h3>📚 Şans Bilgisi</h3><p class="muted">Her kutunun reyting olasılıkları farklıdır. Pahalı kutularda yüksek reytingli oyuncu çıkma ihtimali artar; en iyi oyuncu garantisi yoktur.</p></div>
+</div>
+</section>
 <section id="page-tactics" class="hidden"><div class="panel"><h2>🧠 Maç taktikleri</h2><p class="muted">Rakibe karşı oyun tarzını ve dizilişini seç.</p><div class="formrow"><label>Diziliş <select id="formation" onchange="setTactic()"><option>4-3-3</option><option>4-4-2</option><option>3-5-2</option><option>5-3-2</option><option>4-2-3-1</option></select></label><label>Oyun tarzı <select id="style" onchange="setTactic()"><option value="balanced">Dengeli</option><option value="attack">Hücum</option><option value="defend">Savunma</option><option value="possession">Topa sahip olma</option><option value="counter">Kontra atak</option></select></label><label>Pres <select id="press" onchange="setTactic()"><option value="normal">Normal</option><option value="high">Önde pres</option><option value="low">Geri çekil</option></select></label><label>Pas oyunu <select id="passing" onchange="setTactic()"><option value="short">Kısa pas</option><option value="mixed">Karışık pas</option><option value="long">Uzun top</option></select></label><label>Tempo <select id="tempo" onchange="setTactic()"><option value="normal">Normal</option><option value="fast">Hızlı</option><option value="slow">Yavaş</option></select></label><label>Defans çizgisi <select id="line" onchange="setTactic()"><option value="balanced">Dengeli</option><option value="high">Önde</option><option value="deep">Derinde</option></select></label></div><div class="grid" style="margin-top:16px"><div class="metric"><div class="big" id="attackVal">68</div><small>Hücum gücü</small></div><div class="metric"><div class="big" id="midVal">64</div><small>Orta saha gücü</small></div><div class="metric"><div class="big" id="defVal">61</div><small>Savunma gücü</small></div></div><div class="notice" style="margin-top:12px" id="tacticText">Dengeli taktik, her alanda istikrarlı bir yaklaşım sunar.</div></div></section>
 <section id="page-matches" class="hidden"><div class="hero"><div><h1>Maç Merkezi</h1><div class="muted">Maç simülasyonunu başlat ve ödül kazan.</div></div><span class="badge">LİG MAÇI</span></div><div class="panel"><h2>🏆 C48 Lig Mücadelesi</h2><div class="grid"><div class="metric"><small>Senin takımın</small><div class="big" id="myMatchPower">62</div><b id="matchClub">C48 United</b></div><div class="metric"><small>Rakip takım</small><div class="big" id="oppPower">60</div><b>Harbor City</b></div><div class="metric"><small>Galibiyet ödülü</small><div class="big">+2.000</div><small>C48 oyun parası</small></div></div><button class="primary" style="margin-top:14px" id="playMatch" onclick="playMatch()">20 saniyelik maçı başlat</button>
 <div id="liveMatch" class="panel hidden" style="margin-top:14px;background:#0a1a10">
@@ -219,7 +316,7 @@ function lookupMarketPlayer(){
 }
 function teamPower(){return Math.round(state.owned.reduce((s,p)=>s+p.rating,0)/Math.max(1,state.owned.length))}
 function updateStats(){$('money').textContent=fmt(state.money);$('stadiumLevel').textContent=state.stadium;$('teamPower').textContent=teamPower();$('squadCount').textContent=state.owned.length+'/25';$('winCount').textContent=state.wins;$('playedCount').textContent=state.played;$('clubTitle').textContent=state.club;$('matchClub').textContent=state.club;$('myMatchPower').textContent=teamPower();$('capacity').textContent=fmt(5000+(state.stadium-1)*2500);$('stadCapacity').textContent=fmt(5000+(state.stadium-1)*2500);$('stadLevel2').textContent=state.stadium;$('stadName').textContent=state.club+' Arena';$('nextCap').textContent=fmt(5000+state.stadium*2500);$('stadCost').textContent=fmt(state.stadium*16000);$('upgradeStadium').disabled=state.money<state.stadium*16000;$('formationLabel').textContent=state.formation;$('chemistry').textContent=Math.min(99,68+Math.floor(state.owned.length/2))+'%';$('chemBar').style.width=Math.min(99,68+Math.floor(state.owned.length/2))+'%';$('stadBar').style.width=Math.min(100,state.stadium*12)+'%';$('homeNotice').textContent=state.lastResult;$('clubNameInput').value=state.club;if($('crest'))$('crest').textContent=state.symbol;$('crestName').textContent=state.club;if($('crestBig'))$('crestBig').textContent=state.symbol;if($('freeChanges'))$('freeChanges').textContent=Math.max(0,2-state.clubChanges)+'/2';if($('paidClubChange'))$('paidClubChange').disabled=state.money<1000000||state.clubChanges<2;applyTheme(state.theme)}
-function showPage(page){document.querySelectorAll('main section').forEach(s=>s.classList.add('hidden'));$('page-'+page).classList.remove('hidden');document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===page));if(page==='squad')renderSquad();if(page==='market'){renderMarket();renderRealMarket();}if(page==='tactics')setTactic();if(page==='club'){$('color1').value=state.colors?.[0]||'#baff67';$('color2').value=state.colors?.[1]||'#14271b';$('color3').value=state.colors?.[2]||'#f4fff6';$('symbol').value=state.symbol||'🛡️';$('clubNameInput').value=state.club;refreshClubPreview?.()}if(page==='settings')applyTheme(state.theme);if(page==='stadium')updateStats()}
+function showPage(page){document.querySelectorAll('main section').forEach(s=>s.classList.add('hidden'));$('page-'+page).classList.remove('hidden');document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===page));if(page==='squad')renderSquad();if(page==='market'){syncBoxBalance();}if(page==='tactics')setTactic();if(page==='club'){$('color1').value=state.colors?.[0]||'#baff67';$('color2').value=state.colors?.[1]||'#14271b';$('color3').value=state.colors?.[2]||'#f4fff6';$('symbol').value=state.symbol||'🛡️';$('clubNameInput').value=state.club;refreshClubPreview?.()}if(page==='settings')applyTheme(state.theme);if(page==='stadium')updateStats()}
 document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
 let selectedRosterId=null;
 function getFormationPositions(){
@@ -541,6 +638,59 @@ async function loadPortraits(){
    }
  });
 }
+
+const transferBoxTypes={
+ bronze:{name:'Bronz Kutu',price:5000,bands:[[40,60,70],[61,75,25],[76,85,4.5],[86,99,.5]]},
+ silver:{name:'Gümüş Kutu',price:150000,bands:[[40,60,35],[61,75,40],[76,85,18],[86,99,6],[100,110,1]]},
+ gold:{name:'Altın Kutu',price:500000,bands:[[40,60,20],[61,75,30],[76,85,30],[86,94,15],[95,100,5]]},
+ diamond:{name:'Elmas Kutu',price:750000,bands:[[40,70,10],[71,85,30],[86,94,35],[95,100,20],[101,105,4],[106,110,1]]},
+ legend:{name:'Efsanevi Kutu',price:1000000,bands:[[40,75,5],[76,85,20],[86,94,30],[95,100,30],[101,105,10],[106,110,5]]}
+};
+const boxPlayerNames=[
+ ['Cristiano Ronaldo','SF'],['Lionel Messi','SF'],['Lamine Yamal','SĞK'],['Arda Güler','MO'],['Sergio Ramos','STP'],
+ ['Kylian Mbappé','SF'],['Erling Haaland','SF'],['Son Heung-min','SLK'],['Kevin De Bruyne','MO'],['Jude Bellingham','MO'],
+ ['Vinícius Júnior','SLK'],['Hakan Çalhanoğlu','MO'],['İlkay Gündoğan','MO'],['Mohamed Salah','SĞK'],['Virgil van Dijk','STP'],
+ ['Manuel Neuer','KL'],['Luka Modrić','MO'],['Harry Kane','SF'],['Bukayo Saka','SĞK'],['Jamal Musiala','MO'],
+ ['Noah Becker','STP'],['Mert Kaya','MO'],['Deniz Demir','SĞK'],['Eren Şahin','SF'],['Kerem Aydın','STP']
+];
+function randomBoxRating(box){
+ const bands=transferBoxTypes[box].bands;
+ const roll=Math.random()*100;
+ let sum=0,band=bands[bands.length-1];
+ for(const b of bands){sum+=b[2];if(roll<sum){band=b;break;}}
+ return band[0]+Math.floor(Math.random()*(band[1]-band[0]+1));
+}
+function randomBoxPlayer(rating){
+ const special={
+  'Cristiano Ronaldo':['SF',110],'Lionel Messi':['SF',108],'Lamine Yamal':['SĞK',96],
+  'Arda Güler':['MO',91],'Sergio Ramos':['STP',90],'Kylian Mbappé':['SF',109],
+  'Erling Haaland':['SF',108],'Son Heung-min':['SLK',94]
+ };
+ const eligible=boxPlayerNames.filter(([name])=>!state.owned.some(p=>p.name===name));
+ let name,pos;
+ const elite=eligible.filter(([n])=>special[n]&&special[n][1]>=rating-3&&special[n][1]<=rating+4);
+ if(elite.length&&rating>=88&&Math.random()<.55){[name,pos]=elite[Math.floor(Math.random()*elite.length)];rating=special[name][1];}
+ else if(eligible.length){[name,pos]=eligible[Math.floor(Math.random()*eligible.length)];}
+ else {name='C48 Akademi Oyuncusu '+Math.floor(100+Math.random()*900);pos=positions[Math.floor(Math.random()*positions.length)];}
+ return {id:'box-'+Date.now()+'-'+Math.random().toString(36).slice(2,7),name,pos,rating,price:priceForRating(rating)};
+}
+function syncBoxBalance(){const el=$('boxBalance');if(el)el.textContent=fmt(state.money)+' C48';}
+function openTransferBox(type){
+ const box=transferBoxTypes[type];if(!box)return;
+ if(state.money<box.price){msg('Bu kutu için yeterli C48 paran yok.');return;}
+ if(state.owned.length>=25){msg('Kadro dolu! Önce kadroda yer aç.');return;}
+ if(!confirm(`${box.name} açmak için ${fmt(box.price)} C48 harcansın mı?`))return;
+ const rating=randomBoxRating(type);
+ const player=randomBoxPlayer(rating);
+ state.money-=box.price;
+ state.owned.push(player);
+ state.lastResult=`${box.name} açıldı: ${player.name} (${player.rating} reyting)`;
+ persist();updateStats();renderSquad();syncBoxBalance();
+ const result=$('boxResult');
+ if(result)result.innerHTML=`🎉 Kutudan çıkan oyuncu:<br><strong>${player.name}</strong><br>${player.pos} · ${player.rating} reyting<br><span>${fmt(box.price)} C48 harcandı.</span>`;
+ msg(`${player.name} kutudan çıktı ve kadrona eklendi!`);
+}
+
 load();if(!state.playerCode)state.playerCode='C48-'+Math.random().toString(36).slice(2,8).toUpperCase();if(!state.friends)state.friends=[];if(!state.listings)state.listings=[];if(!Number.isFinite(state.clubChanges))state.clubChanges=0;if(!state.theme)state.theme='green';if(!state.passing)state.passing='short';if(!state.tempo)state.tempo='normal';if(!state.line)state.line='balanced';persist();connectC48Online();generateMarket();updateStats();renderSquad();renderFriends();renderRealMarket();loadPortraits();$('myPlayerCode').textContent=state.playerCode;let activeMarketWindow=Math.floor(Date.now()/1800000);function updateMarketClock(){const now=Date.now(),windowNow=Math.floor(now/1800000);if(windowNow!==activeMarketWindow){activeMarketWindow=windowNow;generateMarket();renderMarket();msg('Transfer marketi yenilendi! Yeni 20 oyuncu geldi.')}const left=1800000-(now%1800000);const el=$('marketTimer');if(el)el.textContent=String(Math.floor(left/60000)).padStart(2,'0')+':'+String(Math.floor((left%60000)/1000)).padStart(2,'0')}updateMarketClock();setInterval(updateMarketClock,250);
 </script>
 <script>
