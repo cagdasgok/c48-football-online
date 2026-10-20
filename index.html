@@ -181,18 +181,42 @@ async function sbFetch(path, options={}){
  if(!res.ok) throw new Error(data?.message||data?.msg||data?.error_description||data?.hint||String(data||('HTTP '+res.status)));
  return data;
 }
+async function c48CreateAnonymousSession(){
+ c48Session=await sbFetch('/auth/v1/signup',{method:'POST',body:JSON.stringify({data:{club_name:state.club||'C48 United'}})});
+ if(!c48Session?.access_token) throw new Error('Supabase oturum anahtarı döndürmedi. Authentication > Sign In / Providers bölümünde Allow anonymous sign-ins açık ve kaydedilmiş olmalı.');
+ localStorage.setItem('c48_supabase_session',JSON.stringify(c48Session));
+}
 async function connectC48Online(){
  setOnlineStatus('Supabase sunucusuna bağlanılıyor…');
  try{
    const saved=localStorage.getItem('c48_supabase_session');
    if(saved){try{c48Session=JSON.parse(saved)}catch(e){c48Session=null}}
    if(!c48Session?.access_token){
-     // Supabase anonymous sign-in. Enable Authentication > Sign In / Providers > Anonymous Sign-Ins first.
-     c48Session=await sbFetch('/auth/v1/signup',{method:'POST',body:JSON.stringify({data:{club_name:state.club||'C48 United'}})});
-     if(!c48Session?.access_token) throw new Error('Supabase oturum anahtarı döndürmedi. Authentication > Sign In / Providers bölümünde Allow anonymous sign-ins açık ve kaydedilmiş olmalı.');
-     localStorage.setItem('c48_supabase_session',JSON.stringify(c48Session));
+     await c48CreateAnonymousSession();
    }
-   await loadOnlineProfile();
+   try{
+     await loadOnlineProfile();
+   }catch(profileErr){
+     const msg=String(profileErr?.message||profileErr);
+     if(/JWT expired|token.*expired|invalid.*token|401/i.test(msg)){
+       // Try refreshing the existing anonymous session first to preserve its user ID.
+       if(c48Session?.refresh_token){
+         try{
+           const refreshed=await sbFetch('/auth/v1/token?grant_type=refresh_token',{method:'POST',body:JSON.stringify({refresh_token:c48Session.refresh_token}),headers:{Authorization:'Bearer '+C48_SUPABASE_KEY}});
+           if(refreshed?.access_token){c48Session=refreshed;localStorage.setItem('c48_supabase_session',JSON.stringify(c48Session));await loadOnlineProfile();}
+           else throw new Error('Oturum yenilenemedi.');
+         }catch(refreshErr){
+           localStorage.removeItem('c48_supabase_session');c48Session=null;
+           await c48CreateAnonymousSession();
+           await loadOnlineProfile();
+         }
+       }else{
+         localStorage.removeItem('c48_supabase_session');c48Session=null;
+         await c48CreateAnonymousSession();
+         await loadOnlineProfile();
+       }
+     }else throw profileErr;
+   }
    await loadOnlineMarket();
  }catch(err){
    setOnlineStatus('Sunucu bağlantısı kurulamadı: '+err.message);
