@@ -1580,4 +1580,155 @@ window.addEventListener('load',()=>{const footer=document.querySelector('.footer
 })();
 </script>
 
+<script>
+// C48 Football Manager v2.0 feature patch
+(function(){
+ const $=id=>document.getElementById(id);
+ // 4) Remove the standalone Matches navigation; primary match entry goes to league.
+ document.querySelectorAll('#nav button[data-page="matches"]').forEach(b=>b.remove());
+ document.querySelectorAll('button[onclick*="showPage(\'matches\')"]').forEach(b=>{b.setAttribute('onclick',"showPage('league')");});
+ const matchSection=$('page-matches'); if(matchSection)matchSection.style.display='none';
+ // 5) Soundtrack chooser. User-initiated playback opens YouTube Music to respect browser/autoplay policies.
+ const settings=$('page-settings');
+ if(settings&&!$('musicSettings')){
+  const panel=document.createElement('div');panel.className='panel';panel.id='musicSettings';
+  panel.innerHTML=`<h2>🎵 Müzik seçimi</h2><p class="muted">Bir müzik seç. Tarayıcı politikaları nedeniyle oynatmayı sen başlatırsın; parça YouTube Music'te açılır.</p><div class="formrow"><select id="musicSelect"><option value="icKzfie3Xhk">Feet Don't Fail Me Now</option><option value="XDjB9E3YtUE">Heat Waves</option></select><button class="primary" id="playMusicBtn">▶ Müziği aç</button><button id="stopMusicBtn">Müziği durdur</button></div><div id="musicNote" class="muted" style="margin-top:8px">Müzik seçilmedi.</div>`;
+  settings.insertBefore(panel,settings.querySelector('.panel'));
+  $('playMusicBtn').onclick=()=>{const id=$('musicSelect').value;const name=id==='icKzfie3Xhk'?"Feet Don't Fail Me Now":"Heat Waves";window.open('https://music.youtube.com/watch?v='+id,'_blank','noopener');$('musicNote').textContent=name+' YouTube Music üzerinde açıldı.';state.music=id;persist();};
+  $('stopMusicBtn').onclick=()=>{$('musicNote').textContent='Müziği YouTube Music sekmesinden durdurabilirsin.';};
+ }
+ // 8-9) Training system: +5 max per player for each session, level-based durations, slots and prices.
+ const v20TrainingCosts=[20000,100000,350000,700000,1200000];
+ const v20TrainingTimes=[240,180,150,60,30];
+ trainingSeconds=function(){return v20TrainingTimes[Math.min(4,Math.max(0,Number(state.trainingLevel)||0))]||240;};
+ trainingSlotCount=function(){const level=Number(state.trainingLevel)||0;return level>=4?4:level>=2?3:2;};
+ const v20RenderTraining=renderTraining;
+ renderTraining=function(){
+  state.trainingJobs=state.trainingJobs||{};state.trainingSlots=trainingSlotCount();
+  const sel=$('trainingPlayer');if(sel){const current=sel.value;sel.innerHTML=state.owned.map(p=>`<option value="${String(p.id).replace(/"/g,'&quot;')}">${escapeHtml(p.name)} · ${p.rating} reyting</option>`).join('');if(state.owned.some(p=>String(p.id)===current))sel.value=current;}
+  $('trainingTime').textContent=trainingTimeLabel(trainingSeconds());$('trainingSlots').textContent=state.trainingSlots;$('trainingLevel').textContent='Seviye '+(Number(state.trainingLevel||0)+1);
+  const jobs=Object.entries(state.trainingJobs).filter(([id])=>state.owned.some(p=>String(p.id)===String(id)));$('trainingActive').textContent=jobs.length;
+  $('trainingPlayers').innerHTML=state.owned.map(p=>{const job=state.trainingJobs[p.id];const left=job?Math.max(0,trainingSeconds()-Math.floor((Date.now()-job.startedAt)/1000)):0;return `<div class="player"><div><b>${escapeHtml(p.name)}</b><div class="muted">${p.pos} · Reyting ${p.rating}</div>${job?`<div class="bar"><span style="width:${Math.min(100,100*(trainingSeconds()-left)/trainingSeconds())}%"></span></div><small>+1 reyting için ${trainingTimeLabel(left)}</small>`:'<small class="muted">Antrenmanda değil</small>'}</div><button onclick="toggleTrainingFor('${String(p.id).replace(/'/g,"\\'")}')">${job?'Durdur':'Çalıştır'}</button></div>`}).join('');
+  const cards=$('trainingUpgradeCards');if(cards)cards.innerHTML=v20TrainingCosts.map((cost,i)=>`<div class="metric" style="border-color:${i<(Number(state.trainingLevel)||0)?'#baff67':'#294833'}"><div class="big">${fmt(cost)}</div><small>${i<(Number(state.trainingLevel)||0)?'✓ Tamamlandı':`Seviye ${i+2} · ${trainingTimeLabel(v20TrainingTimes[i+1]||30)}`}</small>${i===1?'<small>3 oyuncu slotu</small>':''}${i===3?'<small>4 oyuncu slotu</small>':''}</div>`).join('');
+  const next=v20TrainingCosts[Number(state.trainingLevel)||0];$('trainingUpgradeInfo').textContent=next?`Sonraki yükseltme: ${fmt(next)} C48 · Süre ${trainingTimeLabel(trainingSeconds())} → ${trainingTimeLabel(v20TrainingTimes[(Number(state.trainingLevel)||0)+1]||30)}`:'Tesis maksimum seviyede!';
+  $('upgradeTrainingBtn').disabled=!next||state.money<next;$('upgradeTrainingBtn').textContent=next?`Tesisi yükselt · ${fmt(next)} C48`:'Maksimum seviye';
+ };
+ upgradeTrainingFacility=function(){const level=Number(state.trainingLevel)||0;const cost=v20TrainingCosts[level];if(cost==null)return;if(state.money<cost){msg('Yeterli paran yok.');return;}state.money-=cost;state.trainingLevel=level+1;state.trainingSlots=trainingSlotCount();state.lastResult='Antrenman tesisi seviye '+(state.trainingLevel+1)+' oldu.';persist();updateStats();renderTraining();msg('Tesis yükseltildi! Süre ve slotlar güncellendi.');};
+ const v20ToggleTraining=toggleTrainingFor;
+ toggleTrainingFor=function(id){const p=state.owned.find(x=>String(x.id)===String(id));if(!p)return;state.trainingJobs=state.trainingJobs||{};if(state.trainingJobs[id]){delete state.trainingJobs[id];persist();renderTraining();msg(p.name+' antrenmandan çıkarıldı.');return;}if(Object.keys(state.trainingJobs).length>=trainingSlotCount()){msg('Antrenman slotları dolu!');return;}state.trainingJobs[id]={startedAt:Date.now(),baseRating:Number(p.rating)||0,gains:0};persist();renderTraining();msg(p.name+' antrenmana başladı. En fazla +5 reyting kazanabilir.');};
+ processTrainingTicks=function(){const jobs=state.trainingJobs||{};let changed=false;const now=Date.now();Object.entries(jobs).forEach(([id,job])=>{const p=state.owned.find(x=>String(x.id)===String(id));if(!p){delete jobs[id];changed=true;return;}if(!Number.isFinite(Number(job.baseRating))){job.baseRating=Number(p.rating)||0;job.gains=0;}if(!Number.isFinite(Number(job.gains)))job.gains=Math.max(0,(Number(p.rating)||0)-Number(job.baseRating));if(Number(job.gains)>=5){delete jobs[id];changed=true;state.lastResult=p.name+' antrenman sınırına ulaştı (+5).';return;}if(now-Number(job.startedAt)>=trainingSeconds()*1000){const before=Number(p.rating)||0;p.rating=before+1;p.price=(Number(p.price)||priceForRating(before))+1000000;job.gains=Number(job.gains)+1;job.startedAt=now;changed=true;state.lastResult=p.name+' +1 reyting kazandı.';if(job.gains>=5)delete jobs[id];}});if(changed){persist();updateStats();if(!$('page-squad').classList.contains('hidden'))renderSquad();if(!$('page-scout').classList.contains('hidden'))renderScout();if(!$('page-market').classList.contains('hidden'))syncBoxBalance();if(typeof renderProfileV15==='function')renderProfileV15();}if(!$('page-training').classList.contains('hidden'))renderTraining();};
+ // 11) Add exactly 100 new searchable players: 5 x 100 OVR, 45 x 80-90, 50 x 40-70.
+ const extraPlayers=[];const positions=['KL','STP','MO','SĞK','SLK','SF'];
+ for(let i=1;i<=100;i++){
+  let rating,price;
+  if(i<=5){rating=100;price=2000000+Math.floor(Math.random()*3000001);}
+  else if(i<=50){rating=80+Math.floor(Math.random()*11);price=800000+Math.floor(Math.random()*1200001);}
+  else {rating=40+Math.floor(Math.random()*31);price=50000+Math.floor(Math.random()*650001);}
+  const player={id:'v20-new-'+String(i).padStart(3,'0'),name:`C48 Yeni Oyuncu ${String(i).padStart(3,'0')}`,pos:positions[(i-1)%positions.length],rating,price,club:'C48 Akademi'};extraPlayers.push(player);
+ }
+ realPlayerData.push(...extraPlayers);
+ const oldGenerateScoutPool=generateScoutPool;
+ generateScoutPool=function(){oldGenerateScoutPool();const known=new Set(scoutPool.map(p=>p.id));extraPlayers.forEach(p=>{if(!known.has(p.id))scoutPool.push({...p});});};
+ // 10) Add price sort/filter controls to scout search.
+ const scoutToolbar=document.querySelector('#page-scout .market-toolbar');
+ if(scoutToolbar&&!$('scoutPriceSort')){const sort=document.createElement('select');sort.id='scoutPriceSort';sort.innerHTML='<option value="rating">Reytinge göre</option><option value="price-asc">Fiyat: düşükten yükseğe</option><option value="price-desc">Fiyat: yüksekten düşüğe</option>';sort.onchange=()=>renderScout();scoutToolbar.appendChild(sort);const priceMin=document.createElement('input');priceMin.type='number';priceMin.id='scoutMinPrice';priceMin.placeholder='Min fiyat';priceMin.min='0';priceMin.oninput=()=>renderScout();scoutToolbar.appendChild(priceMin);const priceMax=document.createElement('input');priceMax.type='number';priceMax.id='scoutMaxPrice';priceMax.placeholder='Maks fiyat';priceMax.min='0';priceMax.oninput=()=>renderScout();scoutToolbar.appendChild(priceMax);}
+ const oldRenderScout=renderScout;
+ renderScout=function(){oldRenderScout();const rows=$('scoutRows');if(!rows)return;const q=normalizePlayerSearch($('scoutSearch')?.value||''),pos=$('scoutPosition')?.value||'',min=Number($('scoutRating')?.value||0),availability=$('scoutAvailability')?.value||'all';let list=(Array.isArray(scoutPool)?scoutPool:[]).filter(p=>normalizePlayerSearch(p.name).includes(q)&&(!pos||p.pos===pos)&&p.rating>=min&&(availability==='all'||(state.owned.some(x=>x.id===p.id)?availability==='owned':availability==='available')));const minPrice=Number($('scoutMinPrice')?.value||0),maxPrice=Number($('scoutMaxPrice')?.value||0);list=list.filter(p=>p.price>=minPrice&&(!maxPrice||p.price<=maxPrice));const sort=$('scoutPriceSort')?.value||'rating';if(sort==='price-asc')list.sort((a,b)=>a.price-b.price);else if(sort==='price-desc')list.sort((a,b)=>b.price-a.price);const pages=Math.max(1,Math.ceil(list.length/SCOUT_PAGE_SIZE));scoutPage=Math.min(Math.max(1,scoutPage),pages);const visible=list.slice((scoutPage-1)*SCOUT_PAGE_SIZE,scoutPage*SCOUT_PAGE_SIZE);rows.innerHTML=visible.map(p=>{const owned=state.owned.some(x=>x.id===p.id);return `<article class="market-card"><div class="market-card-top"><div class="market-avatar">⚽</div><div class="market-rating">${p.rating}<small>REYTİNG</small></div></div><div class="market-player-name">${escapeHtml(p.name)}</div><div class="market-player-meta"><span class="market-tag">${escapeHtml(p.pos)}</span></div><div class="market-card-bottom"><div class="market-price"><small>FİYAT</small>${fmt(p.price)} C48</div>${owned?'<span class="market-tag">Kadromda</span>':''}</div></article>`;}).join('')||'<div class="notice">Bu filtrelerle oyuncu bulunamadı.</div>';const pag=$('scoutPagination');if(pag)pag.innerHTML=`<button ${scoutPage<=1?'disabled':''} onclick="scoutPage=Math.max(1,scoutPage-1);renderScout()">← Önceki</button><span class="muted">${list.length} oyuncu · Sayfa ${scoutPage}/${pages}</span><button ${scoutPage>=pages?'disabled':''} onclick="scoutPage=Math.min(${pages},scoutPage+1);renderScout()">Sonraki →</button>`;};
+ // 6) Make tactics UI more polished with extra presets; map each to existing tactical modifiers.
+ const tactics=$('page-tactics');if(tactics){const panel=tactics.querySelector('.panel');if(panel&&!$('tacticPresets')){const p=document.createElement('div');p.id='tacticPresets';p.className='panel';p.innerHTML='<h3>⚡ Hazır taktik planları</h3><div class="formrow"><button data-preset="gegen">Gegenpress</button><button data-preset="wing">Kanat hücumu</button><button data-preset="park">Otobüs</button><button data-preset="direct">Direkt oyun</button><button data-preset="youth">Akademi oyunu</button></div><p class="muted" id="presetDescription">Hazır plan seçerek taktiğini hızla ayarla.</p>';panel.appendChild(p);p.querySelectorAll('[data-preset]').forEach(b=>b.onclick=()=>{const v=b.dataset.preset;const map={gegen:{style:'attack',press:'high',passing:'short',tempo:'fast',line:'high',formation:'4-3-3',text:'Gegenpress: yoğun pres ve hızlı top kazanma.'},wing:{style:'attack',press:'normal',passing:'mixed',tempo:'fast',line:'balanced',formation:'4-2-3-1',text:'Kanat hücumu: geniş alanlar ve hızlı bindirmeler.'},park:{style:'defend',press:'low',passing:'long',tempo:'slow',line:'deep',formation:'5-3-2',text:'Otobüs: derin savunma ve kontra fırsatı.'},direct:{style:'counter',press:'normal',passing:'long',tempo:'fast',line:'balanced',formation:'4-4-2',text:'Direkt oyun: hızlı dikine paslar.'},youth:{style:'possession',press:'normal',passing:'short',tempo:'normal',line:'balanced',formation:'4-3-3',text:'Akademi: pas bağlantıları ve topa sahip olma.'}}[v];Object.assign(state,{style:map.style,press:map.press,passing:map.passing,tempo:map.tempo,line:map.line,formation:map.formation});['style','press','passing','tempo','line','formation'].forEach(id=>{if($(id))$(id).value=state[id];});setTactic();$('presetDescription').textContent=map.text;msg('Taktik uygulandı: '+map.text);});}}
+ // 12-13) Update intro to a news/patch notes modal with explicit continue button and stronger animation.
+ const intro=$('c48Intro');if(intro){intro.style.animation='none';intro.style.background='radial-gradient(ellipse at 50% 35%,#27653c 0,#07130c 72%)';intro.innerHTML=`<div class="intro-pitch"></div><div class="v20-intro-card"><div class="intro-title">C48</div><div class="intro-sub">FOOTBALL MANAGER · 2.0</div><h2>📰 Güncelleme Haberleri</h2><ul><li>3 kümeli lig sistemi ve yükselme/küme düşme</li><li>Gol krallığı ve asist krallığı</li><li>Yeni müzik seçenekleri ve gelişmiş taktikler</li><li>100 yeni oyuncu ve fiyat filtreleri</li><li>Geliştirilmiş antrenman sistemi</li></ul><button id="newsContinue" class="primary">Anladım, oyuna gir ⚽</button></div>`;const style=document.createElement('style');style.textContent=`.v20-intro-card{position:relative;z-index:2;width:min(92vw,560px);max-height:88vh;overflow:auto;padding:24px;border:1px solid #78b76d;border-radius:22px;background:linear-gradient(145deg,#193c25,#0b1710);box-shadow:0 0 0 2px #baff6730,0 0 65px #54ff7766;animation:v20IntroIn .7s cubic-bezier(.2,.8,.2,1) both}.v20-intro-card .intro-title{font-size:clamp(42px,9vw,74px);font-weight:1000;color:#baff67;text-shadow:0 0 28px #baff6788}.v20-intro-card .intro-sub{text-align:center;letter-spacing:3px;color:#cfe7d3;margin-bottom:18px}.v20-intro-card h2{margin:12px 0}.v20-intro-card li{margin:9px 0;color:#e8f8e9}.v20-intro-card button{width:100%;padding:13px;margin-top:10px}@keyframes v20IntroIn{from{opacity:0;transform:translateY(24px) scale(.94)}to{opacity:1;transform:translateY(0) scale(1)}}`;document.head.appendChild(style);$('newsContinue').onclick=()=>{intro.style.transition='opacity .45s,transform .45s';intro.style.opacity='0';intro.style.transform='scale(1.04)';setTimeout(()=>intro.remove(),470);};}
+ // 7) Three divisions with famous clubs and season-to-season changes.
+ state.division=Number(state.division)||2;state.seasonStats=state.seasonStats||{goals:{},assists:{}};
+ const divisionClubs={1:['Real Madrid','Manchester City','Bayern Münih','Barcelona','Liverpool','PSG','Inter','Arsenal','C48 United','Galatasaray'],2:['Juventus','Chelsea','Borussia Dortmund','Atlético Madrid','Milan','Tottenham','Benfica','Fenerbahçe','C48 United','Ajax'],3:['Trabzonspor','Beşiktaş','Napoli','Porto','Monaco','PSV','Flamengo','River Plate','C48 United','Marmaris FC']};
+ const oldMakeLeagueState=makeLeagueState;
+ makeLeagueState=function(){const l=oldMakeLeagueState();const d=Math.max(1,Math.min(3,Number(state.division)||2));const names=divisionClubs[d].slice();names[8]=state.club;const unique=names.map((name,i)=>({id:'team'+i,name,power:i===0?teamPower():Math.max(45,92-(d-1)*13-i*3),pts:0,p:0,w:0,d:0,l:0,gf:0,ga:0}));return {week:0,teams:unique,results:[],awarded:false,division:d,season:(state.league?.season||0)+1,pendingResults:[]};};
+ // Make division label visible in league hero.
+ const leagueHero=$('page-league')?.querySelector('.league-hero .muted');if(leagueHero)leagueHero.id='divisionDescription';
+ const oldRenderLeague=renderLeague;
+ renderLeague=function(){oldRenderLeague();const l=getLeague();const label=$('divisionDescription');if(label)label.textContent=`Küme ${state.division||2} · Sezon ${l.season||1} · 10 takım · 20 hafta · İlk 3 yükselir, son 3 düşer`;const status=$('leagueStatus');if(status)status.textContent='Küme '+(state.division||2)+' · '+status.textContent;};
+ const oldFinishLeagueWeek=finishLeagueWeek;
+ finishLeagueWeek=function(){const beforeWeek=getLeague().week;oldFinishLeagueWeek();const l=getLeague();if(beforeWeek===19&&l.week===20&&l.awarded&&!l.v20DivisionApplied){const table=[...l.teams].sort((a,b)=>b.pts-a.pts||(b.gf-b.ga)-(a.gf-a.ga)||b.gf-a.gf);const position=table.findIndex(t=>t.id==='team0')+1;const old=Number(state.division)||2;let next=old;if(position<=3&&old>1)next=old-1;else if(position>=8&&old<3)next=old+1;state.division=next;l.v20DivisionApplied=true;state.lastResult+=` Küme ${old} tamamlandı: ${position}. sıra. Yeni küme: ${next}.`;persist();msg(position<=3&&old>1?'Tebrikler! Bir üst kümeye yükseldin.':position>=8&&old<3?'Küme düştün. Yeni sezonda tekrar yükselmeye çalış!':'Küme korundu!');renderLeague();}};
+ // 2-3) Goalscorer and assist kings; probability depends on player rating band.
+ const assistChance=p=>{const r=Number(p.rating)||0;if(r>=110&&r<=120)return .45;if(r>=80&&r<110)return .30;if(r>=50&&r<80)return .20;return .2;};
+ const chooseScorer=()=>{const players=state.owned.filter(p=>p.pos==='SF'||p.pos==='SLK'||p.pos==='SĞK'||p.pos==='MO');return players[Math.floor(Math.random()*Math.max(1,players.length))]||state.owned[0]||{name:state.club+' Oyuncusu',rating:60,pos:'SF'};};
+ const chooseAssister=scorer=>{const players=state.owned.filter(p=>p.id!==scorer.id);const p=players[Math.floor(Math.random()*Math.max(1,players.length))];return p&&Math.random()<assistChance(p)?p:null;};
+ const oldPlayLeagueWeek=playLeagueWeek;
+ playLeagueWeek=function(){oldPlayLeagueWeek();};
+ const oldRenderLeagueResults=renderLeague;
+ renderLeague=function(){oldRenderLeagueResults();const l=getLeague();const wrap=$('leagueResults');if(wrap&&!$('leagueKings')){const box=document.createElement('div');box.id='leagueKings';box.className='panel';box.style.marginTop='12px';wrap.parentNode.appendChild(box);}const box=$('leagueKings');if(box){const stats=state.seasonStats||{goals:{},assists:{}};const top=(obj)=>Object.entries(obj||{}).sort((a,b)=>b[1]-a[1])[0];const g=top(stats.goals),a=top(stats.assists);box.innerHTML=`<h3>👑 Sezon krallıkları</h3><div class="grid"><div class="metric"><div class="big">⚽ ${g?escapeHtml(g[0]):'Henüz yok'}</div><small>Gol kralı · ${g?g[1]:0} gol</small></div><div class="metric"><div class="big">🎯 ${a?escapeHtml(a[0]):'Henüz yok'}</div><small>Asist kralı · ${a?a[1]:0} asist</small></div></div>`;}}
+ const oldWatchLeagueMatch=watchLeagueMatch;
+ watchLeagueMatch=function(index,auto){oldWatchLeagueMatch(index,auto);};
+ // Decorate match results with plausible named scorer/assist events and season counters once each week is completed.
+ const oldFinishForStats=finishLeagueWeek;
+ finishLeagueWeek=function(){const l=getLeague();if(l.pendingResults?.length&&!l.pendingResults[0].v20Stats){const stats=state.seasonStats||(state.seasonStats={goals:{},assists:{}});l.pendingResults.forEach(r=>{const count=Number(r.gf)+Number(r.ga);r.events=[];for(let i=0;i<count;i++){const scorer=chooseScorer();stats.goals[scorer.name]=(stats.goals[scorer.name]||0)+1;const assister=chooseAssister(scorer);if(assister){stats.assists[assister.name]=(stats.assists[assister.name]||0)+1;r.events.push(`${scorer.name} ⚽ (${assister.name} 🎯)`);}else r.events.push(`${scorer.name} ⚽`);}r.v20Stats=true;});}oldFinishForStats();};
+ // Replace result cards after render with named goal events; reset scorer/assist stats on season transition.
+ const oldRenderLeague2=renderLeague;
+ renderLeague=function(){oldRenderLeague2();const l=getLeague();const wrap=$('leagueResults');if(wrap){wrap.querySelectorAll('.league-fixture').forEach((card,i)=>{const r=l.results[i];if(r?.events?.length){let el=card.querySelector('.v20-events');if(!el){el=document.createElement('small');el.className='v20-events';el.style.cssText='display:block;color:#baff67;margin-top:6px';card.appendChild(el);}el.textContent=r.events.join(' · ');}});}const desc=$('divisionDescription');if(desc)desc.textContent=`Küme ${state.division||2} · Sezon ${l.season||1} · İlk 3 yükselir, son 3 düşer`;};
+ // On each newly created season, rotate famous club lineup and reset scoring leaderboard.
+ const oldResetLeagueSeason=resetLeagueSeason;
+ resetLeagueSeason=function(){const ok=oldResetLeagueSeason();if(ok){state.seasonStats={goals:{},assists:{}};const l=getLeague();l.division=state.division;persist();renderLeague();}return ok;};
+ // 1) Rebuild league results after patch and keep UI responsive.
+ try{generateScoutPool();generateMarket();renderScout();renderTraining();renderLeague();setTactic();}catch(e){console.warn('C48 v2.0 setup:',e);}
+ const footer=document.querySelector('.footer');if(footer)footer.textContent='C48 Studios · v2.0 UPDATE';
+})();
+
+</script>
+<script>
+// C48 Football Manager v2.0.1 hotfix: Mustafa Yönat, rating frames, training durations.
+(function(){
+  // Requested training timings: level 1=4m, level 2=3m, level 3=2m30s,
+  // level 4=1m30s, level 5=1m. Extra array slot is kept for compatibility.
+  try { trainingTimes.splice(0, trainingTimes.length, 240, 180, 150, 90, 60, 60); } catch(e) {}
+  try { if (typeof renderTraining === 'function') renderTraining(); } catch(e) {}
+
+  // Add the custom goalkeeper to both source data and the actual searchable pool.
+  const mustafa = {id:'real-mustafa-yonat', name:'Mustafa Yönat', pos:'KL', rating:113, price:20500000, club:'C48 Özel Oyuncular'};
+  if (Array.isArray(realPlayerData)) {
+    const i = realPlayerData.findIndex(p => /mustafa\s*y[oö]nat/i.test(p.name || ''));
+    if (i >= 0) Object.assign(realPlayerData[i], mustafa);
+    else realPlayerData.push({...mustafa});
+  }
+  if (Array.isArray(scoutPool)) {
+    const i = scoutPool.findIndex(p => /mustafa\s*y[oö]nat/i.test(p.name || ''));
+    if (i >= 0) Object.assign(scoutPool[i], mustafa);
+    else scoutPool.unshift({...mustafa});
+  }
+  try { if (typeof renderScout === 'function') renderScout(); } catch(e) {}
+
+  // Ensure rating-tier frames are visible on all player cards, including newly rendered cards.
+  const style = document.createElement('style');
+  style.textContent = `
+    .roster-card,.bench-card,.market-card,.loot-player-card{border-style:solid!important;transition:border-color .18s,box-shadow .18s}
+    .rating-tier-red{border:3px solid #ff3030!important;box-shadow:0 0 12px #ff303066!important}
+    .rating-tier-purple{border:3px solid #b65cff!important;box-shadow:0 0 12px #b65cff66!important}
+    .rating-tier-yellow{border:3px solid #ffe34d!important;box-shadow:0 0 10px #ffe34d55!important}
+    .rating-tier-white{border:3px solid #f5f5f5!important;box-shadow:0 0 8px #f5f5f555!important}
+    .rating-tier-black{border:3px solid #050505!important;box-shadow:0 0 8px #000!important}
+    .rating-tier-blue{border:3px solid #269cff!important;box-shadow:0 0 10px #269cff66!important}
+    .rating-tier-darkgreen{border:3px solid #176b35!important;box-shadow:0 0 10px #176b3555!important}
+    .rating-tier-orange{border:3px solid #ff8a24!important;box-shadow:0 0 10px #ff8a2455!important}
+  `;
+  document.head.appendChild(style);
+  function paintFrames(){
+    document.querySelectorAll('.roster-card,.bench-card,.market-card,.loot-player-card').forEach(el=>{
+      const txt=el.innerText||'';
+      const nums=[...txt.matchAll(/(?:^|\n)(\d{2,3})(?=\n|$)/g)].map(m=>Number(m[1]));
+      const rating=nums.find(n=>n>=40&&n<=130);
+      if(!Number.isFinite(rating)) return;
+      const tier=typeof ratingTier==='function'?ratingTier(rating):'';
+      el.classList.remove('rating-tier-red','rating-tier-purple','rating-tier-yellow','rating-tier-white','rating-tier-black','rating-tier-blue','rating-tier-darkgreen','rating-tier-orange');
+      if(tier) el.classList.add('rating-'+tier);
+      if(typeof ratingTierColor==='function' && tier){el.style.borderColor=ratingTierColor(tier);el.style.borderWidth='3px';el.style.boxShadow=`0 0 10px ${ratingTierColor(tier)}66`;}
+    });
+  }
+  window.c48PaintRatingFrames=paintFrames;
+  paintFrames();
+  const observer=new MutationObserver(()=>paintFrames());
+  observer.observe(document.body,{childList:true,subtree:true});
+  // Some screens render after async setup; repaint a few times during initialization.
+  let tries=0;const timer=setInterval(()=>{paintFrames();if(++tries>=20)clearInterval(timer);},500);
+  const footer=document.querySelector('.footer');if(footer)footer.textContent='C48 Studios · v2.0.1 UPDATE';
+})();
+</script>
 </body></html>
