@@ -267,7 +267,7 @@ header,.sidebar,.panel{box-shadow:0 12px 30px #0002}
 </style></head><body><div id="c48Intro"><div class="intro-pitch"></div><div><div class="intro-title">C48</div><div class="intro-sub">FOOTBALL MANAGER</div><div style="text-align:center;position:relative;margin-top:18px;color:#c4dfc9;font-size:12px;letter-spacing:3px">SEZON 1 · SÜRÜM 1.5</div></div></div>
 <header><div class="logo">C48 <span>FOOTBALL MANAGER</span></div><div class="stats"><button onclick="showPage('profile')" style="padding:7px 10px">👤 <span id="topProfileName">Profil</span></button><div class="chip">💰 <b id="money">25.000</b> C48</div><div class="chip">🏟️ Seviye <b id="stadiumLevel">1</b></div><div class="chip">⭐ Güç <b id="teamPower">62</b></div></div></header>
 <div class="layout"><aside class="sidebar"><div class="muted" style="padding:6px 9px 12px">KULÜP MERKEZİ</div><div class="nav" id="nav">
-<button class="active" data-page="home">🏠 Genel Bakış</button><button data-page="squad">👥 Kadro</button><button data-page="training">🏋️ Antrenman</button><button data-page="scout">🔎 Oyuncu Ara</button><button data-page="market">🛒 Market</button><button data-page="sell">💸 Oyuncu Sat</button><button data-page="league">🏆 Lig</button><button data-page="tactics">🧠 Taktikler</button><button data-page="matches">⚽ Maçlar</button><button data-page="profile">👤 Profil</button><button data-page="ranking">🏆 Reyting Sıralaması</button><button data-page="stadium">🏟️ Stadyum</button><button data-page="club">🎨 Kulüp</button><button data-page="settings">⚙️ Ayarlar</button></div><div class="footer">C48 Studios · v1.6 UPDATE</div></aside>
+<button class="active" data-page="home">🏠 Genel Bakış</button><button data-page="squad">👥 Kadro</button><button data-page="training">🏋️ Antrenman</button><button data-page="scout">🔎 Oyuncu Ara</button><button data-page="market">🛒 Market</button><button data-page="sell">💸 Oyuncu Sat</button><button data-page="league">🏆 Lig</button><button data-page="tactics">🧠 Taktikler</button><button data-page="matches">⚽ Maçlar</button><button data-page="profile">👤 Profil</button><button data-page="ranking">🏆 Reyting Sıralaması</button><button data-page="stadium">🏟️ Stadyum</button><button data-page="club">🎨 Kulüp</button><button data-page="settings">⚙️ Ayarlar</button></div><div class="footer">C48 Studios · v1.6.1 UPDATE</div></aside>
 <main class="main">
 <section id="page-home">
 <div class="hero"><div><div class="badge">YENİ KULÜP · SEZON 1</div><h1 id="clubTitle">C48 United</h1><div class="muted">Kendi kulübünü yönet. Kadronu güçlendir. Zirveye çık.</div></div><button class="primary" onclick="showPage('matches')">Maça Hazırlan →</button></div>
@@ -1146,8 +1146,9 @@ function finishLeagueWeek(){
  league.week++;
  if(league.week===20&&!league.awarded){
   const table=[...league.teams].sort((a,b)=>b.pts-a.pts||(b.gf-b.ga)-(a.gf-a.ga)||b.gf-a.gf);
-  const prizes=[800000,500000,350000];
-  table.forEach((t,i)=>{if(t.id==='team0')state.money+=i<3?prizes[i]:150000;});
+  const prizes=[2000000,1000000,700000,500000];
+  table.forEach((t,i)=>{if(t.id==='team0')state.money+=i<4?prizes[i]:(i<10?400000:0);});
+  state.cups=(Number(state.cups)||0)+1;
   league.awarded=true;
   league.nextSeasonAt=Date.now()+2*60*1000;
   state.lastResult=`Lig bitti! Şampiyon: ${table[0].name}. Yeni lig 2 dakika sonra başlayacak.`;
@@ -1383,7 +1384,7 @@ getLeague=function(){const l=_getLeagueV15();if(l.teams&&l.teams[0]){l.teams[0].
 realPlayerData.forEach(p=>{if(p.name==='Lionel Messi'){p.rating=107;p.price=5600000;}if(p.name==='Lamine Yamal'){p.rating=109;p.price=7500000;}});
 famousPlayerCatalog.forEach(p=>{if(p[0]==='Lamine Yamal'){p[2]=109;}});
 // Start page with updated profile/ranking labels and tiers.
-window.addEventListener('load',()=>{renderBoxGridV151();document.querySelectorAll('#page-versus').forEach(e=>e.remove());const oldFriends=document.querySelector('#page-friends');if(oldFriends)oldFriends.remove();renderProfileV15();renderRatingRankingV15();applyRatingFrames();setInterval(()=>{if(c48Session?.user?.id){refreshOnlineRanking().catch(()=>{});refreshOnlineSocial().catch(()=>{});syncOnlineProfile(false).catch(()=>{});}},30000);const footer=document.querySelector('.footer');if(footer)footer.textContent='C48 Studios · v1.6 UPDATE';const sellBtn=document.querySelector('#page-sell button[onclick="listPlayerForSale()"]');if(sellBtn)sellBtn.textContent='💸 Oyuncuyu anında sat';const sellHeading=document.querySelector('#page-sell h1');if(sellHeading)sellHeading.textContent='💸 Oyuncuyu Anında Sat';const desc=document.querySelector('#page-sell .hero .muted');if(desc)desc.textContent='Oyuncunu piyasa değerinin %25’ine satarsın; %75 zarar uygulanır.';const priceLabel=document.querySelector('#page-sell label');if(priceLabel)priceLabel.firstChild.textContent='Satışta alacağın para (C48) ';});
+window.addEventListener('load',()=>{renderBoxGridV151();document.querySelectorAll('#page-versus').forEach(e=>e.remove());const oldFriends=document.querySelector('#page-friends');if(oldFriends)oldFriends.remove();renderProfileV15();renderRatingRankingV15();applyRatingFrames();setInterval(()=>{if(c48Session?.user?.id){refreshOnlineRanking().catch(()=>{});refreshOnlineSocial().catch(()=>{});syncOnlineProfile(false).catch(()=>{});}},30000);const footer=document.querySelector('.footer');if(footer)footer.textContent='C48 Studios · v1.6.1 UPDATE';const sellBtn=document.querySelector('#page-sell button[onclick="listPlayerForSale()"]');if(sellBtn)sellBtn.textContent='💸 Oyuncuyu anında sat';const sellHeading=document.querySelector('#page-sell h1');if(sellHeading)sellHeading.textContent='💸 Oyuncuyu Anında Sat';const desc=document.querySelector('#page-sell .hero .muted');if(desc)desc.textContent='Oyuncunu piyasa değerinin %25’ine satarsın; %75 zarar uygulanır.';const priceLabel=document.querySelector('#page-sell label');if(priceLabel)priceLabel.firstChild.textContent='Satışta alacağın para (C48) ';});
 </script>
 
 
@@ -1427,7 +1428,69 @@ Object.assign(transferBoxTypes,{
 });
 // refresh pools after the player database changes and re-render visible screens
 try{generateScoutPool();generateMarket();renderRealMarket();renderBoxGridV151();renderProfileV15();renderRatingRankingV15();}catch(e){console.warn('v1.6 refresh:',e);}
-window.addEventListener('load',()=>{const desc=document.querySelector('#page-sell .hero .muted');if(desc)desc.textContent='Oyuncunu piyasa değerinin %15’ine satarsın; %85 zarar uygulanır.';const footer=document.querySelector('.footer');if(footer)footer.textContent='C48 Studios · v1.6 UPDATE';});
+window.addEventListener('load',()=>{const desc=document.querySelector('#page-sell .hero .muted');if(desc)desc.textContent='Oyuncunu piyasa değerinin %15’ine satarsın; %85 zarar uygulanır.';const footer=document.querySelector('.footer');if(footer)footer.textContent='C48 Studios · v1.6.1 UPDATE';});
+</script>
+
+
+<script>
+// C48 Football Manager v1.6.1
+// Exact player market updates, training caps/value growth, profile trophy count, and league prizes.
+const c48161PlayerUpdates={
+ 'Ronaldo Nazário':{pos:'SF',rating:114,price:12500000},
+ 'Kylian Mbappé':{pos:'SF',rating:111,price:10000000},
+ 'Zinedine Zidane':{pos:'MO',rating:110,price:8500000},
+ 'Kaká':{pos:'MO',rating:110,price:6700000},
+ 'Gavi':{pos:'MO',rating:101,price:1300000},
+ 'Mustafa Yönat':{pos:'KL',rating:113,price:18700000},
+ 'Mustafa Yonat':{pos:'KL',rating:113,price:18700000}
+};
+realPlayerData.forEach(p=>{const u=c48161PlayerUpdates[p.name];if(u)Object.assign(p,u);});
+if(!realPlayerData.some(p=>p.name==='Mustafa Yönat'||p.name==='Mustafa Yonat'))realPlayerData.push({id:'real-mustafa-yonat',name:'Mustafa Yönat',pos:'KL',rating:113,price:18700000});
+for(const [name,u] of Object.entries(c48161PlayerUpdates)){
+ const entry=famousPlayerCatalog.find(p=>p[0]===name);
+ if(entry){entry[1]=u.pos;entry[2]=u.rating;} else if(name!=='Mustafa Yonat') famousPlayerCatalog.push([name,u.pos,u.rating]);
+}
+const c48161RandomBoxPlayer=randomBoxPlayer;
+randomBoxPlayer=function(rating,box){const p=c48161RandomBoxPlayer(rating,box);const u=c48161PlayerUpdates[p.name];if(u)Object.assign(p,u);if(p.name==='Mustafa Yonat')p.name='Mustafa Yönat';return p;};
+// Ensure price updates are reflected in current saved roster entries too, without removing existing players.
+state.owned.forEach(p=>{const u=c48161PlayerUpdates[p.name];if(u){p.pos=u.pos;p.rating=u.rating;p.price=u.price;}});
+// Training: each player may gain at most 10 ratings from their starting rating for a training run;
+// each gained rating adds 1,000,000 C48 to the player's value.
+const c48161ToggleTrainingFor=toggleTrainingFor;
+toggleTrainingFor=function(id){
+ const p=state.owned.find(x=>String(x.id)===String(id));if(!p)return;
+ state.trainingJobs=state.trainingJobs||{};
+ if(state.trainingJobs[id]){delete state.trainingJobs[id];persist();renderTraining();msg(p.name+' antrenmandan çıkarıldı.');return;}
+ if(Object.keys(state.trainingJobs).length>=trainingSlotCount()){msg('Antrenman slotları dolu! Tesisi yükselterek kapasiteyi artır.');return;}
+ state.trainingJobs[id]={startedAt:Date.now(),baseRating:Number(p.rating)||0,gains:0};persist();renderTraining();msg(p.name+' antrenmana başladı! En fazla +10 reyting kazanabilir.');
+};
+processTrainingTicks=function(){
+ const jobs=state.trainingJobs||{};let changed=false;const now=Date.now();
+ Object.entries(jobs).forEach(([id,job])=>{
+  const p=state.owned.find(x=>String(x.id)===String(id));
+  if(!p){delete jobs[id];changed=true;return;}
+  if(!Number.isFinite(Number(job.baseRating))){job.baseRating=Number(p.rating)||0;job.gains=0;changed=true;}
+  if(!Number.isFinite(Number(job.gains)))job.gains=Math.max(0,(Number(p.rating)||0)-Number(job.baseRating));
+  if(Number(job.gains)>=10||Number(p.rating)>=120){delete jobs[id];changed=true;state.lastResult=p.name+' antrenman sınırına ulaştı.';return;}
+  if(now-Number(job.startedAt)>=trainingSeconds()*1000){
+   const before=Number(p.rating)||0;
+   p.rating=Math.min(120,Number(p.rating||0)+1);
+   const gained=p.rating-before;
+   if(gained>0){p.price=(Number(p.price)||priceForRating(before))+1000000;job.gains=Number(job.gains)+gained;job.startedAt=now;changed=true;state.lastResult=p.name+' antrenmanla +1 reyting ve +1.000.000 C48 piyasa değeri kazandı!';}
+   if(Number(job.gains)>=10||p.rating>=120)delete jobs[id];
+  }
+ });
+ if(changed){persist();updateStats();if(!$('page-squad').classList.contains('hidden'))renderSquad();if(!$('page-scout').classList.contains('hidden'))renderScout();if(!$('page-market').classList.contains('hidden'))syncBoxBalance();renderProfileV15();}
+ if(!$('page-training').classList.contains('hidden'))renderTraining();
+};
+// League prizes: 1st 2M, 2nd 1M, 3rd 700K, 4th 500K, places 5-10 400K. Cups counted per completed season.
+state.cups=Number(state.cups)||0;
+// Rebuild profile renderer wrapper so trophy count is visible on the manager card.
+const c48161RenderProfile=renderProfileV15;
+renderProfileV15=function(){c48161RenderProfile();const card=$('profileCard');if(card){let badge=card.querySelector('[data-c48-cups]');if(!badge){badge=document.createElement('div');badge.dataset.c48Cups='1';badge.style.cssText='margin-top:10px;padding:9px 12px;border:1px solid #bba34a;background:#292614;border-radius:10px;font-weight:850;color:#ffe783';const heading=card.querySelector('h3');if(heading)card.insertBefore(badge,heading);else card.appendChild(badge);}badge.textContent='🏆 Kazanılan Lig Kupaları: '+(Number(state.cups)||0);}};
+// Update current club state in storage and refresh the visible market/profile.
+try{generateScoutPool();generateMarket();renderRealMarket();renderBoxGridV151();renderProfileV15();renderRatingRankingV15();renderTraining();applyRatingFrames();}catch(e){console.warn('v1.6.1 refresh:',e);}
+window.addEventListener('load',()=>{const footer=document.querySelector('.footer');if(footer)footer.textContent='C48 Studios · v1.6.1 UPDATE';});
 </script>
 
 </body></html>
