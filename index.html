@@ -3945,5 +3945,63 @@ window.addEventListener('load',()=>{const footer=document.querySelector('.footer
 })();
 </script>
 
+
+<script id="c48-training-hard-cap-plus-five">
+(function(){
+  const previousToggle=window.toggleTrainingFor||toggleTrainingFor;
+  window.toggleTrainingFor=function(id){
+    state.trainingJobs=state.trainingJobs||{};
+    const existing=state.trainingJobs[id];
+    if(existing){
+      if(Number(existing.gains||0)>=5){delete state.trainingJobs[id];persist();renderTraining();msg('Bu oyuncu antrenman sınırına ulaştı: en fazla +5 reyting.');return;}
+      return previousToggle(id);
+    }
+    const p=(state.owned||[]).find(x=>String(x.id)===String(id));
+    if(!p)return;
+    const result=previousToggle(id);
+    const job=state.trainingJobs&&state.trainingJobs[id];
+    if(job){
+      job.baseRating=Number(p.rating)||0;
+      job.gains=0;
+      persist();
+      renderTraining();
+    }
+    return result;
+  };
+  const previousTick=window.processTrainingTicks||processTrainingTicks;
+  window.processTrainingTicks=function(){
+    state.trainingJobs=state.trainingJobs||{};
+    for(const [id,job] of Object.entries(state.trainingJobs)){
+      const p=(state.owned||[]).find(x=>String(x.id)===String(id));
+      if(!p){delete state.trainingJobs[id];continue;}
+      if(!Number.isFinite(Number(job.baseRating))){
+        job.baseRating=(Number(p.rating)||0)-Math.max(0,Number(job.gains)||0);
+      }
+      if(!Number.isFinite(Number(job.gains)))job.gains=Math.max(0,(Number(p.rating)||0)-Number(job.baseRating));
+      const allowedBase=Number(job.baseRating)||0;
+      if((Number(p.rating)||0)>=allowedBase+5||Number(job.gains)>=5){
+        delete state.trainingJobs[id];
+        state.lastResult=p.name+' antrenman sınırına ulaştı (en fazla +5 reyting).';
+      }
+    }
+    persist();
+    return previousTick();
+  };
+  try{toggleTrainingFor=window.toggleTrainingFor;processTrainingTicks=window.processTrainingTicks;}catch(e){}
+  window.addEventListener('load',function(){
+    try{
+      for(const [id,job] of Object.entries(state.trainingJobs||{})){
+        const p=(state.owned||[]).find(x=>String(x.id)===String(id));
+        if(!p){delete state.trainingJobs[id];continue;}
+        if(!Number.isFinite(Number(job.baseRating)))job.baseRating=(Number(p.rating)||0)-Math.max(0,Number(job.gains)||0);
+        if(!Number.isFinite(Number(job.gains)))job.gains=Math.max(0,(Number(p.rating)||0)-Number(job.baseRating));
+        if(Number(job.gains)>=5||(Number(p.rating)||0)>=(Number(job.baseRating)||0)+5)delete state.trainingJobs[id];
+      }
+      persist();
+    }catch(e){console.warn('Training +5 cap:',e);}
+  });
+})();
+</script>
+
 </body>
 </html>
