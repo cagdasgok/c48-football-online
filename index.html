@@ -3674,5 +3674,232 @@ window.addEventListener('load',()=>{const footer=document.querySelector('.footer
 })();
 </script>
 
+
+<script id="c48-sell-page-first-eleven-and-reserves">
+(function(){
+  const esc=v=>String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  function price(p){
+    const raw=Number(p&&p.price);
+    if(raw>0)return raw;
+    try{return typeof priceForRating==='function'?Number(priceForRating(Number(p.rating)||50))||65000:65000;}catch(e){return 65000;}
+  }
+  window.renderSellPage=function(){
+    const sel=document.getElementById('sellPlayerSelect');if(!sel)return;
+    const owned=Array.isArray(state.owned)?state.owned:[];
+    const previous=String(sel.value||'');
+    const first=owned.slice(0,11),outside=owned.slice(11);
+    const option=p=>`<option value="${esc(p.id)}">${esc(p.name||'Oyuncu')} · ${Number(p.rating)||0} reyting · ${esc(p.pos||'MO')}</option>`;
+    sel.innerHTML=(first.length?`<optgroup label="⭐ İlk 11">${first.map(option).join('')}</optgroup>`:'')+
+      (outside.length?`<optgroup label="📦 Kadro dışı / yedek">${outside.map(option).join('')}</optgroup>`:'');
+    if(owned.some(p=>String(p.id)===previous))sel.value=previous;
+    const p=owned.find(x=>String(x.id)===String(sel.value))||owned[0];
+    const input=document.getElementById('sellPriceInput');if(input)input.value=p?Math.round(price(p)*0.25):'';
+    const label=document.querySelector('#page-sell label');
+    if(label){const firstText=label.firstChild;if(firstText&&firstText.nodeType===3)firstText.textContent='Satacağın oyuncu (İlk 11 ve kadro dışı ayrı gruplarda)';}
+    const my=document.getElementById('mySellListings');if(my)my.innerHTML='<div class="notice">Oyuncular İlk 11 ve kadro dışı olarak ayrı gruplandırıldı. Satıştan sonra kadro otomatik güncellenir.</div>';
+    const all=document.getElementById('allSellListings');if(all)all.innerHTML='<div class="muted">Satışlar anında tamamlanır.</div>';
+  };
+  window.updateAutoSalePrice=function(){
+    const sel=document.getElementById('sellPlayerSelect'),p=(state.owned||[]).find(x=>String(x.id)===String(sel&&sel.value));
+    const input=document.getElementById('sellPriceInput');if(input)input.value=p?Math.round(price(p)*0.25):'';
+  };
+  window.listPlayerForSale=function(){
+    const sel=document.getElementById('sellPlayerSelect'),id=sel&&sel.value;
+    const owned=Array.isArray(state.owned)?state.owned:[];
+    const p=owned.find(x=>String(x.id)===String(id));
+    if(!p){msg('Satılacak oyuncuyu seç.');return;}
+    if(owned.length<=11){msg('Kadronun 11 oyuncudan az kalmaması için önce yedek oyuncu al.');return;}
+    const payout=Math.max(1000,Math.round(price(p)*0.25));
+    if(!confirm(`${p.name} (${p.rating} reyting) oyuncusunu ${payout.toLocaleString('tr-TR')} C48 karşılığında satmak istiyor musun?`))return;
+    state.owned=owned.filter(x=>String(x.id)!==String(id));
+    state.money=(Number(state.money)||0)+payout;
+    state.lastResult=`${p.name} satıldı: +${payout.toLocaleString('tr-TR')} C48.`;
+    try{persist();}catch(e){}
+    try{updateStats();}catch(e){}
+    try{renderSquad();}catch(e){}
+    try{window.renderSellPage();}catch(e){}
+    try{msg(`${p.name} satıldı! +${payout.toLocaleString('tr-TR')} C48`);}catch(e){}
+  };
+  window.addEventListener('load',()=>{try{window.renderSellPage();}catch(e){console.error('C48 sell groups:',e);}});
+})();
+</script>
+
+
+<script id="c48-sell-two-separate-player-lists">
+(function(){
+  function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+  function saleValue(p){
+    const v=Number(p&&p.price);
+    if(v>0)return Math.round(v*.25);
+    try{const base=typeof priceForRating==='function'?Number(priceForRating(Number(p.rating)||50)):65000;return Math.max(1000,Math.round(base*.25));}catch(e){return 25000;}
+  }
+  function ensureOutsideSelect(){
+    const main=document.getElementById('sellPlayerSelect');
+    if(!main)return null;
+    let label=document.getElementById('sellOutsidePlayerLabel');
+    if(!label){
+      label=document.createElement('label');
+      label.id='sellOutsidePlayerLabel';
+      label.innerHTML='📦 Kadro dışı / yedek oyuncular<select id="sellOutsidePlayerSelect"><option value="">Kadro dışı oyuncu yok</option></select><small style="display:block;opacity:.75;margin-top:5px">Buradan seçtiğin oyuncu satış listesine aktarılır.</small>';
+      main.parentElement.insertBefore(label,main.parentElement.children[1]||null);
+    }
+    return document.getElementById('sellOutsidePlayerSelect');
+  }
+  window.renderSellPage=function(){
+    const main=document.getElementById('sellPlayerSelect');if(!main)return;
+    const outsideSel=ensureOutsideSelect();
+    const owned=Array.isArray(state.owned)?state.owned:[];
+    const prevMain=String(main.value||''),prevOutside=String(outsideSel&&outsideSel.value||'');
+    const first=owned.slice(0,11),outside=owned.slice(11);
+    const option=p=>`<option value="${esc(p.id)}">${esc(p.name||'Oyuncu')} · ${Number(p.rating)||0} reyting · ${esc(p.pos||'MO')}</option>`;
+    main.innerHTML=first.length?first.map(option).join(''):'<option value="">İlk 11 oyuncusu yok</option>';
+    if(outsideSel)outsideSel.innerHTML=outside.length?outside.map(option).join(''):'<option value="">Kadro dışı oyuncu yok</option>';
+    if(first.some(p=>String(p.id)===prevMain))main.value=prevMain;
+    if(outsideSel&&outside.some(p=>String(p.id)===prevOutside))outsideSel.value=prevOutside;
+    if(outsideSel){
+      outsideSel.onchange=function(){
+        const id=String(outsideSel.value||'');
+        if(id){main.value=id;updateAutoSalePrice();}
+      };
+    }
+    main.onchange=function(){
+      const p=owned.find(x=>String(x.id)===String(main.value));
+      const input=document.getElementById('sellPriceInput');if(input)input.value=p?saleValue(p):'';
+    };
+    const chosen=owned.find(p=>String(p.id)===String(main.value))||first[0]||outside[0];
+    const input=document.getElementById('sellPriceInput');if(input)input.value=chosen?saleValue(chosen):'';
+    const my=document.getElementById('mySellListings');if(my)my.innerHTML='<div class="notice">⭐ İlk 11 ve 📦 kadro dışı/yedek oyuncular ayrı listelenir. Satmak istediğin oyuncuyu seçip satış düğmesine bas.</div>';
+    const all=document.getElementById('allSellListings');if(all)all.innerHTML='<div class="muted">Satışlar anında tamamlanır.</div>';
+  };
+  window.updateAutoSalePrice=function(){
+    const main=document.getElementById('sellPlayerSelect'),p=(state.owned||[]).find(x=>String(x.id)===String(main&&main.value));
+    const input=document.getElementById('sellPriceInput');if(input)input.value=p?saleValue(p):'';
+  };
+  window.addEventListener('load',()=>{try{window.renderSellPage();}catch(e){console.error('C48 split sell lists:',e);}});
+})();
+</script>
+
+
+<style id="c48-squad-premium-design">
+#page-squad .panel{background:linear-gradient(145deg,#101c16,#0a110d)!important;border:1px solid #31523b!important;border-radius:18px!important;padding:18px!important;box-shadow:0 14px 36px #0005}
+#page-squad #squadLayout{grid-template-columns:minmax(0,1fr) minmax(235px,.38fr)!important;gap:18px!important}
+#page-squad #formationPitch{min-height:620px!important;border:2px solid #4bc887!important;border-radius:20px!important;padding:18px 12px!important;overflow:hidden;background:radial-gradient(ellipse at 50% 45%,#2c9a4c 0%,#176637 46%,#0c3b25 100%)!important;box-shadow:inset 0 0 0 5px #0b261b, inset 0 0 45px #0005,0 0 25px #13a85a22!important}
+#page-squad #formationPitch:before{content:"";position:absolute;inset:12px;border:2px solid #d8ffe455;border-radius:10px;pointer-events:none;background:linear-gradient(90deg,transparent 49.7%,#d8ffe433 49.7%,#d8ffe433 50.3%,transparent 50.3%),linear-gradient(0deg,transparent 49.7%,#d8ffe433 49.7%,#d8ffe433 50.3%,transparent 50.3%);z-index:0}
+#page-squad #formationPitch:after{content:"";position:absolute;width:130px;height:130px;border:2px solid #d8ffe455;border-radius:50%;left:50%;top:50%;transform:translate(-50%,-50%);pointer-events:none}
+#page-squad #formationPlayers{display:flex!important;flex-direction:column;justify-content:space-around;gap:16px!important;min-height:575px;position:relative;z-index:2!important}
+#page-squad .c48-formation-row{display:grid;gap:8px;align-items:center;justify-items:center;width:100%}
+#page-squad .c48-pitch-player{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;width:min(100%,145px);min-height:108px;padding:10px 6px 8px!important;border-radius:16px!important;background:linear-gradient(155deg,#101611f5,#070c09f5)!important;border:2px solid #6c9c78!important;color:#fff!important;box-shadow:0 6px 14px #0005,inset 0 1px 0 #ffffff20!important;transition:transform .16s,border-color .16s,box-shadow .16s!important}
+#page-squad .c48-pitch-player:hover{transform:translateY(-3px);border-color:#b7ff69!important;box-shadow:0 0 20px #a8ff6633!important}
+#page-squad .c48-pitch-player.selected{border:3px solid #ffb22c!important;box-shadow:0 0 0 3px #ffb22c22,0 0 24px #ff9d2844!important}
+#page-squad .c48-player-avatar{font-size:22px;line-height:1}
+#page-squad .c48-player-rating{position:absolute;right:8px;top:7px;font-size:22px;font-weight:1000;color:#b8ff65;text-shadow:0 0 12px #9dff4933}
+#page-squad .c48-player-pos{font-size:10px;font-weight:900;padding:3px 8px;border-radius:6px;background:#175b3a;color:#d4ffe2;border:1px solid #3e9e69}
+#page-squad .c48-player-name{font-size:11px;font-weight:900;line-height:1.25;text-align:center;max-width:100%;overflow-wrap:anywhere}
+#page-squad .c48-formation-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 12px}
+#page-squad .c48-formation-badge{font-size:12px;color:#baffd1;border:1px solid #3c8a5d;border-radius:999px;padding:5px 10px;background:#092719aa}
+#page-squad #benchList{display:grid!important;gap:10px!important}
+#page-squad .c48-list-player{display:grid;grid-template-columns:40px 1fr auto;align-items:center;gap:10px;text-align:left;width:100%;padding:12px!important;background:linear-gradient(100deg,#12251a,#0c1710)!important;border:1px solid #315c3c!important;border-radius:13px!important;color:#f5fff7!important;min-height:70px}
+#page-squad .c48-list-player.selected{border:2px solid #ffb22c!important}
+#page-squad .c48-list-avatar{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:#1e3828;border:1px solid #416d4b;font-size:20px}
+#page-squad .c48-list-name{font-weight:900;font-size:12px;line-height:1.3}
+#page-squad .c48-list-meta{font-size:10px;color:#a9c5af;margin-top:4px}
+#page-squad .c48-list-rating{font-size:20px;font-weight:1000;color:#baff65}
+#page-squad #reserveList{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px!important;background:linear-gradient(120deg,#171a12,#101711)!important;border:1px solid #664a27;border-radius:15px;padding:12px!important}
+#page-squad .c48-reserve-heading{display:flex;align-items:center;gap:10px;margin:22px 0 10px!important;color:#ffd08a}
+#page-squad .c48-formation-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+#page-squad .c48-formation-top select{max-width:130px;background:#10251a;color:#fff;border:1px solid #43885a;border-radius:10px;padding:8px}
+@media(max-width:800px){#page-squad #squadLayout{grid-template-columns:1fr!important}#page-squad #formationPitch{min-height:520px!important}#page-squad #formationPlayers{min-height:475px}#page-squad .c48-pitch-player{min-height:86px;padding:8px 3px!important}#page-squad .c48-player-rating{font-size:17px;right:5px;top:5px}#page-squad .c48-player-name{font-size:10px}}
+</style>
+<script id="c48-squad-dynamic-formation-layout">
+(function(){
+ const esc=v=>String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ window.renderSquad=function(){
+   const pitch=document.getElementById('formationPitch'),container=document.getElementById('formationPlayers');
+   if(!container||!pitch||!Array.isArray(state.owned))return;
+   const players=state.owned.slice(0,11),bench=state.owned.slice(11,16),reserve=state.owned.slice(16);
+   const rows=getFormationPositions(),formation=state.formation||'4-3-3';
+   let top=pitch.querySelector('.c48-formation-top');
+   if(!top){top=document.createElement('div');top.className='c48-formation-top';pitch.insertBefore(top,container);}
+   top.innerHTML=`<span class="c48-formation-badge">⚽ SAHA DİZİLİŞİ</span><span class="c48-formation-badge">${esc(formation)} · ${players.length}/11</span>`;
+   container.innerHTML=rows.map((row,ri)=>`<div class="c48-formation-row" style="grid-template-columns:repeat(${Math.max(1,row.length)},minmax(0,1fr))">${row.map(i=>{
+     const p=players[i];if(!p)return '<div></div>';
+     const selected=selectedRosterId===p.id;
+     return `<button class="c48-pitch-player ${selected?'selected':''}" onclick="chooseRoster('${esc(p.id)}')" title="Oyuncu değişimi için seç">
+       <span class="c48-player-rating">${Number(p.rating)||0}</span><span class="c48-player-avatar">${p.pos==='KL'?'🧤':'👤'}</span>
+       <span class="c48-player-name">${esc(p.name)}</span><span class="c48-player-pos">${esc(p.pos||'MO')}</span>
+     </button>`;
+   }).join('')}</div>`).join('');
+   const benchEl=document.getElementById('benchList');
+   if(benchEl)benchEl.innerHTML=bench.length?bench.map(p=>`<button class="c48-list-player ${selectedRosterId===p.id?'selected':''}" onclick="chooseRoster('${esc(p.id)}')"><span class="c48-list-avatar">${p.pos==='KL'?'🧤':'👤'}</span><span><span class="c48-list-name">${esc(p.name)}</span><div class="c48-list-meta">${esc(p.pos||'MO')} · Yedek</div></span><span class="c48-list-rating">${Number(p.rating)||0}</span></button>`).join(''):'<div class="muted">Yedek yok.</div>';
+   const reserveEl=document.getElementById('reserveList');
+   if(reserveEl)reserveEl.innerHTML=reserve.length?reserve.map(p=>`<button class="c48-list-player ${selectedRosterId===p.id?'selected':''}" onclick="chooseRoster('${esc(p.id)}')"><span class="c48-list-avatar">📦</span><span><span class="c48-list-name">${esc(p.name)}</span><div class="c48-list-meta">${esc(p.pos||'MO')} · Kadro dışı</div></span><span class="c48-list-rating">${Number(p.rating)||0}</span></button>`).join(''):'<div class="muted">Kadro dışı oyuncun yok.</div>';
+   const reserveHeading=reserveEl&&reserveEl.previousElementSibling;
+   if(reserveHeading&&reserveHeading.tagName==='H3')reserveHeading.className='c48-reserve-heading';
+ };
+ window.addEventListener('load',()=>{try{renderSquad();}catch(e){console.error('C48 formation UI:',e);}});
+})();
+</script>
+
+
+<style id="c48-v27-season-countdown-style">
+#c48SeasonCountdown{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:18px 20px;margin:0 0 16px;border:1px solid #507c3d;border-radius:16px;background:radial-gradient(circle at 90% 10%,#315b2b,#13251a 62%,#0d1711);box-shadow:0 8px 24px #0004}
+#c48SeasonCountdown .c48-count-label{font-weight:900;color:#c1ff72}
+#c48SeasonCountdown .c48-count-digits{display:flex;gap:9px}
+#c48SeasonCountdown .c48-count-unit{min-width:64px;text-align:center;padding:8px 10px;border-radius:10px;background:#09110c;border:1px solid #395b35}
+#c48SeasonCountdown .c48-count-num{display:block;font-size:24px;font-weight:1000;color:#fff}
+#c48SeasonCountdown .c48-count-sub{font-size:10px;color:#b9cbb8;text-transform:uppercase}
+</style>
+<script id="c48-v27-release-and-season-timer">
+(function(){
+ const version='c48-update-v2.7';
+ const DAY=24*60*60*1000;
+ function seasonEnd(){
+   let end=0;
+   try{end=Number(localStorage.getItem('c48-season-end-v27'))||0;}catch(e){}
+   if(!end||end<=Date.now()){
+     end=Date.now()+3*DAY;
+     try{localStorage.setItem('c48-season-end-v27',String(end));}catch(e){}
+   }
+   return end;
+ }
+ function addCountdown(){
+   const page=document.getElementById('page-season');if(!page)return;
+   let panel=document.getElementById('c48SeasonCountdown');
+   if(!panel){
+     panel=document.createElement('div');panel.id='c48SeasonCountdown';
+     const hero=page.querySelector('.hero');
+     if(hero)hero.insertAdjacentElement('afterend',panel);else page.prepend(panel);
+   }
+   const end=seasonEnd(),left=Math.max(0,end-Date.now());
+   const days=Math.floor(left/DAY),hours=Math.floor(left%DAY/3600000),mins=Math.floor(left%3600000/60000),secs=Math.floor(left%60000/1000);
+   panel.innerHTML=`<div><div class="c48-count-label">⏳ SEZON BİTİŞİNE KALAN SÜRE</div><div style="color:#b9cbb8;font-size:12px;margin-top:5px">Yeni sezon döngüsü 3 günde bir yenilenir.</div></div><div class="c48-count-digits">${[['Gün',days],['Saat',hours],['Dakika',mins],['Saniye',secs]].map(([label,n])=>`<div class="c48-count-unit"><span class="c48-count-num">${String(n).padStart(2,'0')}</span><span class="c48-count-sub">${label}</span></div>`).join('')}</div>`;
+ }
+ function showNews(){
+   try{if(localStorage.getItem(version))return;}catch(e){}
+   const modal=document.createElement('div');modal.className='c48-preview-backdrop';modal.style.zIndex='1000000';
+   modal.innerHTML=`<section class="c48-preview-modal" style="max-width:620px"><h2>🆕 C48 Football Manager v2.7</h2><p>Bu güncellemede kulüp yönetimi ve kadro ekranı geliştirildi:</p><ul>
+   <li>⚽ Daha modern saha görünümü ve saha çizgileri.</li>
+   <li>👤 Oyuncular için reyting, pozisyon ve isim bilgileri daha belirgin kartlarda gösterilir.</li>
+   <li>🧤 Kaleciler için ayrı simge.</li>
+   <li>🪑 İlk 11, yedekler ve kadro dışı oyuncular daha düzenli görünür.</li>
+   <li>🔁 Farklı dizilişlerde saha yerleşimi güncellenir; iki oyuncuya sırayla tıklayarak yer değiştirme korunur.</li>
+   <li>⏳ Sezon ekranına 3 günlük geri sayım eklendi.</li>
+   <li>🛠️ Kutu açılışı, oyuncu havuzu ve oyuncu satışı için önceki düzeltmeler korunur.</li>
+   </ul><button id="c48V27NewsClose" class="primary">Oyuna Başla</button></section>`;
+   document.body.appendChild(modal);
+   modal.querySelector('#c48V27NewsClose').onclick=()=>{try{localStorage.setItem(version,'1');localStorage.setItem('c48-update-v2.6','1');localStorage.setItem('c48-update-v2.2','1');}catch(e){}modal.remove();};
+ }
+ function start(){
+   document.querySelectorAll('.footer').forEach(el=>el.textContent='C48 Studios · v2.7 UPDATE');
+   document.querySelectorAll('body *').forEach(el=>{
+     if(el.children.length===0&&el.textContent&&/C48 Studios · v2\.[0-6] UPDATE/.test(el.textContent))el.textContent='C48 Studios · v2.7 UPDATE';
+   });
+   addCountdown();setInterval(addCountdown,1000);
+   setTimeout(showNews,900);
+ }
+ window.addEventListener('load',start);
+})();
+</script>
+
 </body>
 </html>
