@@ -3901,5 +3901,49 @@ window.addEventListener('load',()=>{const footer=document.querySelector('.footer
 })();
 </script>
 
+
+<script id="c48-v27-league-rating-balance">
+(function(){
+  const bounds={3:[50,70],2:[65,80],1:[85,105]};
+  const originalMake=window.makeLeagueState||makeLeagueState;
+  function applyLeagueRatings(league){
+    if(!league||!Array.isArray(league.teams))return league;
+    const div=Number(state.division)||2,[lo,hi]=bounds[div]||bounds[2];
+    league.teams.forEach((team,i)=>{
+      if(i===0){
+        // Keep the user's real squad strength, but show it within the division's intended band.
+        const actual=Number(typeof teamPower==='function'?teamPower():team.power)||lo;
+        team.power=Math.max(lo,Math.min(hi,actual));
+      }else{
+        // Spread opponent strengths across the requested range, strongest to weakest.
+        const ratio=(i-1)/Math.max(1,league.teams.length-2);
+        team.power=Math.round(hi-ratio*(hi-lo));
+      }
+    });
+    return league;
+  }
+  window.makeLeagueState=function(){
+    return applyLeagueRatings(originalMake());
+  };
+  try{makeLeagueState=window.makeLeagueState;}catch(e){}
+  const originalGet=window.getLeague||getLeague;
+  window.getLeague=function(){
+    const league=originalGet();
+    return applyLeagueRatings(league);
+  };
+  try{getLeague=window.getLeague;}catch(e){}
+  const originalStrength=window.leagueStrength||leagueStrength;
+  window.leagueStrength=function(index){
+    const league=window.getLeague();
+    const team=league.teams[index];
+    return team?Number(team.power)||50:originalStrength(index);
+  };
+  try{leagueStrength=window.leagueStrength;}catch(e){}
+  window.addEventListener('load',function(){
+    try{const league=window.getLeague();if(typeof persist==='function')persist();if(typeof renderLeague==='function')renderLeague();}catch(e){console.warn('C48 league rating balance:',e);}
+  });
+})();
+</script>
+
 </body>
 </html>
